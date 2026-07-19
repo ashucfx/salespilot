@@ -1,0 +1,61 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: salespilot-postgres-dev
+    environment:
+      POSTGRES_DB: salespilot
+      POSTGRES_USER: salespilot
+      POSTGRES_PASSWORD: salespilot123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+    networks:
+      - salespilot-dev
+
+  backend:
+    build:
+      context: ./backend
+      target: builder
+    container_name: salespilot-backend-dev
+    depends_on:
+      - postgres
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/salespilot
+      DB_USERNAME: salespilot
+      DB_PASSWORD: salespilot123
+      JWT_SECRET: dev-secret-key-not-for-production-use-change-me
+      SPRING_PROFILES_ACTIVE: dev
+      FRONTEND_URL: http://localhost:3000
+      ALLOWED_ORIGINS: http://localhost:3000
+    volumes:
+      - ./backend/src:/app/src
+      - ./backend/target:/app/target
+      - uploads_dev:/app/uploads
+    ports:
+      - "8080:8080"
+    networks:
+      - salespilot-dev
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: salespilot-frontend-dev
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8080/api
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
+    ports:
+      - "3000:3000"
+    networks:
+      - salespilot-dev
+
+volumes:
+  postgres_dev_data:
+  uploads_dev:
+
+networks:
+  salespilot-dev:
+    driver: bridge
