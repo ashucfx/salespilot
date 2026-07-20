@@ -52,13 +52,46 @@ public class AuthService {
     private static final SecureRandom SECURE_RANDOM = new SecureRandom();
 
     public AuthResponse login(LoginRequest request, String ipAddress, String userAgent) {
-        // Authenticate
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new ResourceNotFoundException("User", request.getEmail()));
+
+        // Authenticate password
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
 
-        User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new ResourceNotFoundException("User", request.getEmail()));
+        // Generate 6-digit OTP
+        String otpCode = String.format("%06d", SECURE_RANDOM.nextInt(1000000));
+        user.setOtpCode(passwordEncoder.encode(otpCode));
+        user.setOtpExpiry(Instant.now().plus(10, java.time.temporal.ChronoUnit.MINUTES));
+        userRepository.save(user);
+
+        // Send OTP Email
+        emailService.sendOtpEmail(user.getEmail(), otpCode);
+
+        log.info("OTP generated and sent to: {}", user.getEmail());
+
+        return AuthResponse.builder()
+                .otpRequired(true)
+                .build();
+    }
+
+    public AuthResponse verifyOtp(String email, String otpCode, String ipAddress, String userAgent) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User", email));
+
+        if (user.getOtpExpiry() == null || user.getOtpExpiry().isBefore(Instant.now())) {
+            throw new org.springframework.security.authentication.BadCredentialsException("OTP has expired");
+        }
+
+        if (!passwordEncoder.matches(otpCode, user.getOtpCode())) {
+            throw new org.springframework.security.authentication.BadCredentialsException("Invalid OTP code");
+        }
+
+        // Clear OTP
+        user.setOtpCode(null);
+        user.setOtpExpiry(null);
+        userRepository.save(user);
 
         // Generate tokens
         String accessToken = jwtUtil.generateAccessToken(user, buildClaims(user));

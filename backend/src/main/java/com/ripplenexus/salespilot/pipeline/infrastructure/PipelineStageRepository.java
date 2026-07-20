@@ -9,5 +9,5 @@ import java.util.UUID;
 
 @Repository
 public interface PipelineStageRepository extends JpaRepository<PipelineStage, UUID> {
-    List<PipelineStage> findAllByDeletedAtIsNullOrderByPositionAsc();
+    List<PipelineStage> findAllByDeletedAtIsNullOrderByDisplayOrderAsc();
 }

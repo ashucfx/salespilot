@@ -30,7 +30,19 @@ public class AuthController {
         String ip = getClientIp(httpRequest);
         String ua = httpRequest.getHeader("User-Agent");
         AuthResponse response = authService.login(request, ip, ua);
-        return ResponseEntity.ok(ApiResponse.success("Login successful", response));
+        return ResponseEntity.ok(ApiResponse.success("Login step 1 successful (OTP required)", response));
+    }
+
+    @Operation(summary = "Verify OTP for login")
+    @PostMapping("/verify-otp")
+    public ResponseEntity<ApiResponse<AuthResponse>> verifyOtp(
+            @Valid @RequestBody VerifyOtpRequest request,
+            HttpServletRequest httpRequest
+    ) {
+        String ip = getClientIp(httpRequest);
+        String ua = httpRequest.getHeader("User-Agent");
+        AuthResponse response = authService.verifyOtp(request.getEmail(), request.getOtpCode(), ip, ua);
+        return ResponseEntity.ok(ApiResponse.success("OTP verified successfully", response));
     }
 
     @Operation(summary = "Refresh access token using refresh token")

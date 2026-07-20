@@ -98,8 +98,8 @@ INSERT INTO pipeline_stages (id, name, slug, display_order, color) VALUES
     (gen_random_uuid(), 'Demo',              'demo',               5, '#f97316'),
     (gen_random_uuid(), 'Proposal Sent',     'proposal-sent',      6, '#84cc16'),
     (gen_random_uuid(), 'Negotiation',       'negotiation',        7, '#eab308'),
-    (gen_random_uuid(), 'Won',               'won',                8, '#10b981', false, false, false),
-    (gen_random_uuid(), 'Lost',              'lost',               9, '#ef4444', false, true, false);
+    (gen_random_uuid(), 'Won',               'won',                8, '#10b981'),
+    (gen_random_uuid(), 'Lost',              'lost',               9, '#ef4444');
 
 UPDATE pipeline_stages SET is_won_stage = true WHERE slug = 'won';
 UPDATE pipeline_stages SET is_lost_stage = true WHERE slug = 'lost';

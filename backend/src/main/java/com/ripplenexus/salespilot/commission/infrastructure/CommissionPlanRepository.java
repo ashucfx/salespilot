@@ -12,6 +12,8 @@ import java.util.UUID;
 @Repository
 public interface CommissionPlanRepository extends JpaRepository<com.ripplenexus.salespilot.commission.domain.EmployeeCommissionPlan, UUID> {
 
+    java.util.List<com.ripplenexus.salespilot.commission.domain.EmployeeCommissionPlan> findByEmployeeIdAndIsActiveTrue(UUID employeeId);
+
     @Query("""
         SELECT ecp.rule FROM EmployeeCommissionPlan ecp
         WHERE ecp.employee.id = :employeeId

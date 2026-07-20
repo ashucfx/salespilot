@@ -13,4 +13,5 @@ import java.util.UUID;
 public interface CommissionRuleRepository extends JpaRepository<CommissionRule, UUID> {
     List<CommissionRule> findByIsActiveTrue();
     Optional<CommissionRule> findFirstByIsActiveTrueOrderByCreatedAtAsc();
+    Optional<CommissionRule> findByName(String name);
 }

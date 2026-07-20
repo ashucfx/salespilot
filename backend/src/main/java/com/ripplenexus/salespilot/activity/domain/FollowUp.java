@@ -9,7 +9,7 @@ import lombok.*;
 import java.time.Instant;
 
 @Entity
-@Table(name = "follow_ups")
+@Table(name = "followups")
 @Getter
 @Setter
 @Builder
@@ -21,21 +21,52 @@ public class FollowUp extends BaseEntity {
     @JoinColumn(name = "lead_id")
     private Lead lead;
 
+    @Column(name = "company_id")
+    private java.util.UUID companyId;
+
+    @Column(name = "contact_id")
+    private java.util.UUID contactId;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "assigned_to", nullable = false)
+    @JoinColumn(name = "assigned_to")
     private Employee assignedTo;
 
-    @Column(name = "follow_up_date", nullable = false)
-    private Instant followUpDate;
+    @Column(name = "type", nullable = false)
+    @Builder.Default
+    private String type = "CALL";
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
-    private FollowUpStatus status = FollowUpStatus.PENDING;
+    @Column(name = "title", nullable = false)
+    private String title;
 
     @Column(name = "notes", columnDefinition = "TEXT")
     private String notes;
 
-    public enum FollowUpStatus {
-        PENDING, COMPLETED, CANCELLED
-    }
+    @Column(name = "scheduled_at", nullable = false)
+    private Instant scheduledAt;
+
+    @Column(name = "completed_at")
+    private Instant completedAt;
+
+    @Column(name = "is_completed", nullable = false)
+    @Builder.Default
+    private Boolean isCompleted = false;
+
+    @Column(name = "is_overdue", nullable = false)
+    @Builder.Default
+    private Boolean isOverdue = false;
+
+    @Column(name = "is_recurring", nullable = false)
+    @Builder.Default
+    private Boolean isRecurring = false;
+
+    @Column(name = "recurrence_rule")
+    private String recurrenceRule;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "next_followup_id")
+    private FollowUp nextFollowup;
+
+    @Column(name = "reminder_sent", nullable = false)
+    @Builder.Default
+    private Boolean reminderSent = false;
 }

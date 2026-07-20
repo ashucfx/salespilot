@@ -32,12 +32,14 @@ public class RefreshToken {
     @Column(name = "expires_at", nullable = false)
     private Instant expiresAt;
 
+    @Builder.Default
     @Column(name = "revoked", nullable = false)
     private boolean revoked = false;
 
     @Column(name = "revoked_at")
     private Instant revokedAt;
 
+    @Builder.Default
     @Column(name = "created_at", nullable = false)
     private Instant createdAt = Instant.now();
 

@@ -66,6 +66,10 @@ public class Commission extends BaseEntity {
     @Column(name = "notes")
     private String notes;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "payout_id")
+    private Payout payout;
+
     public enum CommissionStatus {
         PENDING, APPROVED, REJECTED, PAID, CANCELLED
     }

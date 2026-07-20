@@ -35,13 +35,21 @@ public class ICPService {
         IdealCustomerProfile icp = getOrThrow(id);
         
         icp.setName(request.getName());
-        icp.setDescription(request.getDescription());
-        icp.setIndustryFocus(request.getIndustryFocus());
+        icp.setIndustry(request.getIndustry());
         icp.setCompanySizeMin(request.getCompanySizeMin());
         icp.setCompanySizeMax(request.getCompanySizeMax());
         icp.setRevenueMin(request.getRevenueMin());
-        icp.setTargetRegions(request.getTargetRegions());
-        icp.setKeyPainPoints(request.getKeyPainPoints());
+        icp.setRevenueMax(request.getRevenueMax());
+        icp.setDecisionMakers(request.getDecisionMakers());
+        icp.setPainPoints(request.getPainPoints());
+        icp.setInterestedServices(request.getInterestedServices());
+        if (request.getPriority() != null) {
+            icp.setPriority(request.getPriority());
+        }
+        icp.setDescription(request.getDescription());
+        if (request.getIsActive() != null) {
+            icp.setIsActive(request.getIsActive());
+        }
         
         return icpRepository.save(icp);
     }

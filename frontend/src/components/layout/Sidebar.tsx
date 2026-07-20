@@ -13,7 +13,8 @@ import {
   LogOut,
   ChevronRight,
   TrendingUp,
-  Activity
+  Activity,
+  ShieldAlert
 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { motion } from 'framer-motion';
@@ -21,55 +22,79 @@ import { motion } from 'framer-motion';
 const getNavItems = (roles: string[]) => {
   const isAdmin = roles.includes('ADMIN');
   const isManager = roles.includes('SALES_MANAGER');
+  const isEmployee = !isAdmin && !isManager;
   
-  const items = [
-    { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-    { name: 'Leads', href: '/leads', icon: Target },
-    { name: 'Pipeline', href: '/pipeline', icon: Activity },
-    { name: 'Companies', href: '/companies', icon: Briefcase },
-    { name: 'Contacts', href: '/contacts', icon: Users },
-    { name: 'ICPs', href: '/icps', icon: Target },
-    { name: 'Tasks', href: '/tasks', icon: Activity },
-    { name: 'Meetings', href: '/meetings', icon: Users },
-    { name: 'Deals', href: '/deals', icon: Briefcase },
-    { name: 'Commissions', href: '/commissions', icon: Banknote },
-    { name: 'Targets', href: '/targets', icon: TrendingUp },
-  ];
+  const items = [];
 
-  if (isAdmin || isManager) {
+  // Core for everyone
+  items.push({ name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard });
+
+  if (isEmployee) {
+    items.push({ name: 'My Leads', href: '/leads', icon: Target });
+    items.push({ name: 'My Pipeline', href: '/pipeline', icon: Activity });
+    items.push({ name: 'My Clients', href: '/companies', icon: Briefcase });
+    items.push({ name: 'My Payouts', href: '/payouts', icon: Banknote });
+  } else {
+    items.push({ name: 'All Leads', href: '/leads', icon: Target });
+    items.push({ name: 'Pipeline', href: '/pipeline', icon: Activity });
+    items.push({ name: 'Companies', href: '/companies', icon: Briefcase });
+    items.push({ name: 'Deals', href: '/deals', icon: Briefcase });
     items.push({ name: 'Team', href: '/team', icon: Users });
+    items.push({ name: 'Payouts', href: '/payouts', icon: Banknote });
+    items.push({ name: 'Commissions', href: '/commissions', icon: Banknote });
   }
+
+  // Profile is available for everyone
+  items.push({ name: 'My Profile', href: '/profile', icon: Settings });
   
   if (isAdmin) {
+    items.push({ name: 'System Users', href: '/users', icon: Users });
+    items.push({ name: 'KYC Approvals', href: '/kyc', icon: ShieldAlert });
     items.push({ name: 'Settings', href: '/settings', icon: Settings });
   }
   
   return items;
 };
 
+import { useAppStore } from '@/store/appStore';
+
 export default function Sidebar() {
   const pathname = usePathname();
   const { user, logout } = useAuthStore();
+  const { sidebarOpen, setSidebarOpen } = useAppStore();
   const roles = user?.roles || [];
   
   const navItems = getNavItems(roles);
 
   return (
-    <div className="flex h-screen w-64 flex-col bg-[#131320] border-r border-indigo-500/10">
-      {/* Brand */}
-      <div className="flex h-16 shrink-0 items-center px-6 border-b border-indigo-500/10">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center">
-            <TrendingUp className="w-5 h-5 text-white" />
+    <>
+      {/* Mobile Backdrop */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      <div className={cn(
+        "fixed inset-y-0 left-0 z-50 flex h-screen w-72 flex-col bg-[#05050A] border-r border-slate-800/60 shadow-2xl transition-transform duration-300 ease-in-out lg:static lg:translate-x-0",
+        sidebarOpen ? "translate-x-0" : "-translate-x-full"
+      )}>
+        {/* Brand */}
+      <div className="flex h-20 shrink-0 items-center px-6 border-b border-slate-800/60 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-transparent pointer-events-none"></div>
+        <div className="flex items-center gap-3 relative z-10">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 via-violet-600 to-fuchsia-600 flex items-center justify-center shadow-lg shadow-indigo-500/30 border border-indigo-400/20">
+            <TrendingUp className="w-5 h-5 text-white" strokeWidth={2.5} />
           </div>
-          <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-violet-400">
-            Sales Pilot
+          <span className="text-2xl font-black tracking-tighter text-white flex items-center drop-shadow-lg">
+            SALES<span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-violet-400 to-fuchsia-400 ml-0.5">PILOT</span>
           </span>
         </div>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 overflow-y-auto px-4 py-6 space-y-1">
+      <nav className="flex-1 overflow-y-auto px-4 py-6 space-y-1 custom-scrollbar">
         {navItems.map((item) => {
           const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
           return (
@@ -77,25 +102,30 @@ export default function Sidebar() {
               key={item.name}
               href={item.href}
               className={cn(
-                "group relative flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200",
+                "group relative flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-xl transition-all duration-300",
                 isActive 
-                  ? "text-white bg-indigo-500/10" 
-                  : "text-slate-400 hover:text-white hover:bg-slate-800/50"
+                  ? "text-white bg-gradient-to-r from-indigo-500/15 to-violet-500/5 shadow-[inset_1px_0_0_0_#6366f1]" 
+                  : "text-slate-400 hover:text-white hover:bg-slate-800/40"
               )}
             >
               {isActive && (
                 <motion.div
                   layoutId="sidebar-active-indicator"
-                  className="absolute left-0 top-0 bottom-0 w-1 bg-indigo-500 rounded-r-full"
+                  className="absolute left-0 top-1 bottom-1 w-1 bg-gradient-to-b from-indigo-400 to-violet-500 rounded-r-full"
                   initial={false}
                   transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 />
               )}
               <div className="flex items-center gap-3">
-                <item.icon className={cn(
-                  "w-5 h-5 transition-colors",
-                  isActive ? "text-indigo-400" : "text-slate-500 group-hover:text-indigo-400"
-                )} />
+                <div className={cn(
+                  "p-1.5 rounded-lg transition-colors",
+                  isActive ? "bg-indigo-500/20" : "bg-transparent group-hover:bg-slate-800"
+                )}>
+                  <item.icon className={cn(
+                    "w-4 h-4 transition-colors",
+                    isActive ? "text-indigo-400" : "text-slate-500 group-hover:text-indigo-300"
+                  )} strokeWidth={isActive ? 2.5 : 2} />
+                </div>
                 {item.name}
               </div>
               {isActive && <ChevronRight className="w-4 h-4 text-indigo-400/50" />}
@@ -105,16 +135,16 @@ export default function Sidebar() {
       </nav>
 
       {/* User Area */}
-      <div className="shrink-0 p-4 border-t border-indigo-500/10 bg-slate-900/30">
+      <div className="shrink-0 p-4 border-t border-slate-800/60 bg-[#0A0A10]/50 backdrop-blur-md">
         <div className="flex items-center gap-3 mb-4 px-2">
-          <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-violet-500 to-cyan-500 flex items-center justify-center text-white font-bold text-sm shadow-[0_0_15px_rgba(139,92,246,0.3)]">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-violet-600 to-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-[0_0_15px_rgba(99,102,241,0.4)] border border-white/10 ring-2 ring-background">
             {user?.email?.charAt(0).toUpperCase()}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-white truncate">
-              {user?.email}
+            <p className="text-[14px] font-semibold text-white truncate leading-tight">
+              {user?.email?.split('@')[0]}
             </p>
-            <p className="text-xs text-slate-400 truncate capitalize">
+            <p className="text-[12px] text-slate-400 truncate capitalize font-medium tracking-wide mt-0.5">
               {roles[0]?.toLowerCase().replace('_', ' ')}
             </p>
           </div>
@@ -124,12 +154,13 @@ export default function Sidebar() {
             logout();
             window.location.href = '/login';
           }}
-          className="flex w-full items-center gap-2 px-3 py-2 text-sm font-medium text-red-400 hover:text-red-300 hover:bg-red-400/10 rounded-lg transition-colors"
+          className="flex w-full items-center gap-2 px-4 py-2.5 text-sm font-semibold text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 rounded-xl transition-colors border border-transparent hover:border-rose-500/20"
         >
-          <LogOut className="w-4 h-4" />
-          Logout
+          <LogOut className="w-4 h-4" strokeWidth={2.5} />
+          Sign Out
         </button>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

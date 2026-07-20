@@ -33,9 +33,7 @@ CREATE TABLE pipeline_entries (
     position        INTEGER     NOT NULL DEFAULT 0,
     entered_at      TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     last_moved_at   TIMESTAMPTZ,
-    days_in_stage   INTEGER     GENERATED ALWAYS AS (
-        EXTRACT(DAY FROM NOW() - entered_at)::INTEGER
-    ) STORED,
+    days_in_stage   INTEGER     DEFAULT 0,
     created_at      TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at      TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );

@@ -39,6 +39,16 @@ public class EmployeeDto {
     private Set<String> industries;
     private Set<String> services;
     private String notes;
+    private String nationalId;
+    private String countryOfId;
+    private String upiId;
+    private String bankName;
+    private String bankAccount;
+    private String bankIfsc;
+    private String kycStatus;
+    private LocalDate endDate;
+    private String resignationStatus;
+    private String resignationReason;
     private Instant createdAt;
     private Instant updatedAt;
 
@@ -69,6 +79,16 @@ public class EmployeeDto {
                 .industries(e.getIndustries())
                 .services(e.getServices())
                 .notes(e.getNotes())
+                .nationalId(e.getNationalId())
+                .countryOfId(e.getCountryOfId())
+                .upiId(e.getUpiId())
+                .bankName(e.getBankName())
+                .bankAccount(e.getBankAccount())
+                .bankIfsc(e.getBankIfsc())
+                .kycStatus(e.getKycStatus() != null ? e.getKycStatus().name() : null)
+                .endDate(e.getEndDate())
+                .resignationStatus(e.getResignationStatus() != null ? e.getResignationStatus().name() : null)
+                .resignationReason(e.getResignationReason())
                 .createdAt(e.getCreatedAt())
                 .updatedAt(e.getUpdatedAt())
                 .build();

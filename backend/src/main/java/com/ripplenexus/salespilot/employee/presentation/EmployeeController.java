@@ -6,6 +6,7 @@ import com.ripplenexus.salespilot.core.dto.PageResponse;
 import com.ripplenexus.salespilot.employee.application.EmployeeService;
 import com.ripplenexus.salespilot.employee.presentation.dto.CreateEmployeeRequest;
 import com.ripplenexus.salespilot.employee.presentation.dto.EmployeeDto;
+import com.ripplenexus.salespilot.employee.presentation.dto.KycSubmissionRequest;
 import com.ripplenexus.salespilot.employee.presentation.dto.UpdateEmployeeRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -45,6 +46,16 @@ public class EmployeeController {
     public ResponseEntity<ApiResponse<EmployeeDto>> getMyProfile(@AuthenticationPrincipal User user) {
         EmployeeDto dto = employeeService.getByUserId(user.getId());
         return ResponseEntity.ok(ApiResponse.success(dto));
+    }
+
+    @Operation(summary = "Submit KYC details for current employee")
+    @PostMapping("/me/kyc")
+    public ResponseEntity<ApiResponse<EmployeeDto>> submitKyc(
+            @AuthenticationPrincipal User user,
+            @Valid @RequestBody KycSubmissionRequest request
+    ) {
+        EmployeeDto dto = employeeService.submitKyc(user.getId(), request);
+        return ResponseEntity.ok(ApiResponse.success("KYC submitted successfully", dto));
     }
 
     @Operation(summary = "Get employee by ID")
@@ -106,5 +117,61 @@ public class EmployeeController {
     public ResponseEntity<ApiResponse<Void>> delete(@PathVariable UUID id) {
         employeeService.deleteEmployee(id);
         return ResponseEntity.ok(ApiResponse.success("Employee deleted", null));
+    }
+    @Operation(summary = "Verify Employee KYC (Admin only)")
+    @PostMapping("/{id}/kyc/verify")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<EmployeeDto>> verifyKyc(@PathVariable UUID id) {
+        return ResponseEntity.ok(ApiResponse.success("KYC Verified", employeeService.verifyKyc(id)));
+    }
+
+    @Operation(summary = "Reject Employee KYC (Admin only)")
+    @PostMapping("/{id}/kyc/reject")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<EmployeeDto>> rejectKyc(@PathVariable UUID id, @RequestBody java.util.Map<String, String> request) {
+        return ResponseEntity.ok(ApiResponse.success("KYC Rejected", employeeService.rejectKyc(id, request.get("reason"))));
+    }
+
+    @Operation(summary = "Reconsider Frozen Account (Admin only)")
+    @PostMapping("/{id}/kyc/reconsider")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<EmployeeDto>> reconsiderKyc(@PathVariable UUID id) {
+        return ResponseEntity.ok(ApiResponse.success("Account reconsidered for KYC", employeeService.reconsiderKyc(id)));
+    }
+
+    @Operation(summary = "Update employee designation (Admin only)")
+    @PostMapping("/{id}/designation")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<EmployeeDto>> updateDesignation(
+            @PathVariable UUID id,
+            @RequestBody java.util.Map<String, String> request) {
+        return ResponseEntity.ok(ApiResponse.success("Designation updated", employeeService.updateDesignation(id, request.get("designation"))));
+    }
+
+    @Operation(summary = "Submit resignation (Employee)")
+    @PostMapping("/me/resignation")
+    public ResponseEntity<ApiResponse<EmployeeDto>> submitResignation(
+            @AuthenticationPrincipal User user,
+            @RequestBody java.util.Map<String, String> request) {
+        return ResponseEntity.ok(ApiResponse.success("Resignation submitted", employeeService.submitResignation(user.getId(), request.get("reason"))));
+    }
+
+    @Operation(summary = "Approve resignation (Admin only)")
+    @PostMapping("/{id}/resignation/approve")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<EmployeeDto>> approveResignation(
+            @PathVariable UUID id,
+            @RequestBody java.util.Map<String, String> request) {
+        java.time.LocalDate endDate = java.time.LocalDate.parse(request.get("endDate"));
+        return ResponseEntity.ok(ApiResponse.success("Resignation approved", employeeService.approveResignation(id, endDate)));
+    }
+
+    @Operation(summary = "Reject resignation (Admin only)")
+    @PostMapping("/{id}/resignation/reject")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<EmployeeDto>> rejectResignation(
+            @PathVariable UUID id,
+            @RequestBody java.util.Map<String, String> request) {
+        return ResponseEntity.ok(ApiResponse.success("Resignation rejected", employeeService.rejectResignation(id, request.get("reason"))));
     }
 }

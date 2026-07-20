@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/settings")
+@RequestMapping("/settings")
 @RequiredArgsConstructor
 public class SettingsController {
 

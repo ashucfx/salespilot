@@ -36,6 +36,7 @@ public class DealService {
     private final CommissionService commissionService;
     private final TargetService targetService;
     private final NotificationService notificationService;
+    private final com.ripplenexus.salespilot.core.email.EmailService emailService;
 
     /**
      * Closes a deal when a lead is marked WON.
@@ -77,8 +78,15 @@ public class DealService {
         // Update target progress
         targetService.updateRevenueProgress(employee.getId(), request.getDealValue());
 
-        // Notify
-        notificationService.notifyTargetAchieved(employee.getUser(), "monthly", "");
+        // Gamification: Check if this is the employee's first closed deal
+        long count = dealRepository.countByEmployee(employee.getId());
+        if (count == 1) {
+            emailService.sendFirstDealClosedEmail(
+                    employee.getWorkEmail(),
+                    employee.getFirstName(),
+                    deal.getDealNumber()
+            );
+        }
 
         log.info("Deal closed: {} | Value: {} | Employee: {}",
                 deal.getDealNumber(), request.getDealValue(), employee.getEmployeeNumber());

@@ -42,10 +42,12 @@ public class ContactService {
         contact.setLastName(request.getLastName());
         contact.setEmail(request.getEmail());
         contact.setPhone(request.getPhone());
-        contact.setJobTitle(request.getJobTitle());
-        contact.setDepartment(request.getDepartment());
+        contact.setDesignation(request.getDesignation());
+        contact.setWhatsapp(request.getWhatsapp());
+        contact.setCountry(request.getCountry());
+        contact.setCity(request.getCity());
         contact.setLinkedinUrl(request.getLinkedinUrl());
-        contact.setPrimary(request.isPrimary());
+        contact.setDecisionMaker(request.isDecisionMaker());
         contact.setNotes(request.getNotes());
         
         return contactRepository.save(contact);

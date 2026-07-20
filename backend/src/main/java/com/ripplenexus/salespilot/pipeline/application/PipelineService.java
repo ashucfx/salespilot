@@ -25,11 +25,11 @@ public class PipelineService {
     private final LeadRepository leadRepository;
 
     public List<PipelineStage> getStages() {
-        return stageRepository.findAllByDeletedAtIsNullOrderByPositionAsc();
+        return stageRepository.findAllByDeletedAtIsNullOrderByDisplayOrderAsc();
     }
 
     public List<PipelineEntry> getEntries() {
-        return entryRepository.findByDeletedAtIsNull();
+        return entryRepository.findAll();
     }
 
     public void updateLeadStage(UUID leadId, UUID newStageId, int newPosition) {
@@ -39,17 +39,17 @@ public class PipelineService {
         PipelineStage stage = stageRepository.findById(newStageId)
                 .orElseThrow(() -> new ResourceNotFoundException("Stage", newStageId));
 
-        PipelineEntry entry = entryRepository.findByDeletedAtIsNull().stream()
+        PipelineEntry entry = entryRepository.findAll().stream()
                 .filter(e -> e.getLead().getId().equals(leadId))
                 .findFirst()
                 .orElseGet(() -> PipelineEntry.builder()
                         .lead(lead)
-                        .enteredStageAt(Instant.now())
+                        .enteredAt(Instant.now())
                         .build());
 
         entry.setStage(stage);
-        entry.setPositionInStage(newPosition);
-        entry.setEnteredStageAt(Instant.now());
+        entry.setPosition(newPosition);
+        entry.setEnteredAt(Instant.now());
         
         // Update lead status based on system stage if applicable
         if (stage.getName().equalsIgnoreCase("WON")) {

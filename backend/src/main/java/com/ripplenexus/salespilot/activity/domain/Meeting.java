@@ -21,21 +21,41 @@ public class Meeting extends BaseEntity {
     @JoinColumn(name = "lead_id")
     private Lead lead;
 
+    @Column(name = "company_id")
+    private java.util.UUID companyId;
+
+    @Column(name = "contact_id")
+    private java.util.UUID contactId;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "organizer_id", nullable = false)
+    @JoinColumn(name = "organizer_id")
     private Employee organizer;
+
+    @Column(name = "type", nullable = false)
+    @Builder.Default
+    private String type = "ONLINE";
 
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "description", columnDefinition = "TEXT")
-    private String description;
+    @Column(name = "agenda", columnDefinition = "TEXT")
+    private String agenda;
 
-    @Column(name = "start_time", nullable = false)
-    private Instant startTime;
+    @Column(name = "notes", columnDefinition = "TEXT")
+    private String notes;
 
-    @Column(name = "end_time", nullable = false)
-    private Instant endTime;
+    @Column(name = "outcome", columnDefinition = "TEXT")
+    private String outcome;
+
+    @Column(name = "next_action", columnDefinition = "TEXT")
+    private String nextAction;
+
+    @Column(name = "scheduled_at", nullable = false)
+    private Instant scheduledAt;
+
+    @Column(name = "duration_minutes", nullable = false)
+    @Builder.Default
+    private Integer durationMinutes = 60;
 
     @Column(name = "location")
     private String location;
@@ -45,9 +65,10 @@ public class Meeting extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
+    @Builder.Default
     private MeetingStatus status = MeetingStatus.SCHEDULED;
 
     public enum MeetingStatus {
-        SCHEDULED, COMPLETED, CANCELLED, RESCHEDULED
+        SCHEDULED, IN_PROGRESS, COMPLETED, CANCELLED, POSTPONED
     }
 }

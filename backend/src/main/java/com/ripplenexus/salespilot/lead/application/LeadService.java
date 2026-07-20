@@ -84,7 +84,8 @@ public class LeadService {
             emailService.sendLeadAssignedEmail(
                     assignedTo.getWorkEmail(),
                     assignedTo.getFirstName(),
-                    lead.getContactName() + " - " + lead.getCompanyName()
+                    lead.getContactName(),
+                    lead.getCompanyName()
             );
         }
 
@@ -115,10 +116,19 @@ public class LeadService {
         }
 
         // Reassignment (Admin/Manager only — enforced at controller)
-        if (request.getAssignedToId() != null) {
+        if (request.getAssignedToId() != null && (lead.getAssignedTo() == null || !lead.getAssignedTo().getId().equals(request.getAssignedToId()))) {
             Employee newAssignee = employeeRepository.findById(request.getAssignedToId())
                     .orElseThrow(() -> new ResourceNotFoundException("Employee", request.getAssignedToId()));
             lead.setAssignedTo(newAssignee);
+            
+            if (!newAssignee.getUser().getId().equals(currentUser.getId())) {
+                emailService.sendLeadAssignedEmail(
+                        newAssignee.getWorkEmail(),
+                        newAssignee.getFirstName(),
+                        lead.getContactName(),
+                        lead.getCompanyName()
+                );
+            }
         }
 
         return LeadDto.from(leadRepository.save(lead));

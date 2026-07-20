@@ -1,61 +1,146 @@
 # Sales Pilot 🚀
 
-> **Lead. Close. Grow.**
-> 
-> Sales Pilot is a production-ready, modular monolith B2B Sales CRM and Sales Operations Platform built with Next.js 15, Spring Boot 3.4, and PostgreSQL.
+![Sales Pilot Cover](https://via.placeholder.com/1200x300/0F172A/FFFFFF?text=Sales+Pilot+-+Next-Gen+CRM+Platform)
 
-## 🏗️ Architecture
+Sales Pilot is an advanced, AI-ready CRM and Sales Engagement platform designed to streamline lead management, pipeline tracking, employee onboarding (KYC), and automated payout distribution.
 
-Sales Pilot is strictly designed as a **Modular Monolith**. It guarantees future microservice extraction capabilities by strictly isolating domains, without incurring the overhead of Kubernetes, Kafka, or distributed tracing on Day 1.
+Built with **Next.js 14**, **Tailwind CSS**, and **Spring Boot 3**, Sales Pilot scales flawlessly from a single founder to a massive distributed sales team.
 
-### Tech Stack
-- **Frontend**: Next.js 15 (App Router), Tailwind CSS v4, Framer Motion, Zustand, Axios
-- **Backend**: Java 21, Spring Boot 3.4.2, Spring Security, Hibernate/JPA
-- **Database**: PostgreSQL 16
-- **Migrations**: Flyway
-- **Deployment**: Docker Compose & Nginx (Reverse Proxy)
+## 🌟 Key Features
 
-### Core Modules
-1. **Auth & Identity**: JWT-based session management with RBAC (Admin, Manager, Exec).
-2. **Employee Management**: Profile, assignment, and data isolation.
-3. **Lead Hub**: Companies, Contacts, Ideal Customer Profiles (ICPs), and Leads.
-4. **Pipeline Engine**: Kanban state management and automated lead status mutation.
-5. **Activity Tracking**: Timeline logging, Tasks, Meetings, and Follow-ups.
-6. **Closing & Revenue**: Proposals, Deals, and Payments.
-7. **Commission Engine**: Tiered/Fixed/Percentage rules and payout tracking.
-8. **Targets**: Gamified quota progress tracking.
-9. **Admin & Settings**: System configuration, branding, and global audit logging.
-
-## 🚀 Quick Start (Docker)
-
-To run the entire Sales Pilot stack (PostgreSQL, Spring Boot Backend, Next.js Frontend, Nginx Proxy) in production mode:
-
-```bash
-# Clone the repository
-git clone https://github.com/ripplenexus/salespilot.git
-cd salespilot
-
-# Start the services
-docker compose -f docker-compose.yml up --build -d
-```
-
-### Accessing the Application
-- **Frontend**: `http://localhost`
-- **Backend API**: `http://localhost/api`
-- **Swagger Documentation**: `http://localhost:8080/swagger-ui.html` (Local development only)
-
-## 🗄️ Database Seeding
-
-Flyway automatically handles schema generation and data seeding.
-When the database spins up for the first time, it runs the `V13__seed_data.sql` script, injecting default Admin accounts, commission rules, and pipeline stages so the app is instantly usable.
-
-## 🎨 UI/UX Philosophy
-
-The frontend was meticulously crafted without relying on bloated component libraries. It uses a bespoke design system featuring:
-- **Glassmorphism**: Frosted glass panels (`.glass-panel`) over deep indigo/violet animated gradients.
-- **Micro-interactions**: Fluid Framer Motion animations across all routing and data interactions.
-- **Dark Mode First**: A deeply immersive palette optimized for extended professional usage.
+- **Automated KYC & Onboarding**: Seamlessly onboard sales agents globally with automated document verification workflows.
+- **Smart Pipeline Management**: Drag-and-drop Deal pipelines with automated triggers.
+- **11-Step Email Gamification Flow**: Automated Brevo-powered engagement emails to motivate employees (e.g., *First Deal Closed*, *Targets Crushed*, *Daily Agendas*).
+- **Automated Commission Engine**: Real-time payout calculations, tiered commission structures, and multi-currency tracking.
+- **Secure OTP Authentication**: Passwordless-ready security with robust OTP and JWT implementations.
 
 ---
 
-*Built by Ripple Nexus.*
+## 🏗 System Architecture
+
+Sales Pilot utilizes a modern monolithic-backend, decoupled-frontend micro-services architecture to maximize performance while retaining ease of deployment.
+
+```mermaid
+graph TD
+    %% Styling
+    classDef frontend fill:#3b82f6,stroke:#1d4ed8,stroke-width:2px,color:#fff
+    classDef backend fill:#10b981,stroke:#047857,stroke-width:2px,color:#fff
+    classDef db fill:#f59e0b,stroke:#b45309,stroke-width:2px,color:#fff
+    classDef ext fill:#8b5cf6,stroke:#6d28d9,stroke-width:2px,color:#fff
+
+    User[👤 Sales Agent / Admin] -->|HTTPS| Frontend
+    
+    subgraph Client [Presentation Layer]
+        Frontend[Next.js App / React / Zustand]:::frontend
+    end
+    
+    subgraph API [Core Engine Layer]
+        Backend[Spring Boot 3 Application]:::backend
+        Security[Spring Security + JWT]:::backend
+        Scheduler[Quartz / Email Schedulers]:::backend
+        
+        Frontend -->|REST API Requests| Security
+        Security --> Backend
+        Backend --- Scheduler
+    end
+    
+    subgraph Data [Persistence Layer]
+        Database[(PostgreSQL Database)]:::db
+        Flyway[Flyway Migrations]:::db
+        
+        Backend <-->|JPA / Hibernate| Database
+        Flyway -->|Schema Sync| Database
+    end
+    
+    subgraph External [External Services]
+        Brevo[Brevo Email REST API]:::ext
+        S3[AWS S3 / Local Storage]:::ext
+        
+        Backend -->|JSON / API Key| Brevo
+        Backend -->|Multipart| S3
+    end
+```
+
+---
+
+## ⚙️ Core Operational Flow
+
+The system is designed around event-driven domain operations. Below is the automated email engagement and payout workflow triggered when a deal is won.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Agent as Sales Agent
+    participant Web as Next.js Dashboard
+    participant API as Spring Boot API
+    participant Deal as Deal Service
+    participant Comm as Commission Engine
+    participant Brevo as Brevo API
+
+    Agent->>Web: Drags Deal to "Closed Won"
+    Web->>API: PUT /api/pipeline/deals/{id}/stage
+    API->>Deal: Update Deal Status
+    Deal->>Comm: Trigger calculateCommission()
+    Comm-->>Deal: Commission Calculated
+    Deal->>Brevo: POST /v3/smtp/email (Target Achieved)
+    Brevo-->>Agent: 📧 Sends "Target Crushed!" Email
+    Deal->>Brevo: POST /v3/smtp/email (Commission Paid)
+    Brevo-->>Agent: 📧 Sends "Commission Paid" Email
+```
+
+---
+
+## 🚀 Getting Started
+
+### 1. Prerequisites
+- **Node.js**: v18.0.0 or higher
+- **Java**: JDK 21 or higher
+- **Database**: PostgreSQL 15+
+- **Maven**: v3.9+
+
+### 2. Environment Configuration
+Duplicate the provided example file to create your environment configs.
+
+```bash
+cp .env.example .env
+```
+Ensure that `MAIL_PASSWORD` (API Key) and `JWT_SECRET` are correctly populated.
+
+### 3. Backend Setup (Spring Boot)
+The backend uses **Flyway** to automatically provision all 19+ relational tables upon startup.
+
+```bash
+cd backend
+./mvnw clean install
+./mvnw spring-boot:run
+```
+The backend will launch on `http://localhost:8080/api`
+
+### 4. Frontend Setup (Next.js)
+```bash
+cd frontend
+npm install
+npm run dev
+```
+The UI will be available at `http://localhost:3000`
+
+---
+
+## 🔒 Security Posture
+
+- **Stateless JWT**: Short-lived access tokens (15m) + secure HttpOnly refresh tokens.
+- **Bcrypt Hashing**: Multi-round bcrypt hashing for all sensitive employee data.
+- **Role-Based Access Control (RBAC)**: Strict `hasRole('ADMIN')` and `hasRole('EMPLOYEE')` enforcement via Spring Method Security.
+- **SQL Injection Prevention**: 100% Hibernate parameterized queries.
+
+---
+
+## 📚 API Documentation
+
+Once the backend is running, full Swagger UI documentation is available at:
+`http://localhost:8080/api/swagger-ui/index.html`
+
+## 🛡️ License
+
+© 2026 The Ripple Nexus. All rights reserved.
+Proprietary and confidential. Unauthorized copying of this file, via any medium, is strictly prohibited.

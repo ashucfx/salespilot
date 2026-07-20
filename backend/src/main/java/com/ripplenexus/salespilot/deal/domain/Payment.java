@@ -27,19 +27,23 @@ public class Payment extends BaseEntity {
     private String currency = "INR";
 
     @Column(name = "payment_date", nullable = false)
-    private Instant paymentDate;
-
-    @Column(name = "payment_method")
-    private String paymentMethod;
-
-    @Column(name = "reference_number")
-    private String referenceNumber;
+    private java.time.LocalDate paymentDate;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
-    private PaymentStatus status = PaymentStatus.COMPLETED;
+    @Column(name = "payment_method")
+    private PaymentMethod paymentMethod;
 
-    public enum PaymentStatus {
-        PENDING, COMPLETED, FAILED, REFUNDED
+    @Column(name = "transaction_ref")
+    private String transactionRef;
+
+    @Column(name = "is_received", nullable = false)
+    @Builder.Default
+    private Boolean isReceived = true;
+
+    @Column(name = "remarks", columnDefinition = "TEXT")
+    private String remarks;
+
+    public enum PaymentMethod {
+        BANK_TRANSFER, CREDIT_CARD, CASH, CHEQUE, ONLINE_GATEWAY
     }
 }

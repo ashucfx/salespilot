@@ -3,7 +3,7 @@ package com.ripplenexus.salespilot.lead.presentation;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ripplenexus.salespilot.AbstractIntegrationTest;
 import com.ripplenexus.salespilot.auth.presentation.dto.LoginRequest;
-import com.ripplenexus.salespilot.lead.presentation.dto.LeadRequestDto;
+import com.ripplenexus.salespilot.lead.presentation.dto.CreateLeadRequest;
 import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +45,7 @@ class LeadIntegrationTest extends AbstractIntegrationTest {
     void createLead_WithAdminAuth_Success() throws Exception {
         String token = getAdminAccessToken();
 
-        LeadRequestDto leadRequest = new LeadRequestDto();
+        CreateLeadRequest leadRequest = new CreateLeadRequest();
         leadRequest.setFirstName("Bruce");
         leadRequest.setLastName("Wayne");
         leadRequest.setEmail("bruce@wayne.com");

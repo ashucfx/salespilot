@@ -33,8 +33,12 @@ export const useAuthStore = create<AuthState>()(
       setTokens: (accessToken, refreshToken) => 
         set({ accessToken, refreshToken }),
         
-      logout: () => 
-        set({ user: null, accessToken: null, refreshToken: null, isAuthenticated: false }),
+      logout: () => {
+        if (typeof document !== 'undefined') {
+          document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        }
+        set({ user: null, accessToken: null, refreshToken: null, isAuthenticated: false });
+      },
     }),
     {
       name: 'salespilot-auth',

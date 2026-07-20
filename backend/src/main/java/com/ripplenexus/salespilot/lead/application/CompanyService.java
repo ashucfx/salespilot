@@ -48,7 +48,7 @@ public class CompanyService {
         company.setName(request.getName());
         company.setWebsite(request.getWebsite());
         company.setIndustry(request.getIndustry());
-        company.setSize(request.getSize());
+        company.setEmployeeCount(request.getEmployeeCount());
         company.setAnnualRevenue(request.getAnnualRevenue());
         company.setCountry(request.getCountry());
         company.setCity(request.getCity());

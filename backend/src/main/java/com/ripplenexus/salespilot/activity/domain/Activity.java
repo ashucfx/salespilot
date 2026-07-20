@@ -22,7 +22,7 @@ public class Activity extends BaseEntity {
     private Lead lead;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "employee_id", nullable = false)
+    @JoinColumn(name = "performed_by", nullable = false)
     private Employee employee;
 
     @Enumerated(EnumType.STRING)
@@ -35,7 +35,7 @@ public class Activity extends BaseEntity {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "activity_date", nullable = false)
+    @Column(name = "performed_at", nullable = false)
     @Builder.Default
     private Instant activityDate = Instant.now();
 

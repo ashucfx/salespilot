@@ -16,11 +16,8 @@ public class IdealCustomerProfile extends BaseEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "description", columnDefinition = "TEXT")
-    private String description;
-
-    @Column(name = "industry_focus")
-    private String industryFocus;
+    @Column(name = "industry")
+    private String industry;
 
     @Column(name = "company_size_min")
     private Integer companySizeMin;
@@ -28,12 +25,37 @@ public class IdealCustomerProfile extends BaseEntity {
     @Column(name = "company_size_max")
     private Integer companySizeMax;
 
-    @Column(name = "revenue_min")
-    private String revenueMin;
+    @Column(name = "revenue_min", precision = 15, scale = 2)
+    private java.math.BigDecimal revenueMin;
 
-    @Column(name = "target_regions")
-    private String targetRegions;
+    @Column(name = "revenue_max", precision = 15, scale = 2)
+    private java.math.BigDecimal revenueMax;
 
-    @Column(name = "key_pain_points", columnDefinition = "TEXT")
-    private String keyPainPoints;
+    @org.hibernate.annotations.JdbcTypeCode(org.hibernate.type.SqlTypes.ARRAY)
+    @Column(name = "decision_makers")
+    private java.util.List<String> decisionMakers;
+
+    @org.hibernate.annotations.JdbcTypeCode(org.hibernate.type.SqlTypes.ARRAY)
+    @Column(name = "pain_points")
+    private java.util.List<String> painPoints;
+
+    @org.hibernate.annotations.JdbcTypeCode(org.hibernate.type.SqlTypes.ARRAY)
+    @Column(name = "interested_services")
+    private java.util.List<String> interestedServices;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "priority", nullable = false)
+    @Builder.Default
+    private IcpPriority priority = IcpPriority.MEDIUM;
+
+    @Column(name = "description", columnDefinition = "TEXT")
+    private String description;
+
+    @Column(name = "is_active", nullable = false)
+    @Builder.Default
+    private Boolean isActive = true;
+
+    public enum IcpPriority {
+        LOW, MEDIUM, HIGH, URGENT
+    }
 }

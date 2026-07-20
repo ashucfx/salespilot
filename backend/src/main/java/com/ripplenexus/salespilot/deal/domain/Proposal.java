@@ -22,34 +22,58 @@ public class Proposal extends BaseEntity {
     @JoinColumn(name = "lead_id", nullable = false)
     private Lead lead;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "created_by", nullable = false)
-    private Employee createdBy;
+    @Column(name = "type", nullable = false)
+    private String type = "PROPOSAL";
 
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "value", nullable = false, precision = 15, scale = 2)
-    private BigDecimal value;
+    @Column(name = "file_name", nullable = false)
+    private String fileName;
+
+    @Column(name = "file_path", nullable = false)
+    private String filePath;
+
+    @Column(name = "file_size")
+    private Long fileSize;
+
+    @Column(name = "mime_type")
+    private String mimeType;
+
+    @Column(name = "amount", precision = 15, scale = 2)
+    private BigDecimal amount;
 
     @Column(name = "currency", nullable = false)
+    @Builder.Default
     private String currency = "INR";
-
-    @Column(name = "document_url")
-    private String documentUrl;
 
     @Column(name = "version", nullable = false)
     @Builder.Default
     private Integer version = 1;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
-    private ProposalStatus status = ProposalStatus.DRAFT;
+    @Column(name = "approval_status", nullable = false)
+    @Builder.Default
+    private ProposalStatus approvalStatus = ProposalStatus.PENDING;
 
     @Column(name = "valid_until")
-    private Instant validUntil;
+    private java.time.LocalDate validUntil;
+
+    @Column(name = "notes")
+    private String notes;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "uploaded_by")
+    private Employee uploadedBy;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "approved_by")
+    private Employee approvedBy;
+
+    @Column(name = "approved_at")
+    private Instant approvedAt;
 
     public enum ProposalStatus {
-        DRAFT, SENT, VIEWED, ACCEPTED, REJECTED
+        PENDING, APPROVED, REJECTED
     }
 }

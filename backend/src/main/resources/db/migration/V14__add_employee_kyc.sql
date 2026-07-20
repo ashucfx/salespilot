@@ -1,0 +1,5 @@
+ALTER TABLE employees
+    ADD COLUMN upi_id VARCHAR(100),
+    ADD COLUMN pan_number VARCHAR(50),
+    ADD COLUMN aadhar_number VARCHAR(50),
+    ADD COLUMN kyc_status VARCHAR(20) NOT NULL DEFAULT 'PENDING';

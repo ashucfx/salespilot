@@ -16,15 +16,28 @@ public class PipelineStage extends BaseEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "color", nullable = false)
-    private String color;
+    @Column(name = "slug", nullable = false, unique = true)
+    private String slug;
 
-    @Column(name = "position", nullable = false)
-    private Integer position;
+    @Column(name = "color", nullable = false)
+    @Builder.Default
+    private String color = "#6366f1";
+
+    @Column(name = "display_order", nullable = false)
+    private Integer displayOrder;
 
     @Column(name = "description")
     private String description;
 
-    @Column(name = "is_system_stage", nullable = false)
-    private boolean isSystemStage = false;
+    @Column(name = "is_won_stage", nullable = false)
+    @Builder.Default
+    private Boolean isWonStage = false;
+
+    @Column(name = "is_lost_stage", nullable = false)
+    @Builder.Default
+    private Boolean isLostStage = false;
+
+    @Column(name = "is_active", nullable = false)
+    @Builder.Default
+    private Boolean isActive = true;
 }

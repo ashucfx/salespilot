@@ -3,6 +3,7 @@ package com.ripplenexus.salespilot.lead.domain;
 import com.ripplenexus.salespilot.core.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "companies")
@@ -22,11 +23,11 @@ public class Company extends BaseEntity {
     @Column(name = "industry")
     private String industry;
 
-    @Column(name = "size")
-    private String size;
+    @Column(name = "employee_count")
+    private Integer employeeCount;
 
     @Column(name = "annual_revenue")
-    private String annualRevenue;
+    private BigDecimal annualRevenue;
 
     @Column(name = "country")
     private String country;

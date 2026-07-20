@@ -16,6 +16,8 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [otpStep, setOtpStep] = useState(false);
+  const [otpCode, setOtpCode] = useState('');
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,14 +30,46 @@ export default function LoginPage() {
     try {
       const { data } = await api.post('/auth/login', { email, password });
       
+      if (data.data.otpRequired) {
+        setOtpStep(true);
+        toast.success('Security code sent to your email');
+      } else {
+        // Fallback for non-OTP login if necessary
+        const { user, accessToken, refreshToken } = data.data;
+        setAuth(user, accessToken, refreshToken);
+        document.cookie = `token=${accessToken}; path=/; max-age=86400; SameSite=Lax`;
+        toast.success('Login successful');
+        window.location.href = '/dashboard';
+      }
+    } catch (error: any) {
+      console.error('Login failed', error);
+      toast.error(error.response?.data?.message || 'Invalid email or password');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleVerifyOtp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!otpCode || otpCode.length !== 6) {
+      toast.error('Please enter a valid 6-digit security code');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const { data } = await api.post('/auth/verify-otp', { email, otpCode });
+      
       const { user, accessToken, refreshToken } = data.data;
       setAuth(user, accessToken, refreshToken);
       
-      toast.success('Login successful');
-      router.push('/dashboard');
-    } catch (error) {
-      // Error handled by api interceptor mostly, but can catch here if needed
-      console.error('Login failed', error);
+      // Set cookie for Next.js middleware
+      document.cookie = `token=${accessToken}; path=/; max-age=86400; SameSite=Lax`;
+      toast.success('Verification successful');
+      window.location.href = '/dashboard';
+    } catch (error: any) {
+      console.error('OTP verification failed', error);
+      toast.error(error.response?.data?.message || 'Invalid security code');
     } finally {
       setLoading(false);
     }
@@ -60,69 +94,114 @@ export default function LoginPage() {
 
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 shadow-lg shadow-indigo-500/30 mb-6">
-              <TrendingUp className="w-8 h-8 text-white" />
+              {otpStep ? <Lock className="w-8 h-8 text-white" /> : <TrendingUp className="w-8 h-8 text-white" />}
             </div>
             <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">
-              Welcome Back
+              {otpStep ? 'Security Check' : 'Welcome Back'}
             </h1>
-            <p className="text-slate-400 mt-2">Sign in to Sales Pilot to continue.</p>
+            <p className="text-slate-400 mt-2">
+              {otpStep ? `Enter the 6-digit code sent to ${email}` : 'Sign in to Sales Pilot to continue.'}
+            </p>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-5">
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1.5">Work Email</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-slate-500" />
+          {!otpStep ? (
+            <form onSubmit={handleLogin} className="space-y-5">
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-1.5">Work Email</label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Mail className="h-5 w-5 text-slate-500" />
+                  </div>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="block w-full pl-10 pr-3 py-2.5 bg-slate-900/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                    placeholder="admin@salespilot.com"
+                    required
+                  />
                 </div>
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="block text-sm font-medium text-slate-300">Password</label>
+                  <Link href="/forgot-password" className="text-xs font-medium text-indigo-400 hover:text-indigo-300 transition-colors">
+                    Forgot password?
+                  </Link>
+                </div>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Lock className="h-5 w-5 text-slate-500" />
+                  </div>
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="block w-full pl-10 pr-3 py-2.5 bg-slate-900/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                    placeholder="••••••••"
+                    required
+                  />
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full relative group flex justify-center py-2.5 px-4 border border-transparent text-sm font-medium rounded-xl text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:ring-offset-[#0f0f1a] overflow-hidden transition-all"
+              >
+                <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-indigo-600 to-violet-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <span className="relative flex items-center">
+                  {loading ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    <>
+                      Continue <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </>
+                  )}
+                </span>
+              </button>
+            </form>
+          ) : (
+            <form onSubmit={handleVerifyOtp} className="space-y-5">
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-1.5">Security Code</label>
                 <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="block w-full pl-10 pr-3 py-2.5 bg-slate-900/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                  placeholder="admin@salespilot.com"
+                  type="text"
+                  maxLength={6}
+                  value={otpCode}
+                  onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ''))}
+                  className="block w-full text-center tracking-[0.5em] text-2xl py-3 bg-slate-900/50 border border-slate-700 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                  placeholder="000000"
                   required
                 />
               </div>
-            </div>
 
-            <div>
-              <div className="flex items-center justify-between mb-1.5">
-                <label className="block text-sm font-medium text-slate-300">Password</label>
-                <Link href="/forgot-password" className="text-xs font-medium text-indigo-400 hover:text-indigo-300 transition-colors">
-                  Forgot password?
-                </Link>
-              </div>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-slate-500" />
-                </div>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full pl-10 pr-3 py-2.5 bg-slate-900/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                  placeholder="••••••••"
-                  required
-                />
-              </div>
-            </div>
+              <button
+                type="submit"
+                disabled={loading || otpCode.length !== 6}
+                className="w-full relative group flex justify-center py-2.5 px-4 border border-transparent text-sm font-medium rounded-xl text-white bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:ring-offset-[#0f0f1a] overflow-hidden transition-all"
+              >
+                <span className="relative flex items-center">
+                  {loading ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    'Verify & Sign In'
+                  )}
+                </span>
+              </button>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="group relative w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-xl text-sm font-medium text-white bg-gradient-to-r from-indigo-500 to-violet-600 hover:from-indigo-400 hover:to-violet-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:ring-offset-slate-900 shadow-lg shadow-indigo-500/25 transition-all disabled:opacity-70 disabled:cursor-not-allowed mt-2"
-            >
-              {loading ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
-              ) : (
-                <>
-                  Sign In
-                  <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </>
-              )}
-            </button>
-          </form>
+              <div className="text-center mt-4">
+                <button
+                  type="button"
+                  onClick={() => setOtpStep(false)}
+                  className="text-sm text-slate-400 hover:text-white transition-colors"
+                >
+                  Back to login
+                </button>
+              </div>
+            </form>
+          )}
 
           <div className="mt-8 text-center text-sm text-slate-400">
             Secure, Enterprise-grade Sales Operations.

@@ -10,4 +10,5 @@ public class AuthResponse {
     private String refreshToken;
     private String tokenType;
     private UserInfoDto user;
+    private boolean otpRequired;
 }

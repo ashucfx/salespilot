@@ -3,6 +3,7 @@ package com.ripplenexus.salespilot.commission.application;
 import com.ripplenexus.salespilot.commission.domain.Commission;
 import com.ripplenexus.salespilot.commission.domain.CommissionRule;
 import com.ripplenexus.salespilot.commission.domain.CommissionTier;
+import com.ripplenexus.salespilot.commission.domain.EmployeeCommissionPlan;
 import com.ripplenexus.salespilot.commission.infrastructure.CommissionPlanRepository;
 import com.ripplenexus.salespilot.commission.infrastructure.CommissionRepository;
 import com.ripplenexus.salespilot.commission.infrastructure.CommissionRuleRepository;
@@ -12,6 +13,9 @@ import com.ripplenexus.salespilot.core.exception.BusinessException;
 import com.ripplenexus.salespilot.core.exception.ResourceNotFoundException;
 import com.ripplenexus.salespilot.deal.domain.Deal;
 import com.ripplenexus.salespilot.employee.domain.Employee;
+import com.ripplenexus.salespilot.employee.infrastructure.EmployeeRepository;
+import com.ripplenexus.salespilot.lead.infrastructure.LeadRepository;
+import com.ripplenexus.salespilot.commission.presentation.dto.EmployeePayoutSummaryDto;
 import com.ripplenexus.salespilot.employee.infrastructure.EmployeeRepository;
 import com.ripplenexus.salespilot.notification.application.NotificationService;
 import jakarta.transaction.Transactional;
@@ -37,6 +41,7 @@ public class CommissionService {
     private final CommissionRuleRepository commissionRuleRepository;
     private final CommissionPlanRepository commissionPlanRepository;
     private final EmployeeRepository employeeRepository;
+    private final LeadRepository leadRepository;
     private final NotificationService notificationService;
     private final EmailService emailService;
 
@@ -66,6 +71,40 @@ public class CommissionService {
         return commission;
     }
 
+    public void updateEmployeeCommissionRule(UUID employeeId, BigDecimal newPercentage) {
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee", employeeId));
+
+        String ruleName = "Custom " + newPercentage + "% Rule - " + employee.getEmployeeNumber();
+        CommissionRule rule = commissionRuleRepository.findByName(ruleName)
+                .orElseGet(() -> {
+                    CommissionRule newRule = CommissionRule.builder()
+                            .name(ruleName)
+                            .type(CommissionRule.CommissionType.PERCENTAGE)
+                            .percentage(newPercentage)
+                            .isActive(true)
+                            .build();
+                    return commissionRuleRepository.save(newRule);
+                });
+
+        commissionPlanRepository.findByEmployeeIdAndIsActiveTrue(employeeId)
+                .forEach(plan -> {
+                    plan.setActive(false);
+                    plan.setEffectiveTo(LocalDate.now());
+                    commissionPlanRepository.save(plan);
+                });
+
+        EmployeeCommissionPlan newPlan = EmployeeCommissionPlan.builder()
+                .employee(employee)
+                .rule(rule)
+                .effectiveFrom(LocalDate.now())
+                .isActive(true)
+                .build();
+        
+        commissionPlanRepository.save(newPlan);
+        log.info("Updated commission plan for {} to {}%", employee.getEmployeeNumber(), newPercentage);
+    }
+
     public void approve(UUID commissionId, UUID approverEmployeeId, String notes) {
         Commission commission = getOrThrow(commissionId);
         if (commission.getStatus() != Commission.CommissionStatus.PENDING) {
@@ -85,10 +124,6 @@ public class CommissionService {
         String formattedAmount = formatAmount(commission.getCommissionAmount(), commission.getCurrency());
         notificationService.notifyCommissionApproved(
                 commission.getEmployee().getUser(), formattedAmount);
-        emailService.sendCommissionApprovedEmail(
-                commission.getEmployee().getWorkEmail(),
-                commission.getEmployee().getFirstName(),
-                formattedAmount);
 
         log.info("Commission approved: {} by {}", commissionId, approver.getEmployeeNumber());
     }
@@ -150,6 +185,27 @@ public class CommissionService {
                     .findByStatus(Commission.CommissionStatus.valueOf(status.toUpperCase()), pageable));
         }
         return PageResponse.of(commissionRepository.findAll(pageable));
+    }
+
+    public PageResponse<EmployeePayoutSummaryDto> getPayoutSummary(Pageable pageable) {
+        return PageResponse.of(employeeRepository.findAllActive(pageable).map(emp -> {
+            BigDecimal pending = commissionRepository.sumPendingByEmployee(emp.getId());
+            long leadsGen = leadRepository.countByAssignedTo(emp.getId());
+            long dealsClosed = leadRepository.countWonByEmployee(emp.getId());
+            
+            // Expected payout end of month
+            LocalDate endOfMonth = LocalDate.now().withDayOfMonth(LocalDate.now().lengthOfMonth());
+            
+            return EmployeePayoutSummaryDto.builder()
+                    .employeeId(emp.getId())
+                    .employeeName(emp.getFullName())
+                    .employeeNumber(emp.getEmployeeNumber())
+                    .totalPendingCommission(pending != null ? pending : BigDecimal.ZERO)
+                    .leadsGenerated(leadsGen)
+                    .dealsClosed(dealsClosed)
+                    .nextPayoutDate(endOfMonth.toString())
+                    .build();
+        }));
     }
 
     // ─────────────────────────────────────────────────────────────

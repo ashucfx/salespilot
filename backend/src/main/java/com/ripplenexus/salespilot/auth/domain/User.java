@@ -41,6 +41,12 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "last_login_at")
     private Instant lastLoginAt;
 
+    @Column(name = "otp_code", length = 10)
+    private String otpCode;
+
+    @Column(name = "otp_expiry")
+    private Instant otpExpiry;
+
     @Column(name = "password_reset_token")
     private String passwordResetToken;
 

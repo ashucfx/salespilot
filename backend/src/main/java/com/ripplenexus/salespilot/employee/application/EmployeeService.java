@@ -11,10 +11,15 @@ import com.ripplenexus.salespilot.core.exception.DuplicateResourceException;
 import com.ripplenexus.salespilot.core.exception.ResourceNotFoundException;
 import com.ripplenexus.salespilot.employee.domain.Department;
 import com.ripplenexus.salespilot.employee.domain.Employee;
+import com.ripplenexus.salespilot.commission.domain.CommissionRule;
+import com.ripplenexus.salespilot.commission.domain.EmployeeCommissionPlan;
+import com.ripplenexus.salespilot.commission.infrastructure.CommissionPlanRepository;
+import com.ripplenexus.salespilot.commission.infrastructure.CommissionRuleRepository;
 import com.ripplenexus.salespilot.employee.infrastructure.DepartmentRepository;
 import com.ripplenexus.salespilot.employee.infrastructure.EmployeeRepository;
 import com.ripplenexus.salespilot.employee.presentation.dto.CreateEmployeeRequest;
 import com.ripplenexus.salespilot.employee.presentation.dto.EmployeeDto;
+import com.ripplenexus.salespilot.employee.presentation.dto.KycSubmissionRequest;
 import com.ripplenexus.salespilot.employee.presentation.dto.UpdateEmployeeRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +44,8 @@ public class EmployeeService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final DepartmentRepository departmentRepository;
+    private final CommissionRuleRepository commissionRuleRepository;
+    private final CommissionPlanRepository commissionPlanRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
 
@@ -95,6 +102,26 @@ public class EmployeeService {
 
         Employee employee = builder.build();
         employee = employeeRepository.save(employee);
+
+        // Assign default 10% commission rule
+        CommissionRule rule = commissionRuleRepository.findByName("Default 10% Commission")
+                .orElseGet(() -> {
+                    CommissionRule newRule = CommissionRule.builder()
+                            .name("Default 10% Commission")
+                            .type(CommissionRule.CommissionType.PERCENTAGE)
+                            .percentage(java.math.BigDecimal.valueOf(10.0))
+                            .isActive(true)
+                            .build();
+                    return commissionRuleRepository.save(newRule);
+                });
+
+        EmployeeCommissionPlan plan = EmployeeCommissionPlan.builder()
+                .employee(employee)
+                .rule(rule)
+                .effectiveFrom(java.time.LocalDate.now())
+                .isActive(true)
+                .build();
+        commissionPlanRepository.save(plan);
 
         // Send welcome email asynchronously
         emailService.sendWelcomeEmail(request.getWorkEmail(),
@@ -168,6 +195,35 @@ public class EmployeeService {
         return EmployeeDto.from(employee);
     }
 
+    public EmployeeDto submitKyc(UUID userId, KycSubmissionRequest request) {
+        Employee employee = employeeRepository.findByUserId(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee profile not found"));
+        
+        if (employee.getKycStatus() == Employee.KycStatus.FROZEN) {
+            throw new BusinessException("Account is frozen due to too many failed KYC attempts. Please contact admin.");
+        }
+        
+        int attempts = employee.getKycAttempts() == null ? 0 : employee.getKycAttempts();
+        if (attempts >= 4) {
+            employee.setKycStatus(Employee.KycStatus.FROZEN);
+            employeeRepository.save(employee);
+            throw new BusinessException("Maximum KYC attempts exceeded. Account is now frozen.");
+        }
+        
+        employee.setNationalId(request.getNationalId());
+        employee.setCountryOfId(request.getCountryOfId());
+        employee.setKycDocumentPath(request.getKycDocumentPath());
+        employee.setUpiId(request.getUpiId());
+        employee.setBankName(request.getBankName());
+        employee.setBankAccount(request.getBankAccount());
+        employee.setBankIfsc(request.getBankIfsc());
+        
+        employee.setKycAttempts(attempts + 1);
+        employee.setKycStatus(Employee.KycStatus.SUBMITTED);
+        
+        return EmployeeDto.from(employeeRepository.save(employee));
+    }
+
     public PageResponse<EmployeeDto> getAll(String search, String status, Pageable pageable) {
         Page<Employee> page;
         if (search != null && !search.isBlank()) {
@@ -184,6 +240,67 @@ public class EmployeeService {
     // ─────────────────────────────────────────────────────────────
     // Private helpers
     // ─────────────────────────────────────────────────────────────
+
+    public EmployeeDto verifyKyc(UUID employeeId) {
+        Employee employee = getEmployeeOrThrow(employeeId);
+        employee.setKycStatus(Employee.KycStatus.VERIFIED);
+        employee = employeeRepository.save(employee);
+        
+        emailService.sendKycStatusUpdateEmail(employee.getWorkEmail(), employee.getFirstName(), "VERIFIED");
+        
+        return EmployeeDto.from(employee);
+    }
+
+    public EmployeeDto rejectKyc(UUID employeeId, String reason) {
+        Employee employee = getEmployeeOrThrow(employeeId);
+        employee.setKycStatus(Employee.KycStatus.CLARIFICATION_NEEDED);
+        employee.setNotes("KYC Rejected: " + reason);
+        employee = employeeRepository.save(employee);
+        
+        emailService.sendKycStatusUpdateEmail(employee.getWorkEmail(), employee.getFirstName(), "REJECTED");
+        
+        return EmployeeDto.from(employee);
+    }
+
+    public EmployeeDto reconsiderKyc(UUID employeeId) {
+        Employee employee = getEmployeeOrThrow(employeeId);
+        if (employee.getKycStatus() != Employee.KycStatus.FROZEN) {
+            throw new BusinessException("Only frozen accounts can be reconsidered.");
+        }
+        employee.setKycAttempts(0); // Reset attempts
+        employee.setKycStatus(Employee.KycStatus.PENDING);
+        return EmployeeDto.from(employeeRepository.save(employee));
+    }
+
+    public EmployeeDto updateDesignation(UUID id, String designation) {
+        Employee employee = getEmployeeOrThrow(id);
+        employee.setDesignation(designation);
+        return EmployeeDto.from(employeeRepository.save(employee));
+    }
+
+    public EmployeeDto submitResignation(UUID userId, String reason) {
+        Employee employee = employeeRepository.findByUserId(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee profile not found"));
+        employee.setResignationStatus(Employee.ResignationStatus.SUBMITTED);
+        employee.setResignationReason(reason);
+        employee.setResignationSubmittedAt(java.time.ZonedDateTime.now());
+        return EmployeeDto.from(employeeRepository.save(employee));
+    }
+
+    public EmployeeDto approveResignation(UUID id, java.time.LocalDate endDate) {
+        Employee employee = getEmployeeOrThrow(id);
+        employee.setResignationStatus(Employee.ResignationStatus.APPROVED);
+        employee.setEndDate(endDate);
+        // We will not deactivate the account immediately, a scheduled task can do that on the end_date
+        return EmployeeDto.from(employeeRepository.save(employee));
+    }
+
+    public EmployeeDto rejectResignation(UUID id, String reason) {
+        Employee employee = getEmployeeOrThrow(id);
+        employee.setResignationStatus(Employee.ResignationStatus.REJECTED);
+        employee.setNotes("Resignation Rejected: " + reason);
+        return EmployeeDto.from(employeeRepository.save(employee));
+    }
 
     private Employee getEmployeeOrThrow(UUID id) {
         return employeeRepository.findById(id)

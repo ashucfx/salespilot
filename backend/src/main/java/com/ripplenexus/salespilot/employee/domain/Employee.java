@@ -100,6 +100,27 @@ public class Employee extends BaseEntity {
     @Column(name = "bank_ifsc")
     private String bankIfsc;
 
+    @Column(name = "upi_id")
+    private String upiId;
+
+    @Column(name = "national_id")
+    private String nationalId;
+
+    @Column(name = "country_of_id")
+    private String countryOfId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "kyc_status", nullable = false)
+    @Builder.Default
+    private KycStatus kycStatus = KycStatus.PENDING;
+
+    @Column(name = "kyc_document_path")
+    private String kycDocumentPath;
+
+    @Column(name = "kyc_attempts", nullable = false)
+    @Builder.Default
+    private Integer kycAttempts = 0;
+
     @Column(name = "emergency_name")
     private String emergencyName;
 
@@ -146,5 +167,26 @@ public class Employee extends BaseEntity {
 
     public enum EmploymentStatus {
         ACTIVE, INACTIVE, ON_LEAVE, TERMINATED, PROBATION
+    }
+
+    public enum KycStatus {
+        PENDING, SUBMITTED, VERIFIED, REJECTED, CLARIFICATION_NEEDED, FROZEN
+    }
+
+    @Column(name = "end_date")
+    private LocalDate endDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "resignation_status")
+    private ResignationStatus resignationStatus;
+
+    @Column(name = "resignation_reason")
+    private String resignationReason;
+
+    @Column(name = "resignation_submitted_at")
+    private java.time.ZonedDateTime resignationSubmittedAt;
+
+    public enum ResignationStatus {
+        SUBMITTED, APPROVED, REJECTED, WITHDRAWN
     }
 }

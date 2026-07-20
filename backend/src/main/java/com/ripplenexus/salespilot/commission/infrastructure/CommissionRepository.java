@@ -13,6 +13,7 @@ import java.util.UUID;
 @Repository
 public interface CommissionRepository extends JpaRepository<Commission, UUID> {
 
+
     Page<Commission> findByEmployeeId(UUID employeeId, Pageable pageable);
 
     Page<Commission> findByStatus(Commission.CommissionStatus status, Pageable pageable);
