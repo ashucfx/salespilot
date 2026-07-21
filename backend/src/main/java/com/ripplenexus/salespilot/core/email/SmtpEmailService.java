@@ -17,6 +17,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class SmtpEmailService implements EmailService {
 
+    private final EmailLogRepository emailLogRepository;
     private final RestTemplate restTemplate = new RestTemplate();
 
     @Value("${salespilot.email.from:ashutosh.shukla@theripplenexus.com}")
@@ -154,11 +155,28 @@ public class SmtpEmailService implements EmailService {
 
             if (response.getStatusCode().is2xxSuccessful()) {
                 log.info("Email successfully dispatched to {} via Brevo API | Subject: {}", to, subject);
+                emailLogRepository.save(EmailLog.builder()
+                        .recipient(to)
+                        .subject(subject)
+                        .status("SUCCESS")
+                        .build());
             } else {
                 log.error("Brevo API error: {}", response.getBody());
+                emailLogRepository.save(EmailLog.builder()
+                        .recipient(to)
+                        .subject(subject)
+                        .status("FAILED")
+                        .errorMessage(response.getBody())
+                        .build());
             }
         } catch (Exception e) {
             log.error("Failed to send email to {}: {}", to, e.getMessage());
+            emailLogRepository.save(EmailLog.builder()
+                    .recipient(to)
+                    .subject(subject)
+                    .status("FAILED")
+                    .errorMessage(e.getMessage())
+                    .build());
         }
     }
 }
