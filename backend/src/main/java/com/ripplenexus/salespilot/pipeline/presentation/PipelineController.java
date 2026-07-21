@@ -28,22 +28,28 @@ public class PipelineController {
 
     @GetMapping("/entries")
     @PreAuthorize("hasAnyRole('ADMIN', 'SALES_MANAGER', 'SALES_EXEC')")
-    public ResponseEntity<ResponseDto<List<PipelineEntry>>> getEntries() {
-        return ResponseEntity.ok(ResponseDto.success(pipelineService.getEntries()));
+    public ResponseEntity<ResponseDto<List<PipelineEntry>>> getEntries(
+            @org.springframework.security.core.annotation.AuthenticationPrincipal com.ripplenexus.salespilot.auth.domain.User currentUser
+    ) {
+        return ResponseEntity.ok(ResponseDto.success(pipelineService.getEntries(currentUser)));
     }
 
     @PutMapping("/entries/{leadId}/stage")
     @PreAuthorize("hasAnyRole('ADMIN', 'SALES_MANAGER', 'SALES_EXEC')")
     public ResponseEntity<ResponseDto<Void>> updateStage(
             @PathVariable UUID leadId,
-            @RequestBody UpdateStageRequest request) {
-        pipelineService.updateLeadStage(leadId, request.getStageId(), request.getPosition());
+            @jakarta.validation.Valid @RequestBody UpdateStageRequest request,
+            @org.springframework.security.core.annotation.AuthenticationPrincipal com.ripplenexus.salespilot.auth.domain.User currentUser) {
+        pipelineService.updateLeadStage(leadId, request.getStageId(), request.getPosition(), currentUser);
         return ResponseEntity.ok(ResponseDto.success(null));
     }
 
     @Data
     public static class UpdateStageRequest {
+        @jakarta.validation.constraints.NotNull(message = "Stage ID cannot be null")
         private UUID stageId;
+        
+        @jakarta.validation.constraints.Min(value = 0, message = "Position cannot be negative")
         private int position;
     }
 }
