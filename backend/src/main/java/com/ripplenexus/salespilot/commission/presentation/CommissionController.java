@@ -20,6 +20,7 @@ import java.util.UUID;
 public class CommissionController {
 
     private final CommissionService commissionService;
+    private final com.ripplenexus.salespilot.employee.infrastructure.EmployeeRepository employeeRepository;
 
     @PutMapping("/employee/{employeeId}/rule")
     @PreAuthorize("hasRole('ADMIN')")
@@ -34,23 +35,42 @@ public class CommissionController {
     @PreAuthorize("hasAnyRole('ADMIN', 'SALES_MANAGER', 'SALES_EXEC')")
     public ResponseEntity<ResponseDto<PageResponse<Commission>>> getEmployeeCommissions(
             @PathVariable UUID employeeId,
+            @org.springframework.security.core.annotation.AuthenticationPrincipal com.ripplenexus.salespilot.auth.domain.User currentUser,
             Pageable pageable) {
+            
+        boolean isAdminOrManager = currentUser.getRoles().stream()
+                .anyMatch(r -> r.getName().equals("ADMIN") || r.getName().equals("SALES_MANAGER"));
+                
+        if (!isAdminOrManager) {
+            com.ripplenexus.salespilot.employee.domain.Employee employee = employeeRepository.findByUserId(currentUser.getId())
+                    .orElseThrow(() -> new com.ripplenexus.salespilot.core.exception.ResourceNotFoundException("Employee profile not found"));
+            if (!employee.getId().equals(employeeId)) {
+                throw new org.springframework.security.access.AccessDeniedException("You can only view your own commissions.");
+            }
+        }
+        
         return ResponseEntity.ok(ResponseDto.success(commissionService.getByEmployee(employeeId, null, pageable)));
     }
 
     @PostMapping("/{id}/approve")
     @PreAuthorize("hasAnyRole('ADMIN', 'SALES_MANAGER')")
-    public ResponseEntity<ResponseDto<Void>> approveCommission(@PathVariable UUID id) {
-        // TODO: Pass actual logged-in user employee ID
-        commissionService.approve(id, UUID.randomUUID(), "Approved via API");
+    public ResponseEntity<ResponseDto<Void>> approveCommission(
+            @PathVariable UUID id,
+            @org.springframework.security.core.annotation.AuthenticationPrincipal com.ripplenexus.salespilot.auth.domain.User currentUser) {
+        com.ripplenexus.salespilot.employee.domain.Employee approver = employeeRepository.findByUserId(currentUser.getId()).orElse(null);
+        UUID approverId = approver != null ? approver.getId() : currentUser.getId();
+        commissionService.approve(id, approverId, "Approved via API");
         return ResponseEntity.ok(ResponseDto.success(null));
     }
 
     @PostMapping("/{id}/pay")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ResponseDto<Void>> payCommission(@PathVariable UUID id) {
-        // TODO: Pass actual logged-in user employee ID
-        commissionService.markPaid(id, UUID.randomUUID(), "PAID_API");
+    public ResponseEntity<ResponseDto<Void>> payCommission(
+            @PathVariable UUID id,
+            @org.springframework.security.core.annotation.AuthenticationPrincipal com.ripplenexus.salespilot.auth.domain.User currentUser) {
+        com.ripplenexus.salespilot.employee.domain.Employee payer = employeeRepository.findByUserId(currentUser.getId()).orElse(null);
+        UUID payerId = payer != null ? payer.getId() : currentUser.getId();
+        commissionService.markPaid(id, payerId, "PAID_API");
         return ResponseEntity.ok(ResponseDto.success(null));
     }
 
