@@ -187,7 +187,7 @@ public class LeadService {
     private String generateLeadNumber() {
         YearMonth now = YearMonth.now();
         String prefix = String.format("LD-%04d%02d", now.getYear(), now.getMonthValue());
-        long count = leadRepository.count() + 1;
-        return String.format("%s-%04d", prefix, count);
+        String randomSuffix = UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+        return String.format("%s-%s", prefix, randomSuffix);
     }
 }
