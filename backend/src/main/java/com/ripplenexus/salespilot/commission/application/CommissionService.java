@@ -50,6 +50,11 @@ public class CommissionService {
      * Called by DealService after deal closure.
      */
     public Commission calculateAndCreate(Deal deal, Employee employee) {
+        if (commissionRepository.existsByDealId(deal.getId())) {
+            log.warn("Commission already exists for deal {}", deal.getId());
+            throw new BusinessException("Commission already generated for this deal.");
+        }
+
         CommissionRule rule = getActiveRuleForEmployee(employee);
 
         BigDecimal commissionAmount = calculateAmount(rule, deal.getDealValue());
