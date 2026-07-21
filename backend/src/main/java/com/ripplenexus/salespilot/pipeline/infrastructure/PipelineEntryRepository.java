@@ -10,4 +10,5 @@ import java.util.UUID;
 @Repository
 public interface PipelineEntryRepository extends JpaRepository<PipelineEntry, UUID> {
     List<PipelineEntry> findByStageIdOrderByPositionAsc(UUID stageId);
+    java.util.Optional<PipelineEntry> findByLeadId(UUID leadId);
 }
