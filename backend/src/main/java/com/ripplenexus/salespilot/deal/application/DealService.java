@@ -54,6 +54,11 @@ public class DealService {
         Employee employee = employeeRepository.findByUserId(closedByUserId)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee profile not found"));
 
+        if (lead.getAssignedTo() == null || !lead.getAssignedTo().getId().equals(employee.getId())) {
+            throw new org.springframework.security.access.AccessDeniedException("Access denied. You can only close deals for your own assigned leads.");
+        }
+
+
         // Mark lead as WON
         lead.setStatus(Lead.LeadStatus.WON);
         lead.setDealValue(request.getDealValue());
@@ -102,7 +107,7 @@ public class DealService {
 
     private String generateDealNumber() {
         YearMonth now = YearMonth.now();
-        long count = dealRepository.count() + 1;
-        return String.format("DEAL-%04d%02d-%04d", now.getYear(), now.getMonthValue(), count);
+        String randomSuffix = UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+        return String.format("DEAL-%04d%02d-%s", now.getYear(), now.getMonthValue(), randomSuffix);
     }
 }
