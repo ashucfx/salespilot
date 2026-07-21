@@ -31,19 +31,35 @@ public class EmailNotificationScheduler {
         
         List<Employee> activeEmployees = employeeRepository.findAll();
         
+        int emailsSent = 0;
+        final int DAILY_LIMIT = 290; // Leave 10 for other transacational emails
+
         for (Employee employee : activeEmployees) {
+            if (emailsSent >= DAILY_LIMIT) {
+                log.warn("Daily email limit reached ({}). Stopping agenda blast.", DAILY_LIMIT);
+                break;
+            }
+
             if (employee.getStatus() == Employee.EmploymentStatus.ACTIVE) {
-                // For a real production app, we would query the follow-up and meeting repositories here.
-                // Since MeetingService isn't fully implemented yet, we send a generic motivational agenda.
-                int pendingFollowUps = 3; // Placeholder until FollowUp table is fully mapped
-                int todayMeetings = 2;    // Placeholder until Meeting table is fully mapped
-                
-                emailService.sendDailyAgendaEmail(
-                        employee.getWorkEmail(),
-                        employee.getFirstName(),
-                        pendingFollowUps,
-                        todayMeetings
-                );
+                try {
+                    // For a real production app, we would query the follow-up and meeting repositories here.
+                    int pendingFollowUps = 3; 
+                    int todayMeetings = 2;    
+                    
+                    emailService.sendDailyAgendaEmail(
+                            employee.getWorkEmail(),
+                            employee.getFirstName(),
+                            pendingFollowUps,
+                            todayMeetings
+                    );
+                    emailsSent++;
+                    
+                    // Throttle to respect Brevo API rate limits
+                    Thread.sleep(150); 
+                } catch (Exception e) {
+                    log.error("Failed to send agenda to {}: {}", employee.getWorkEmail(), e.getMessage());
+                    // Continue to next employee
+                }
             }
         }
         log.info("Daily Agenda email blast completed.");
@@ -58,20 +74,34 @@ public class EmailNotificationScheduler {
         List<Employee> activeEmployees = employeeRepository.findAll();
         Instant oneWeekAgo = Instant.now().minus(7, ChronoUnit.DAYS);
         
-        for (Employee employee : activeEmployees) {
-            if (employee.getStatus() == Employee.EmploymentStatus.ACTIVE) {
-                // Normally we'd filter deals closed in the last 7 days. Using all-time for simplicity here.
-                long dealsCount = dealRepository.countByEmployee(employee.getId());
-                BigDecimal revenue = dealRepository.sumRevenueByEmployee(employee.getId());
-                
-                if (revenue == null) revenue = BigDecimal.ZERO;
+        int emailsSent = 0;
+        final int WEEKLY_LIMIT = 290;
 
-                emailService.sendWeeklyPerformanceSummaryEmail(
-                        employee.getWorkEmail(),
-                        employee.getFirstName(),
-                        (int) dealsCount,
-                        revenue.toString()
-                );
+        for (Employee employee : activeEmployees) {
+            if (emailsSent >= WEEKLY_LIMIT) {
+                log.warn("Weekly email limit reached ({}). Stopping summary blast.", WEEKLY_LIMIT);
+                break;
+            }
+
+            if (employee.getStatus() == Employee.EmploymentStatus.ACTIVE) {
+                try {
+                    long dealsCount = dealRepository.countByEmployee(employee.getId());
+                    BigDecimal revenue = dealRepository.sumRevenueByEmployee(employee.getId());
+                    
+                    if (revenue == null) revenue = BigDecimal.ZERO;
+
+                    emailService.sendWeeklyPerformanceSummaryEmail(
+                            employee.getWorkEmail(),
+                            employee.getFirstName(),
+                            (int) dealsCount,
+                            revenue.toString()
+                    );
+                    emailsSent++;
+                    
+                    Thread.sleep(150);
+                } catch (Exception e) {
+                    log.error("Failed to send weekly summary to {}: {}", employee.getWorkEmail(), e.getMessage());
+                }
             }
         }
         log.info("Weekly Performance Summary email blast completed.");
