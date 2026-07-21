@@ -28,27 +28,50 @@ public class PipelineService {
         return stageRepository.findAllByDeletedAtIsNullOrderByDisplayOrderAsc();
     }
 
-    public List<PipelineEntry> getEntries() {
-        return entryRepository.findAll();
+    public List<PipelineEntry> getEntries(com.ripplenexus.salespilot.auth.domain.User currentUser) {
+        List<PipelineEntry> allEntries = entryRepository.findAll();
+        
+        boolean isAdminOrManager = currentUser.getRoles().stream()
+                .anyMatch(r -> r.getName().equals("ADMIN") || r.getName().equals("SALES_MANAGER"));
+                
+        if (isAdminOrManager) {
+            return allEntries;
+        }
+        
+        // SALES_EXEC only sees their own assigned leads
+        return allEntries.stream()
+                .filter(e -> e.getLead().getAssignedTo() != null 
+                        && e.getLead().getAssignedTo().getUser().getId().equals(currentUser.getId()))
+                .toList();
     }
 
-    public void updateLeadStage(UUID leadId, UUID newStageId, int newPosition) {
+    public PipelineEntryDto updateLeadStage(UUID leadId, UUID newStageId, int position, com.ripplenexus.salespilot.auth.domain.User currentUser) {
         Lead lead = leadRepository.findById(leadId)
+                .filter(l -> l.getDeletedAt() == null)
                 .orElseThrow(() -> new ResourceNotFoundException("Lead", leadId));
-        
+
+        boolean isAdminOrManager = currentUser.getRoles().stream()
+                .anyMatch(r -> r.getName().equals("ADMIN") || r.getName().equals("SALES_MANAGER"));
+                
+        if (!isAdminOrManager) {
+            Employee emp = employeeRepository.findByUserId(currentUser.getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Employee profile not found"));
+            if (lead.getAssignedTo() == null || !lead.getAssignedTo().getId().equals(emp.getId())) {
+                throw new org.springframework.security.access.AccessDeniedException("Access denied. You can only move your own assigned leads.");
+            }
+        }
+
         PipelineStage stage = stageRepository.findById(newStageId)
                 .orElseThrow(() -> new ResourceNotFoundException("Stage", newStageId));
 
-        PipelineEntry entry = entryRepository.findAll().stream()
-                .filter(e -> e.getLead().getId().equals(leadId))
-                .findFirst()
+        PipelineEntry entry = entryRepository.findByLeadId(leadId)
                 .orElseGet(() -> PipelineEntry.builder()
                         .lead(lead)
                         .enteredAt(Instant.now())
                         .build());
 
         entry.setStage(stage);
-        entry.setPosition(newPosition);
+        entry.setPosition(position);
         entry.setEnteredAt(Instant.now());
         
         // Update lead status based on system stage if applicable
