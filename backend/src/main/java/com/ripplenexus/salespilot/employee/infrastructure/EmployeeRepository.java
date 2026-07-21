@@ -23,6 +23,13 @@ public interface EmployeeRepository extends JpaRepository<Employee, UUID> {
 
     @Query("""
         SELECT e FROM Employee e
+        LEFT JOIN FETCH e.user u
+        WHERE e.status = 'ACTIVE'
+    """)
+    Page<Employee> findAllActiveWithUser(Pageable pageable);
+
+    @Query("""
+        SELECT e FROM Employee e
         WHERE e.deletedAt IS NULL
         AND (
             LOWER(e.firstName) LIKE LOWER(CONCAT('%', :search, '%'))
