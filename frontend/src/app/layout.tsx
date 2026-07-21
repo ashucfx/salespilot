@@ -6,8 +6,18 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Sales Pilot | Lead. Close. Grow.",
-  description: "Enterprise Sales CRM and Operations Platform",
+  title: "SalesPilot | Enterprise CRM & Operations",
+  description: "Enterprise Sales CRM and Operations Platform for managing leads, pipeline, and payouts.",
+  icons: {
+    icon: '/icon.svg',
+    shortcut: '/icon.svg',
+    apple: '/icon.svg',
+  },
+  openGraph: {
+    title: 'SalesPilot',
+    description: 'Enterprise Sales CRM and Operations Platform',
+    type: 'website',
+  }
 };
 
 export default function RootLayout({

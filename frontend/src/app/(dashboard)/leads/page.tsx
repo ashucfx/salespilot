@@ -36,6 +36,16 @@ export default function LeadsPage() {
     fetchLeads();
   }, []);
 
+  const handleStatusChange = async (leadId: string, newStatus: string) => {
+    try {
+      await api.put(`/leads/${leadId}`, { status: newStatus });
+      toast.success('Lead status updated');
+      setLeads(leads.map(lead => lead.id === leadId ? { ...lead, status: newStatus } : lead));
+    } catch (error) {
+      toast.error('Failed to update lead status');
+    }
+  };
+
   const getStatusColor = (status: string) => {
     switch(status) {
       case 'NEW': return 'bg-blue-500/10 text-blue-400 border-blue-500/20';
@@ -128,9 +138,18 @@ export default function LeadsPage() {
                       </div>
                     </td>
                     <td className="py-4 px-6">
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(lead.status)}`}>
-                        {lead.status.replace('_', ' ')}
-                      </span>
+                      <select 
+                        value={lead.status}
+                        onChange={(e) => handleStatusChange(lead.id, e.target.value)}
+                        className={`px-3 py-1 rounded-full text-xs font-medium border focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer transition-colors ${getStatusColor(lead.status)} [&>option]:bg-slate-900 [&>option]:text-white`}
+                      >
+                        <option value="NEW">NEW</option>
+                        <option value="CONTACTED">CONTACTED</option>
+                        <option value="QUALIFIED">QUALIFIED</option>
+                        <option value="PROPOSAL_SENT">PROPOSAL SENT</option>
+                        <option value="WON">WON</option>
+                        <option value="LOST">LOST</option>
+                      </select>
                     </td>
                     <td className="py-4 px-6">
                       <div className="flex items-center gap-2 text-slate-400">
