@@ -33,13 +33,13 @@ public class ICPController {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'SALES_MANAGER')")
-    public ResponseEntity<ResponseDto<IdealCustomerProfile>> create(@RequestBody IdealCustomerProfile icp) {
+    public ResponseEntity<ResponseDto<IdealCustomerProfile>> create(@Valid @RequestBody IdealCustomerProfile icp) {
         return ResponseEntity.ok(ResponseDto.success(icpService.createICP(icp)));
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'SALES_MANAGER')")
-    public ResponseEntity<ResponseDto<IdealCustomerProfile>> update(@PathVariable UUID id, @RequestBody IdealCustomerProfile icp) {
+    public ResponseEntity<ResponseDto<IdealCustomerProfile>> update(@PathVariable UUID id, @Valid @RequestBody IdealCustomerProfile icp) {
         return ResponseEntity.ok(ResponseDto.success(icpService.updateICP(id, icp)));
     }
 
