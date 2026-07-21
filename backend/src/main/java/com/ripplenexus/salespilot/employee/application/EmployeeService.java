@@ -20,7 +20,8 @@ import com.ripplenexus.salespilot.employee.infrastructure.EmployeeRepository;
 import com.ripplenexus.salespilot.employee.presentation.dto.CreateEmployeeRequest;
 import com.ripplenexus.salespilot.employee.presentation.dto.EmployeeDto;
 import com.ripplenexus.salespilot.employee.presentation.dto.KycSubmissionRequest;
-import com.ripplenexus.salespilot.employee.presentation.dto.UpdateEmployeeRequest;
+import com.ripplenexus.salespilot.employee.presentation.dto.AdminUpdateEmployeeRequest;
+import com.ripplenexus.salespilot.employee.presentation.dto.UpdateEmployeeProfileRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -131,7 +132,7 @@ public class EmployeeService {
         return EmployeeDto.from(employee);
     }
 
-    public EmployeeDto updateEmployee(UUID id, UpdateEmployeeRequest request) {
+    public EmployeeDto updateAdminDetails(UUID id, AdminUpdateEmployeeRequest request) {
         Employee employee = getEmployeeOrThrow(id);
 
         if (request.getFirstName() != null) employee.setFirstName(request.getFirstName());
@@ -143,6 +144,7 @@ public class EmployeeService {
         if (request.getCity() != null) employee.setCity(request.getCity());
         if (request.getState() != null) employee.setState(request.getState());
         if (request.getCountry() != null) employee.setCountry(request.getCountry());
+        if (request.getPincode() != null) employee.setPincode(request.getPincode());
         if (request.getNotes() != null) employee.setNotes(request.getNotes());
         if (request.getStatus() != null) employee.setStatus(request.getStatus());
         if (request.getSalary() != null) employee.setSalary(request.getSalary());
@@ -150,6 +152,9 @@ public class EmployeeService {
         if (request.getTerritories() != null) employee.setTerritories(request.getTerritories());
         if (request.getIndustries() != null) employee.setIndustries(request.getIndustries());
         if (request.getServices() != null) employee.setServices(request.getServices());
+        if (request.getEmergencyName() != null) employee.setEmergencyName(request.getEmergencyName());
+        if (request.getEmergencyPhone() != null) employee.setEmergencyPhone(request.getEmergencyPhone());
+        if (request.getEmergencyRelation() != null) employee.setEmergencyRelation(request.getEmergencyRelation());
 
         if (request.getDepartmentId() != null) {
             Department dept = departmentRepository.findById(request.getDepartmentId())
@@ -166,7 +171,30 @@ public class EmployeeService {
             employee.setManager(manager);
         }
 
-        return EmployeeDto.from(employeeRepository.save(employee));
+        employeeRepository.save(employee);
+        log.info("Employee admin details updated: {}", employee.getEmployeeNumber());
+        return EmployeeDto.from(employee);
+    }
+
+    public EmployeeDto updateProfile(UUID id, UpdateEmployeeProfileRequest request) {
+        Employee employee = getEmployeeOrThrow(id);
+
+        if (request.getFirstName() != null) employee.setFirstName(request.getFirstName());
+        if (request.getLastName() != null) employee.setLastName(request.getLastName());
+        if (request.getPhone() != null) employee.setPhone(request.getPhone());
+        if (request.getWhatsapp() != null) employee.setWhatsapp(request.getWhatsapp());
+        if (request.getAddress() != null) employee.setAddress(request.getAddress());
+        if (request.getCity() != null) employee.setCity(request.getCity());
+        if (request.getState() != null) employee.setState(request.getState());
+        if (request.getCountry() != null) employee.setCountry(request.getCountry());
+        if (request.getPincode() != null) employee.setPincode(request.getPincode());
+        if (request.getEmergencyName() != null) employee.setEmergencyName(request.getEmergencyName());
+        if (request.getEmergencyPhone() != null) employee.setEmergencyPhone(request.getEmergencyPhone());
+        if (request.getEmergencyRelation() != null) employee.setEmergencyRelation(request.getEmergencyRelation());
+
+        employeeRepository.save(employee);
+        log.info("Employee profile updated by self: {}", employee.getEmployeeNumber());
+        return EmployeeDto.from(employee);
     }
 
     public void deactivateEmployee(UUID id) {
@@ -311,8 +339,8 @@ public class EmployeeService {
     private String generateEmployeeNumber() {
         YearMonth now = YearMonth.now();
         String prefix = String.format("EMP-%04d%02d", now.getYear(), now.getMonthValue());
-        long count = employeeRepository.count() + 1;
-        return String.format("%s-%04d", prefix, count);
+        String randomSuffix = UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+        return String.format("%s-%s", prefix, randomSuffix);
     }
 
     private String generateTempPassword() {
