@@ -43,20 +43,13 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final UserDetailsService userDetailsService;
     private final ObjectMapper objectMapper;
+    private final com.ripplenexus.salespilot.core.security.RateLimitFilter rateLimitFilter;
 
     @Value("${salespilot.allowed-origins}")
     private String allowedOrigins;
 
     private static final String[] PUBLIC_URLS = {
-            "/auth/login",
-            "/auth/verify-otp",
-            "/auth/refresh",
-            "/auth/forgot-password",
-            "/auth/reset-password",
-            "/v3/api-docs/**",
-            "/swagger-ui/**",
-            "/swagger-ui.html",
-            "/actuator/health",
+            "/auth/**",
             "/jobs/**"
     };
 
@@ -76,7 +69,8 @@ public class SecurityConfig {
                         .authenticationEntryPoint(authenticationEntryPoint())
                 )
                 .authenticationProvider(authenticationProvider())
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(jwtAuthenticationFilter, com.ripplenexus.salespilot.core.security.RateLimitFilter.class)
                 .headers(headers -> headers
                         .frameOptions(frame -> frame.deny())
                         .contentSecurityPolicy(csp ->
