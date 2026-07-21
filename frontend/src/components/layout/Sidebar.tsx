@@ -14,7 +14,9 @@ import {
   ChevronRight,
   TrendingUp,
   Activity,
-  ShieldAlert
+  ShieldAlert,
+  CalendarDays,
+  Mail
 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { motion } from 'framer-motion';
@@ -32,11 +34,13 @@ const getNavItems = (roles: string[]) => {
   if (isEmployee) {
     items.push({ name: 'My Leads', href: '/leads', icon: Target });
     items.push({ name: 'My Pipeline', href: '/pipeline', icon: Activity });
+    items.push({ name: 'My Meetings', href: '/meetings', icon: CalendarDays });
     items.push({ name: 'My Clients', href: '/companies', icon: Briefcase });
     items.push({ name: 'My Payouts', href: '/payouts', icon: Banknote });
   } else {
     items.push({ name: 'All Leads', href: '/leads', icon: Target });
     items.push({ name: 'Pipeline', href: '/pipeline', icon: Activity });
+    items.push({ name: 'All Meetings', href: '/meetings', icon: CalendarDays });
     items.push({ name: 'Companies', href: '/companies', icon: Briefcase });
     items.push({ name: 'Deals', href: '/deals', icon: Briefcase });
     items.push({ name: 'Team', href: '/team', icon: Users });
@@ -48,6 +52,7 @@ const getNavItems = (roles: string[]) => {
   items.push({ name: 'My Profile', href: '/profile', icon: Settings });
   
   if (isAdmin) {
+    items.push({ name: 'Email Logs', href: '/email-logs', icon: Mail });
     items.push({ name: 'System Users', href: '/users', icon: Users });
     items.push({ name: 'KYC Approvals', href: '/kyc', icon: ShieldAlert });
     items.push({ name: 'Settings', href: '/settings', icon: Settings });
