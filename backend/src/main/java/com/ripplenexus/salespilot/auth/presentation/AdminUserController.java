@@ -18,7 +18,7 @@ public class AdminUserController {
 
     @PostMapping("/onboard")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<Employee>> onboardUser(@RequestBody OnboardUserRequest request) {
+    public ResponseEntity<ApiResponse<Employee>> onboardUser(@jakarta.validation.Valid @RequestBody OnboardUserRequest request) {
         Employee employee = adminUserService.onboardNewUser(
                 request.getEmail(),
                 request.getFirstName(),
@@ -30,9 +30,17 @@ public class AdminUserController {
 
     @Data
     public static class OnboardUserRequest {
+        @jakarta.validation.constraints.Email
+        @jakarta.validation.constraints.NotBlank
         private String email;
+        
+        @jakarta.validation.constraints.NotBlank
         private String firstName;
+        
+        @jakarta.validation.constraints.NotBlank
         private String lastName;
+        
+        @jakarta.validation.constraints.NotBlank
         private String roleName;
     }
 }
