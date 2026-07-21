@@ -28,9 +28,18 @@ public class ClientForgeController {
 
     @Operation(summary = "Webhook triggered by Client Forge when an invoice is paid")
     @PostMapping("/webhooks/invoice-paid")
-    // Note: In a real scenario, this would have signature validation or an API key, not a user role.
-    // For now, we will allow anonymous access or use a specific api key filter.
-    public ResponseEntity<ApiResponse<Void>> handleInvoicePaidWebhook(@RequestBody InvoicePaidWebhookRequest request) {
+    public ResponseEntity<ApiResponse<Void>> handleInvoicePaidWebhook(
+            @RequestHeader(value = "X-Client-Forge-Signature", required = false) String signature,
+            @RequestBody InvoicePaidWebhookRequest request) {
+            
+        // In a real prod environment, this should be in application.yml
+        String EXPECTED_SECRET = "cf_prod_secret_8f9a2b"; 
+        
+        if (signature == null || !signature.equals(EXPECTED_SECRET)) {
+            return ResponseEntity.status(org.springframework.http.HttpStatus.UNAUTHORIZED)
+                    .body(ApiResponse.error("Invalid webhook signature"));
+        }
+        
         clientForgeService.handleInvoicePaid(request);
         return ResponseEntity.ok(ApiResponse.success("Webhook processed successfully", null));
     }
