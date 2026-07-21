@@ -33,13 +33,13 @@ public class CompanyController {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'SALES_MANAGER', 'SALES_EXEC')")
-    public ResponseEntity<ResponseDto<Company>> create(@RequestBody Company company) {
+    public ResponseEntity<ResponseDto<Company>> create(@Valid @RequestBody Company company) {
         return ResponseEntity.ok(ResponseDto.success(companyService.createCompany(company)));
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'SALES_MANAGER', 'SALES_EXEC')")
-    public ResponseEntity<ResponseDto<Company>> update(@PathVariable UUID id, @RequestBody Company company) {
+    public ResponseEntity<ResponseDto<Company>> update(@PathVariable UUID id, @Valid @RequestBody Company company) {
         return ResponseEntity.ok(ResponseDto.success(companyService.updateCompany(id, company)));
     }
 
