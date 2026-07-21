@@ -62,7 +62,7 @@ public class AuthService {
 
         // Generate 6-digit OTP
         String otpCode = String.format("%06d", SECURE_RANDOM.nextInt(1000000));
-        user.setOtpCode(passwordEncoder.encode(otpCode));
+        user.setOtpCode(hashOtp(otpCode));
         user.setOtpExpiry(Instant.now().plus(10, java.time.temporal.ChronoUnit.MINUTES));
         userRepository.save(user);
 
@@ -84,7 +84,7 @@ public class AuthService {
             throw new org.springframework.security.authentication.BadCredentialsException("OTP has expired");
         }
 
-        if (!passwordEncoder.matches(otpCode, user.getOtpCode())) {
+        if (!hashOtp(otpCode).equals(user.getOtpCode())) {
             throw new org.springframework.security.authentication.BadCredentialsException("Invalid OTP code");
         }
 
@@ -197,6 +197,16 @@ public class AuthService {
                 .expiresAt(Instant.now().plusMillis(refreshTokenExpiry))
                 .build();
         return refreshTokenRepository.save(token);
+    }
+
+    private String hashOtp(String otp) {
+        try {
+            java.security.MessageDigest digest = java.security.MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(otp.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            return java.util.Base64.getEncoder().encodeToString(hash);
+        } catch (java.security.NoSuchAlgorithmException e) {
+            throw new RuntimeException("Failed to hash OTP", e);
+        }
     }
 
     private Map<String, Object> buildClaims(User user) {
