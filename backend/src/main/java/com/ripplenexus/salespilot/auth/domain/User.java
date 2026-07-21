@@ -62,7 +62,8 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "locked_until")
     private Instant lockedUntil;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @org.hibernate.annotations.Fetch(org.hibernate.annotations.FetchMode.SUBSELECT)
     @JoinTable(
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
