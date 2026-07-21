@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @Repository
 public interface CommissionRepository extends JpaRepository<Commission, UUID> {
-
+    boolean existsByDealId(UUID dealId);
 
     Page<Commission> findByEmployeeId(UUID employeeId, Pageable pageable);
 
