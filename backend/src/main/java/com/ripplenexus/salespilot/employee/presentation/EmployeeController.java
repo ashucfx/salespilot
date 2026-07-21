@@ -7,7 +7,8 @@ import com.ripplenexus.salespilot.employee.application.EmployeeService;
 import com.ripplenexus.salespilot.employee.presentation.dto.CreateEmployeeRequest;
 import com.ripplenexus.salespilot.employee.presentation.dto.EmployeeDto;
 import com.ripplenexus.salespilot.employee.presentation.dto.KycSubmissionRequest;
-import com.ripplenexus.salespilot.employee.presentation.dto.UpdateEmployeeRequest;
+import com.ripplenexus.salespilot.employee.presentation.dto.AdminUpdateEmployeeRequest;
+import com.ripplenexus.salespilot.employee.presentation.dto.UpdateEmployeeProfileRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -86,21 +87,21 @@ public class EmployeeController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<EmployeeDto>> update(
             @PathVariable UUID id,
-            @Valid @RequestBody UpdateEmployeeRequest request
+            @Valid @RequestBody AdminUpdateEmployeeRequest request
     ) {
         return ResponseEntity.ok(ApiResponse.success(
-                "Employee updated", employeeService.updateEmployee(id, request)));
+                "Employee updated", employeeService.updateAdminDetails(id, request)));
     }
 
     @Operation(summary = "Update own profile")
     @PutMapping("/me")
     public ResponseEntity<ApiResponse<EmployeeDto>> updateMyProfile(
             @AuthenticationPrincipal User user,
-            @Valid @RequestBody UpdateEmployeeRequest request
+            @Valid @RequestBody UpdateEmployeeProfileRequest request
     ) {
         EmployeeDto me = employeeService.getByUserId(user.getId());
         return ResponseEntity.ok(ApiResponse.success(
-                "Profile updated", employeeService.updateEmployee(me.getId(), request)));
+                "Profile updated", employeeService.updateProfile(me.getId(), request)));
     }
 
     @Operation(summary = "Deactivate employee (Admin only)")
