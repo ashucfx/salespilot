@@ -1,34 +1,29 @@
 package com.ripplenexus.salespilot.core.storage;
 
 import com.ripplenexus.salespilot.core.exception.BusinessException;
-import jakarta.annotation.PostConstruct;
+import com.ripplenexus.salespilot.core.exception.ResourceNotFoundException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.*;
 import java.util.UUID;
 
+/**
+ * Re-implemented LocalFileStorageService that uses PostgreSQL for persistence
+ * to ensure 100% data retention on ephemeral free-tier cloud platforms (Render, Railway).
+ */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class LocalFileStorageService implements FileStorageService {
 
-    @Value("${salespilot.file-storage.local.upload-dir:./uploads}")
-    private String uploadDir;
-
-    @PostConstruct
-    public void init() {
-        try {
-            Files.createDirectories(Paths.get(uploadDir));
-            log.info("File upload directory initialized: {}", uploadDir);
-        } catch (IOException e) {
-            throw new RuntimeException("Could not create upload directory: " + uploadDir, e);
-        }
-    }
+    private final DatabaseFileRepository fileRepository;
 
     @Override
+    @Transactional
     public String store(MultipartFile file, String folder) {
         if (file.isEmpty()) {
             throw new BusinessException("Cannot store empty file.");
@@ -40,39 +35,53 @@ public class LocalFileStorageService implements FileStorageService {
             extension = originalFilename.substring(originalFilename.lastIndexOf("."));
         }
 
-        String filename = UUID.randomUUID() + extension;
-        String relativePath = folder + "/" + filename;
+        UUID fileId = UUID.randomUUID();
+        String filename = fileId + extension;
+        String contentType = file.getContentType() != null ? file.getContentType() : "application/octet-stream";
 
         try {
-            Path targetDir = Paths.get(uploadDir, folder);
-            Files.createDirectories(targetDir);
-            Path targetPath = targetDir.resolve(filename);
-            Files.copy(file.getInputStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
-            log.debug("File stored: {}", relativePath);
-            return relativePath;
+            DatabaseFileEntity entity = DatabaseFileEntity.builder()
+                    .id(fileId)
+                    .filename(filename)
+                    .contentType(contentType)
+                    .folder(folder)
+                    .data(file.getBytes())
+                    .build();
+
+            fileRepository.save(entity);
+            log.debug("File stored in database: {}/{}", folder, filename);
+            
+            return fileId.toString(); // Return UUID as the relative path identifier
         } catch (IOException e) {
-            log.error("Failed to store file: {}", e.getMessage());
+            log.error("Failed to read file bytes: {}", e.getMessage());
             throw new BusinessException("Failed to store file. Please try again.");
         }
     }
 
     @Override
-    public void delete(String filePath) {
+    @Transactional
+    public void delete(String fileIdString) {
         try {
-            Path path = Paths.get(uploadDir, filePath);
-            Files.deleteIfExists(path);
-        } catch (IOException e) {
-            log.warn("Failed to delete file: {}", filePath);
+            UUID fileId = UUID.fromString(fileIdString);
+            fileRepository.deleteById(fileId);
+            log.debug("Deleted file from database: {}", fileId);
+        } catch (IllegalArgumentException e) {
+            log.warn("Attempted to delete invalid file ID format: {}", fileIdString);
         }
     }
 
     @Override
-    public String getUrl(String filePath) {
-        return "/api/files/" + filePath;
+    public String getUrl(String fileIdString) {
+        return "/api/files/" + fileIdString;
     }
 
     @Override
-    public boolean exists(String filePath) {
-        return Files.exists(Paths.get(uploadDir, filePath));
+    public boolean exists(String fileIdString) {
+        try {
+            UUID fileId = UUID.fromString(fileIdString);
+            return fileRepository.existsById(fileId);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
     }
 }
