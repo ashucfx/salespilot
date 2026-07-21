@@ -39,13 +39,13 @@ public class ContactController {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'SALES_MANAGER', 'SALES_EXEC')")
-    public ResponseEntity<ResponseDto<Contact>> create(@RequestBody Contact contact) {
+    public ResponseEntity<ResponseDto<Contact>> create(@Valid @RequestBody Contact contact) {
         return ResponseEntity.ok(ResponseDto.success(contactService.createContact(contact)));
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'SALES_MANAGER', 'SALES_EXEC')")
-    public ResponseEntity<ResponseDto<Contact>> update(@PathVariable UUID id, @RequestBody Contact contact) {
+    public ResponseEntity<ResponseDto<Contact>> update(@PathVariable UUID id, @Valid @RequestBody Contact contact) {
         return ResponseEntity.ok(ResponseDto.success(contactService.updateContact(id, contact)));
     }
 
