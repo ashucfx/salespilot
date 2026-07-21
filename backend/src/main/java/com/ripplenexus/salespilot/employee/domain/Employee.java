@@ -136,24 +136,27 @@ public class Employee extends BaseEntity {
     @Column(name = "notes")
     private String notes;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "employee_territories",
             joinColumns = @JoinColumn(name = "employee_id"))
     @Column(name = "country")
+    @org.hibernate.annotations.Fetch(org.hibernate.annotations.FetchMode.SUBSELECT)
     @Builder.Default
     private Set<String> territories = new HashSet<>();
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "employee_industries",
             joinColumns = @JoinColumn(name = "employee_id"))
     @Column(name = "industry")
+    @org.hibernate.annotations.Fetch(org.hibernate.annotations.FetchMode.SUBSELECT)
     @Builder.Default
     private Set<String> industries = new HashSet<>();
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "employee_services",
             joinColumns = @JoinColumn(name = "employee_id"))
     @Column(name = "service")
+    @org.hibernate.annotations.Fetch(org.hibernate.annotations.FetchMode.SUBSELECT)
     @Builder.Default
     private Set<String> services = new HashSet<>();
 
