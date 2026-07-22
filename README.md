@@ -1,5 +1,8 @@
+<div align="center">
+  <img src="docs/images/sales_pilot_cover.png" alt="Sales Pilot Banner" width="100%" />
+</div>
+
 # Sales Pilot 🚀
-![Sales Pilot Cover](docs/images/sales_pilot_cover.png)
 
 Sales Pilot is an advanced, AI-ready CRM and Sales Engagement platform designed to streamline lead management, pipeline tracking, employee onboarding (KYC), and automated payout distribution.
 
