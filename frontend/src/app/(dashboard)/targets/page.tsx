@@ -19,10 +19,16 @@ export default function TargetsPage() {
 
   const fetchTargets = async () => {
     try {
-      const { data } = await api.get('/targets');
-      setTargets(data);
+      setLoading(true);
+      const res = await api.get('/targets/me');
+      setTargets(res.data?.data || []);
     } catch (err) {
-      console.error('Failed to fetch targets', err);
+      try {
+        const resAll = await api.get('/targets');
+        setTargets(resAll.data?.data || []);
+      } catch (e) {
+        console.error('Failed to fetch targets', e);
+      }
     } finally {
       setLoading(false);
     }
