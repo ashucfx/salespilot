@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Bell, Search, Menu } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useAppStore } from '@/store/appStore';
+import { useAuthStore } from '@/store/authStore';
 
 // Mock notifications data
 const mockNotifications = [
@@ -15,6 +16,7 @@ const mockNotifications = [
 export default function Header() {
   const pathname = usePathname();
   const toggleSidebar = useAppStore((state) => state.toggleSidebar);
+  const user = useAuthStore((state) => state.user);
   const [showNotifications, setShowNotifications] = useState(false);
   const [notifications, setNotifications] = useState(mockNotifications);
   
@@ -115,6 +117,25 @@ export default function Header() {
               </div>
             )}
           </div>
+
+          {/* User Profile Avatar Link */}
+          <a
+            href="/profile"
+            className="flex items-center gap-2 pl-2 border-l border-slate-800 hover:opacity-80 transition-opacity"
+            title="My Profile"
+          >
+            {user?.profilePicture ? (
+              <img
+                src={user.profilePicture}
+                alt="Profile Avatar"
+                className="w-8 h-8 rounded-full object-cover border border-indigo-500/30 ring-2 ring-indigo-500/20"
+              />
+            ) : (
+              <div className="w-8 h-8 rounded-full bg-indigo-600/30 border border-indigo-500/40 text-indigo-300 flex items-center justify-center font-bold text-xs">
+                {user?.email?.charAt(0).toUpperCase() || 'U'}
+              </div>
+            )}
+          </a>
         </div>
       </div>
     </header>

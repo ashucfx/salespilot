@@ -16,7 +16,8 @@ import {
   Activity,
   ShieldAlert,
   CalendarDays,
-  Mail
+  Mail,
+  Trophy
 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { motion } from 'framer-motion';
@@ -30,6 +31,7 @@ const getNavItems = (roles: string[]) => {
 
   // Core for everyone
   items.push({ name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard });
+  items.push({ name: 'Incentives Hub', href: '/incentives', icon: Trophy });
 
   if (isEmployee) {
     items.push({ name: 'My Leads', href: '/leads', icon: Target });
@@ -142,9 +144,17 @@ export default function Sidebar() {
       {/* User Area */}
       <div className="shrink-0 p-4 border-t border-slate-800/60 bg-[#0A0A10]/50 backdrop-blur-md">
         <div className="flex items-center gap-3 mb-4 px-2">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-violet-600 to-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-[0_0_15px_rgba(99,102,241,0.4)] border border-white/10 ring-2 ring-background">
-            {user?.email?.charAt(0).toUpperCase()}
-          </div>
+          {user?.profilePicture ? (
+            <img 
+              src={user.profilePicture} 
+              alt={user.email} 
+              className="w-10 h-10 rounded-xl object-cover border border-indigo-500/30 shadow-[0_0_15px_rgba(99,102,241,0.3)]"
+            />
+          ) : (
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-violet-600 to-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-[0_0_15px_rgba(99,102,241,0.4)] border border-white/10 ring-2 ring-background">
+              {user?.email?.charAt(0).toUpperCase()}
+            </div>
+          )}
           <div className="flex-1 min-w-0">
             <p className="text-[14px] font-semibold text-white truncate leading-tight">
               {user?.email?.split('@')[0]}

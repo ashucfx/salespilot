@@ -6,6 +6,7 @@ export interface User {
   email: string;
   roles: string[];
   emailVerified: boolean;
+  profilePicture?: string;
 }
 
 interface AuthState {
@@ -16,6 +17,7 @@ interface AuthState {
   
   setAuth: (user: User, accessToken: string, refreshToken: string) => void;
   setTokens: (accessToken: string, refreshToken: string) => void;
+  updateUser: (user: Partial<User>) => void;
   logout: () => void;
 }
 
@@ -33,6 +35,11 @@ export const useAuthStore = create<AuthState>()(
       setTokens: (accessToken, refreshToken) => 
         set({ accessToken, refreshToken }),
         
+      updateUser: (updatedFields) =>
+        set((state) => ({
+          user: state.user ? { ...state.user, ...updatedFields } : null
+        })),
+
       logout: () => {
         if (typeof document !== 'undefined') {
           document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
