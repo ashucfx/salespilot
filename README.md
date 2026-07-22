@@ -1,36 +1,61 @@
-<div align="center">
-  <img src="docs/images/sales_pilot_cover.png" alt="Sales Pilot Banner" width="100%" />
-</div>
+# Sales Pilot
 
-# Sales Pilot 🚀
+Sales Pilot is an enterprise-grade, AI-ready CRM and Sales Engagement platform designed to streamline lead management, pipeline tracking, automated commission calculations, employee onboarding (KYC verification), and milestone incentive distribution.
 
-Sales Pilot is an advanced, AI-ready CRM and Sales Engagement platform designed to streamline lead management, pipeline tracking, employee onboarding (KYC), and automated payout distribution.
-
-Built with **Next.js 14**, **Tailwind CSS**, and **Spring Boot 3**, Sales Pilot scales flawlessly from a single founder to a massive distributed sales team.
-
-## 🌟 Key Features
-
-- **Automated KYC & Onboarding**: Seamlessly onboard sales agents globally with automated document verification workflows.
-- **Smart Pipeline Management**: Drag-and-drop Deal pipelines with automated triggers.
-- **11-Step Email Gamification Flow**: Automated Brevo-powered engagement emails to motivate employees (e.g., *First Deal Closed*, *Targets Crushed*, *Daily Agendas*).
-- **Automated Commission Engine**: Real-time payout calculations, tiered commission structures, and multi-currency tracking.
-- **Secure OTP Authentication**: Passwordless-ready security with robust OTP and JWT implementations.
+Built with a decoupled architecture featuring **Next.js 14 (App Router)** on the frontend and a **Spring Boot 3** monolithic backend, Sales Pilot provides high scalability, strict data isolation, and high-performance transactional throughput.
 
 ---
 
-## 🏗 System Architecture
+## High-Level Technology Stack
 
-Sales Pilot utilizes a modern monolithic-backend, decoupled-frontend micro-services architecture to maximize performance while retaining ease of deployment.
+### Core Frameworks & Runtime
+
+| Layer | Technology | Version | Purpose |
+| :--- | :--- | :--- | :--- |
+| **Frontend Framework** | Next.js (App Router) | 14.x | Server-side rendering, client routes, and UI components |
+| **Frontend Language** | TypeScript | 5.x | Static typing and type safety across all UI modules |
+| **Styling & Animation** | Tailwind CSS / Framer Motion | 3.x / 11.x | Modern glassmorphism UI design system and micro-animations |
+| **State Management** | Zustand | 4.x | Lightweight persistent state management |
+| **Backend Framework** | Spring Boot | 3.4.x | Core application context, Dependency Injection, REST APIs |
+| **Backend Language** | Java | 21 | Modern LTS Java runtime with enhanced concurrency features |
+| **Security & Auth** | Spring Security | 6.x | Stateless JWT authentication, RBAC, method security |
+| **Persistence Engine** | Spring Data JPA / Hibernate | 6.x | Object-relational mapping and repository abstractions |
+| **Database Migrations** | Flyway | 10.x | Automated SQL schema version control and database migrations |
+| **Database Engine** | PostgreSQL | 15+ | Relational data store with ACID compliance and spatial support |
+
+### Infrastructure & External Services
+
+| Service | Component | Description |
+| :--- | :--- | :--- |
+| **Email Gateway** | Brevo (Sendinblue) REST API | Transactional emails, 11-step gamified milestone triggers |
+| **Video Meetings** | Jitsi Meet Engine | Stateless WebRTC online room generation and meeting links |
+| **File Storage** | Database / S3 Storage Engine | Multipart upload handler for KYC docs, contracts, and avatars |
+| **API Documentation**| OpenAPI 3.0 / Swagger UI | Interactive REST API endpoint exploration and specification |
+
+---
+
+## Key Enterprise Features
+
+- **Automated Employee KYC & Onboarding**: Multi-stage document upload, automated validation status tracking, clarification requests, and admin verification workflows.
+- **Smart Drag-and-Drop Pipeline**: Real-time pipeline Kanban board with automated stage transition handlers, stage validation rules, and owner verification.
+- **Automated Commission & Payout Engine**: Real-time payout calculations, tiered commission rules, multi-currency support, and duplicate-prevention checks.
+- **Gamified Incentive & Milestone System**: Automated milestone progress tracking (Deal Revenue, Won Deals, Lead Conversions), bonus claiming workflows, and sales leaderboards.
+- **Secure Authentication & RBAC**: Stateless JWT architecture, short-lived tokens, multi-round Bcrypt password hashing, and role-based access control (`ADMIN`, `SALES_MANAGER`, `SALES_EXEC`).
+
+---
+
+## System Architecture
+
+Sales Pilot utilizes a decoupled client-server architecture with a RESTful API layer.
 
 ```mermaid
 graph TD
-    %% Styling
     classDef frontend fill:#3b82f6,stroke:#1d4ed8,stroke-width:2px,color:#fff
     classDef backend fill:#10b981,stroke:#047857,stroke-width:2px,color:#fff
     classDef db fill:#f59e0b,stroke:#b45309,stroke-width:2px,color:#fff
     classDef ext fill:#8b5cf6,stroke:#6d28d9,stroke-width:2px,color:#fff
 
-    User[👤 Sales Agent / Admin] -->|HTTPS| Frontend
+    User[Sales Agent / Admin] -->|HTTPS| Frontend
     
     subgraph Client [Presentation Layer]
         Frontend[Next.js App / React / Zustand]:::frontend
@@ -65,9 +90,9 @@ graph TD
 
 ---
 
-## ⚙️ Core Operational Flow
+## Core Operational Flow
 
-The system is designed around event-driven domain operations. Below is the automated email engagement and payout workflow triggered when a deal is won.
+Below is the event sequence triggered when a sales deal is marked as won.
 
 ```mermaid
 sequenceDiagram
@@ -79,70 +104,76 @@ sequenceDiagram
     participant Comm as Commission Engine
     participant Brevo as Brevo API
 
-    Agent->>Web: Drags Deal to "Closed Won"
-    Web->>API: PUT /api/pipeline/deals/{id}/stage
+    Agent->>Web: Move Deal to "Closed Won"
+    Web->>API: PUT /pipeline/deals/{id}/stage
     API->>Deal: Update Deal Status
     Deal->>Comm: Trigger calculateCommission()
     Comm-->>Deal: Commission Calculated
     Deal->>Brevo: POST /v3/smtp/email (Target Achieved)
-    Brevo-->>Agent: 📧 Sends "Target Crushed!" Email
+    Brevo-->>Agent: Sends "Target Crushed" Email
     Deal->>Brevo: POST /v3/smtp/email (Commission Paid)
-    Brevo-->>Agent: 📧 Sends "Commission Paid" Email
+    Brevo-->>Agent: Sends "Commission Paid" Email
 ```
 
 ---
 
-## 🚀 Getting Started
+## Setup and Installation
 
 ### 1. Prerequisites
 - **Node.js**: v18.0.0 or higher
-- **Java**: JDK 21 or higher
-- **Database**: PostgreSQL 15+
-- **Maven**: v3.9+
+- **Java Development Kit (JDK)**: JDK 21
+- **Database Engine**: PostgreSQL 15+
+- **Build Tool**: Apache Maven v3.9+
 
 ### 2. Environment Configuration
-Duplicate the provided example file to create your environment configs.
+Create the application configuration file by copying `.env.example`:
 
 ```bash
 cp .env.example .env
 ```
-Ensure that `MAIL_PASSWORD` (API Key) and `JWT_SECRET` are correctly populated.
 
-### 3. Backend Setup (Spring Boot)
-The backend uses **Flyway** to automatically provision all 19+ relational tables upon startup.
+Ensure that database credentials, `JWT_SECRET`, and email API keys (`MAIL_PASSWORD`) are properly configured.
+
+### 3. Backend Execution
+Flyway will automatically execute database migrations (`V1__` through `V23__`) upon application launch.
 
 ```bash
 cd backend
-./mvnw clean install
+./mvnw clean install -DskipTests
 ./mvnw spring-boot:run
 ```
-The backend will launch on `http://localhost:8080/api`
 
-### 4. Frontend Setup (Next.js)
+The Spring Boot backend will bind to `http://localhost:8080/api`.
+
+### 4. Frontend Execution
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
-The UI will be available at `http://localhost:3000`
+
+The Next.js user interface will be available at `http://localhost:3000`.
 
 ---
 
-## 🔒 Security Posture
+## Security Posture
 
-- **Stateless JWT**: Short-lived access tokens (15m) + secure HttpOnly refresh tokens.
-- **Bcrypt Hashing**: Multi-round bcrypt hashing for all sensitive employee data.
-- **Role-Based Access Control (RBAC)**: Strict `hasRole('ADMIN')` and `hasRole('EMPLOYEE')` enforcement via Spring Method Security.
-- **SQL Injection Prevention**: 100% Hibernate parameterized queries.
+- **Stateless JWT Security**: Short-lived access tokens combined with secure refresh token rotation.
+- **Data Isolation**: Strict owner-lead verification preventing Unauthorized IDOR access across deals and pipelines.
+- **Input Validation**: `@Valid` request body constraints on all incoming REST endpoints.
+- **Bcrypt Hashing**: Password storage secured using multi-round Bcrypt hashing.
+- **SQL Injection Safeguards**: 100% parameterized ORM queries via JPA/Hibernate.
 
 ---
 
-## 📚 API Documentation
+## API Specification
 
-Once the backend is running, full Swagger UI documentation is available at:
+Interactive Swagger UI endpoint documentation is accessible when running locally at:
 `http://localhost:8080/api/swagger-ui/index.html`
 
-## 🛡️ License
+---
 
-© 2026 The Ripple Nexus. All rights reserved.
-Proprietary and confidential. Unauthorized copying of this file, via any medium, is strictly prohibited.
+## License
+
+Copyright 2026 The Ripple Nexus. All rights reserved.
+Proprietary and confidential. Unauthorized copying or redistribution is strictly prohibited.
