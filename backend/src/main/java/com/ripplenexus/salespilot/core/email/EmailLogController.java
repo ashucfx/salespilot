@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/email-logs")
+@RequestMapping("/email-logs")
 @RequiredArgsConstructor
 @Tag(name = "Email Logs", description = "Admin email delivery monitoring")
 public class EmailLogController {

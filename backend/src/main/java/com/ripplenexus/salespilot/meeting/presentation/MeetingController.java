@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/meetings")
+@RequestMapping("/meetings")
 @RequiredArgsConstructor
 @Tag(name = "Meetings", description = "Meeting scheduling and management endpoints")
 public class MeetingController {
@@ -27,6 +27,7 @@ public class MeetingController {
 
     @Operation(summary = "Schedule a new meeting")
     @PostMapping
+    @org.springframework.security.access.prepost.PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<MeetingDto>> scheduleMeeting(
             @Valid @RequestBody CreateMeetingRequest request,
             @AuthenticationPrincipal User user) {
@@ -36,6 +37,7 @@ public class MeetingController {
 
     @Operation(summary = "Get my scheduled meetings")
     @GetMapping
+    @org.springframework.security.access.prepost.PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<PageResponse<MeetingDto>>> getMyMeetings(
             @AuthenticationPrincipal User user,
             Pageable pageable) {
@@ -44,6 +46,7 @@ public class MeetingController {
 
     @Operation(summary = "Cancel a meeting")
     @PutMapping("/{id}/cancel")
+    @org.springframework.security.access.prepost.PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<Void>> cancelMeeting(
             @PathVariable UUID id,
             @AuthenticationPrincipal User user) {
