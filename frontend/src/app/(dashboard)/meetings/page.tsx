@@ -25,7 +25,8 @@ export default function MeetingsPage() {
     type: 'ONLINE',
     scheduledAt: '',
     durationMinutes: 60,
-    agenda: ''
+    agenda: '',
+    location: ''
   });
 
   useEffect(() => {
