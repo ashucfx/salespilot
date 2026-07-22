@@ -191,9 +191,19 @@ public class EmployeeService {
         if (request.getEmergencyName() != null) employee.setEmergencyName(request.getEmergencyName());
         if (request.getEmergencyPhone() != null) employee.setEmergencyPhone(request.getEmergencyPhone());
         if (request.getEmergencyRelation() != null) employee.setEmergencyRelation(request.getEmergencyRelation());
+        if (request.getProfilePicture() != null) employee.setProfilePicture(request.getProfilePicture());
 
         employeeRepository.save(employee);
         log.info("Employee profile updated by self: {}", employee.getEmployeeNumber());
+        return EmployeeDto.from(employee);
+    }
+
+    public EmployeeDto updateAvatar(UUID userId, String avatarUrl) {
+        Employee employee = employeeRepository.findByUserId(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee profile not found for user " + userId));
+        employee.setProfilePicture(avatarUrl);
+        employeeRepository.save(employee);
+        log.info("Employee avatar updated: {}", employee.getEmployeeNumber());
         return EmployeeDto.from(employee);
     }
 

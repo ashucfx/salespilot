@@ -16,4 +16,5 @@ public class UpdateEmployeeProfileRequest {
     private String emergencyName;
     private String emergencyPhone;
     private String emergencyRelation;
+    private String profilePicture;
 }

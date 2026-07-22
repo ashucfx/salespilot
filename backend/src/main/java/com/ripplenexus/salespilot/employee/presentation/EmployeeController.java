@@ -104,6 +104,20 @@ public class EmployeeController {
                 "Profile updated", employeeService.updateProfile(me.getId(), request)));
     }
 
+    @Operation(summary = "Update own profile picture / avatar")
+    @PostMapping("/me/avatar")
+    public ResponseEntity<ApiResponse<EmployeeDto>> updateMyAvatar(
+            @AuthenticationPrincipal User user,
+            @RequestBody java.util.Map<String, String> body
+    ) {
+        String avatarUrl = body.get("avatarUrl");
+        if (avatarUrl == null || avatarUrl.isBlank()) {
+            return ResponseEntity.badRequest().body(ApiResponse.error("avatarUrl is required."));
+        }
+        EmployeeDto updated = employeeService.updateAvatar(user.getId(), avatarUrl);
+        return ResponseEntity.ok(ApiResponse.success("Avatar updated successfully", updated));
+    }
+
     @Operation(summary = "Deactivate employee (Admin only)")
     @PostMapping("/{id}/deactivate")
     @PreAuthorize("hasRole('ADMIN')")
