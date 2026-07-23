@@ -8,6 +8,9 @@ import { formatCurrency } from '@/lib/utils';
 import { api } from '@/lib/api';
 import toast from 'react-hot-toast';
 
+import { RoleGuard } from '@/components/common/RoleGuard';
+import { TableSkeleton } from '@/components/common/SkeletonLoader';
+
 export default function CommissionsPage() {
   const [commissions, setCommissions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
