@@ -29,4 +29,23 @@ public class CreateMeetingRequest {
     private String agenda;
     
     private boolean autoGenerateLink = true;
+
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
+    public UUID getLeadId() { return leadId; }
+    public void setLeadId(UUID leadId) { this.leadId = leadId; }
+    public UUID getCompanyId() { return companyId; }
+    public void setCompanyId(UUID companyId) { this.companyId = companyId; }
+    public String getType() { return type; }
+    public void setType(String type) { this.type = type; }
+    public Instant getScheduledAt() { return scheduledAt; }
+    public void setScheduledAt(Instant scheduledAt) { this.scheduledAt = scheduledAt; }
+    public Integer getDurationMinutes() { return durationMinutes; }
+    public void setDurationMinutes(Integer durationMinutes) { this.durationMinutes = durationMinutes; }
+    public String getLocation() { return location; }
+    public void setLocation(String location) { this.location = location; }
+    public String getAgenda() { return agenda; }
+    public void setAgenda(String agenda) { this.agenda = agenda; }
+    public boolean isAutoGenerateLink() { return autoGenerateLink; }
+    public void setAutoGenerateLink(boolean autoGenerateLink) { this.autoGenerateLink = autoGenerateLink; }
 }

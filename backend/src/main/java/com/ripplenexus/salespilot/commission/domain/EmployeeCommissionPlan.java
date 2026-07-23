@@ -43,4 +43,21 @@ public class EmployeeCommissionPlan {
 
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt = Instant.now();
+
+    public UUID getId() { return id; }
+    public void setId(UUID id) { this.id = id; }
+    public Employee getEmployee() { return employee; }
+    public void setEmployee(Employee employee) { this.employee = employee; }
+    public CommissionRule getRule() { return rule; }
+    public void setRule(CommissionRule rule) { this.rule = rule; }
+    public LocalDate getEffectiveFrom() { return effectiveFrom; }
+    public void setEffectiveFrom(LocalDate effectiveFrom) { this.effectiveFrom = effectiveFrom; }
+    public LocalDate getEffectiveTo() { return effectiveTo; }
+    public void setEffectiveTo(LocalDate effectiveTo) { this.effectiveTo = effectiveTo; }
+    public boolean isActive() { return isActive; }
+    public void setActive(boolean active) { isActive = active; }
+    public Instant getCreatedAt() { return createdAt; }
+    public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
+    public Instant getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(Instant updatedAt) { this.updatedAt = updatedAt; }
 }

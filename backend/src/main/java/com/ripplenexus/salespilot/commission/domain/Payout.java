@@ -8,7 +8,6 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
-import java.util.UUID;
 
 @Entity
 @Table(name = "payouts")
@@ -63,14 +62,30 @@ public class Payout extends BaseEntity {
     @Column(name = "notes")
     private String notes;
 
-    public Commission.CommissionStatus getStatus() { return status; }
-    public void setStatus(Commission.CommissionStatus status) { this.status = status; }
-    public ZonedDateTime getPaidAt() { return paidAt; }
-    public void setPaidAt(ZonedDateTime paidAt) { this.paidAt = paidAt; }
-    public String getPaymentRef() { return paymentRef; }
-    public void setPaymentRef(String paymentRef) { this.paymentRef = paymentRef; }
     public Employee getEmployee() { return employee; }
     public void setEmployee(Employee employee) { this.employee = employee; }
     public BigDecimal getAmount() { return amount; }
     public void setAmount(BigDecimal amount) { this.amount = amount; }
+    public BigDecimal getBaseSalary() { return baseSalary; }
+    public void setBaseSalary(BigDecimal baseSalary) { this.baseSalary = baseSalary; }
+    public BigDecimal getTotalCommission() { return totalCommission; }
+    public void setTotalCommission(BigDecimal totalCommission) { this.totalCommission = totalCommission; }
+    public String getPayoutPeriod() { return payoutPeriod; }
+    public void setPayoutPeriod(String payoutPeriod) { this.payoutPeriod = payoutPeriod; }
+    public LocalDate getPayoutDate() { return payoutDate; }
+    public void setPayoutDate(LocalDate payoutDate) { this.payoutDate = payoutDate; }
+    public Commission.CommissionStatus getStatus() { return status; }
+    public void setStatus(Commission.CommissionStatus status) { this.status = status; }
+    public String getBankName() { return bankName; }
+    public void setBankName(String bankName) { this.bankName = bankName; }
+    public String getBankAccount() { return bankAccount; }
+    public void setBankAccount(String bankAccount) { this.bankAccount = bankAccount; }
+    public String getBankIfsc() { return bankIfsc; }
+    public void setBankIfsc(String bankIfsc) { this.bankIfsc = bankIfsc; }
+    public ZonedDateTime getPaidAt() { return paidAt; }
+    public void setPaidAt(ZonedDateTime paidAt) { this.paidAt = paidAt; }
+    public String getPaymentRef() { return paymentRef; }
+    public void setPaymentRef(String paymentRef) { this.paymentRef = paymentRef; }
+    public String getNotes() { return notes; }
+    public void setNotes(String notes) { this.notes = notes; }
 }
