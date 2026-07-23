@@ -53,4 +53,21 @@ public class Incentive extends BaseEntity {
         INACTIVE,
         EXPIRED
     }
+
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
+    public TargetType getTargetType() { return targetType; }
+    public void setTargetType(TargetType targetType) { this.targetType = targetType; }
+    public BigDecimal getTargetValue() { return targetValue; }
+    public void setTargetValue(BigDecimal targetValue) { this.targetValue = targetValue; }
+    public BigDecimal getRewardAmount() { return rewardAmount; }
+    public void setRewardAmount(BigDecimal rewardAmount) { this.rewardAmount = rewardAmount; }
+    public String getBadgeName() { return badgeName; }
+    public void setBadgeName(String badgeName) { this.badgeName = badgeName; }
+    public String getBadgeIcon() { return badgeIcon; }
+    public void setBadgeIcon(String badgeIcon) { this.badgeIcon = badgeIcon; }
+    public Status getStatus() { return status; }
+    public void setStatus(Status status) { this.status = status; }
 }
