@@ -42,4 +42,15 @@ public class EmployeeIncentive extends BaseEntity {
         CLAIMABLE,
         CLAIMED
     }
+
+    public Employee getEmployee() { return employee; }
+    public void setEmployee(Employee employee) { this.employee = employee; }
+    public Incentive getIncentive() { return incentive; }
+    public void setIncentive(Incentive incentive) { this.incentive = incentive; }
+    public BigDecimal getCurrentProgress() { return currentProgress; }
+    public void setCurrentProgress(BigDecimal currentProgress) { this.currentProgress = currentProgress; }
+    public ClaimStatus getStatus() { return status; }
+    public void setStatus(ClaimStatus status) { this.status = status; }
+    public Instant getClaimedAt() { return claimedAt; }
+    public void setClaimedAt(Instant claimedAt) { this.claimedAt = claimedAt; }
 }
