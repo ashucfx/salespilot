@@ -1,9 +1,10 @@
 package com.ripplenexus.salespilot.lead.presentation;
 
+import com.ripplenexus.salespilot.core.dto.ApiResponse;
 import com.ripplenexus.salespilot.core.dto.PageResponse;
-import com.ripplenexus.salespilot.core.dto.ResponseDto;
 import com.ripplenexus.salespilot.lead.application.ICPService;
 import com.ripplenexus.salespilot.lead.domain.IdealCustomerProfile;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -21,32 +22,32 @@ public class ICPController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'SALES_MANAGER', 'SALES_EXEC')")
-    public ResponseEntity<ResponseDto<PageResponse<IdealCustomerProfile>>> getAll(Pageable pageable) {
-        return ResponseEntity.ok(ResponseDto.success(icpService.getAll(pageable)));
+    public ResponseEntity<ApiResponse<PageResponse<IdealCustomerProfile>>> getAll(Pageable pageable) {
+        return ResponseEntity.ok(ApiResponse.success(icpService.getAll(pageable)));
     }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'SALES_MANAGER', 'SALES_EXEC')")
-    public ResponseEntity<ResponseDto<IdealCustomerProfile>> getById(@PathVariable UUID id) {
-        return ResponseEntity.ok(ResponseDto.success(icpService.getICP(id)));
+    public ResponseEntity<ApiResponse<IdealCustomerProfile>> getById(@PathVariable UUID id) {
+        return ResponseEntity.ok(ApiResponse.success(icpService.getICP(id)));
     }
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'SALES_MANAGER')")
-    public ResponseEntity<ResponseDto<IdealCustomerProfile>> create(@Valid @RequestBody IdealCustomerProfile icp) {
-        return ResponseEntity.ok(ResponseDto.success(icpService.createICP(icp)));
+    public ResponseEntity<ApiResponse<IdealCustomerProfile>> create(@Valid @RequestBody IdealCustomerProfile icp) {
+        return ResponseEntity.ok(ApiResponse.success(icpService.createICP(icp)));
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'SALES_MANAGER')")
-    public ResponseEntity<ResponseDto<IdealCustomerProfile>> update(@PathVariable UUID id, @Valid @RequestBody IdealCustomerProfile icp) {
-        return ResponseEntity.ok(ResponseDto.success(icpService.updateICP(id, icp)));
+    public ResponseEntity<ApiResponse<IdealCustomerProfile>> update(@PathVariable UUID id, @Valid @RequestBody IdealCustomerProfile icp) {
+        return ResponseEntity.ok(ApiResponse.success(icpService.updateICP(id, icp)));
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ResponseDto<Void>> delete(@PathVariable UUID id) {
+    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable UUID id) {
         icpService.deleteICP(id);
-        return ResponseEntity.ok(ResponseDto.success(null));
+        return ResponseEntity.ok(ApiResponse.success(null));
     }
 }

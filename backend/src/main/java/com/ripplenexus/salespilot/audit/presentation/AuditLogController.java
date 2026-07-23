@@ -2,8 +2,8 @@ package com.ripplenexus.salespilot.audit.presentation;
 
 import com.ripplenexus.salespilot.audit.application.AuditLogService;
 import com.ripplenexus.salespilot.audit.domain.AuditLog;
+import com.ripplenexus.salespilot.core.dto.ApiResponse;
 import com.ripplenexus.salespilot.core.dto.PageResponse;
-import com.ripplenexus.salespilot.core.dto.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ public class AuditLogController {
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ResponseDto<PageResponse<AuditLog>>> getAuditLogs(Pageable pageable) {
-        return ResponseEntity.ok(ResponseDto.success(auditLogService.getAuditLogs(pageable)));
+    public ResponseEntity<ApiResponse<PageResponse<AuditLog>>> getAuditLogs(Pageable pageable) {
+        return ResponseEntity.ok(ApiResponse.success(auditLogService.getAuditLogs(pageable)));
     }
 }
