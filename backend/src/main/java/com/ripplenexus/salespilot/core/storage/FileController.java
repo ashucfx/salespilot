@@ -25,8 +25,20 @@ public class FileController {
             @RequestParam(value = "folder", defaultValue = "general") String folder
     ) {
         String contentType = file.getContentType();
-        if (contentType == null || (!contentType.startsWith("image/") && !contentType.equals("application/pdf") && !contentType.equals("text/csv"))) {
-            return ResponseEntity.badRequest().body(ApiResponse.error("Invalid file type. Only images, PDFs, and CSVs are allowed."));
+        String originalFilename = file.getOriginalFilename();
+
+        if (file.isEmpty() || originalFilename == null) {
+            return ResponseEntity.badRequest().body(ApiResponse.error("File cannot be empty."));
+        }
+
+        String lowerFilename = originalFilename.toLowerCase();
+        boolean validExt = lowerFilename.endsWith(".jpg") || lowerFilename.endsWith(".jpeg") 
+                || lowerFilename.endsWith(".png") || lowerFilename.endsWith(".gif") 
+                || lowerFilename.endsWith(".webp") || lowerFilename.endsWith(".pdf") 
+                || lowerFilename.endsWith(".csv");
+
+        if (!validExt || contentType == null || (!contentType.startsWith("image/") && !contentType.equals("application/pdf") && !contentType.equals("text/csv"))) {
+            return ResponseEntity.badRequest().body(ApiResponse.error("Invalid file type. Only images (JPG, PNG, GIF, WEBP), PDFs, and CSVs are allowed."));
         }
         
         String path = fileStorageService.store(file, folder);

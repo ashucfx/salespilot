@@ -29,11 +29,19 @@ export const useAuthStore = create<AuthState>()(
       refreshToken: null,
       isAuthenticated: false,
       
-      setAuth: (user, accessToken, refreshToken) => 
-        set({ user, accessToken, refreshToken, isAuthenticated: true }),
+      setAuth: (user, accessToken, refreshToken) => {
+        if (typeof document !== 'undefined') {
+          document.cookie = `token=${accessToken}; path=/; max-age=604800; SameSite=Lax`;
+        }
+        set({ user, accessToken, refreshToken, isAuthenticated: true });
+      },
         
-      setTokens: (accessToken, refreshToken) => 
-        set({ accessToken, refreshToken }),
+      setTokens: (accessToken, refreshToken) => {
+        if (typeof document !== 'undefined') {
+          document.cookie = `token=${accessToken}; path=/; max-age=604800; SameSite=Lax`;
+        }
+        set({ accessToken, refreshToken });
+      },
         
       updateUser: (updatedFields) =>
         set((state) => ({
