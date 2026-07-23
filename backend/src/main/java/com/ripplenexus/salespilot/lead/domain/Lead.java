@@ -104,4 +104,15 @@ public class Lead extends BaseEntity {
     public enum LeadPriority {
         LOW, MEDIUM, HIGH, CRITICAL
     }
+
+    public String getContactName() { return contactName; }
+    public void setContactName(String contactName) { this.contactName = contactName; }
+    public String getCompanyName() { return companyName; }
+    public void setCompanyName(String companyName) { this.companyName = companyName; }
+    public String getLeadNumber() { return leadNumber; }
+    public void setLeadNumber(String leadNumber) { this.leadNumber = leadNumber; }
+    public Employee getAssignedTo() { return assignedTo; }
+    public void setAssignedTo(Employee assignedTo) { this.assignedTo = assignedTo; }
+    public LeadStatus getStatus() { return status; }
+    public void setStatus(LeadStatus status) { this.status = status; }
 }

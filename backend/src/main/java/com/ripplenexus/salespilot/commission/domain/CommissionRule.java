@@ -44,4 +44,15 @@ public class CommissionRule extends BaseEntity {
     public enum CommissionType {
         PERCENTAGE, FIXED, HYBRID, TIERED
     }
+
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public CommissionType getType() { return type; }
+    public void setType(CommissionType type) { this.type = type; }
+    public BigDecimal getPercentage() { return percentage; }
+    public void setPercentage(BigDecimal percentage) { this.percentage = percentage; }
+    public BigDecimal getFixedAmount() { return fixedAmount; }
+    public void setFixedAmount(BigDecimal fixedAmount) { this.fixedAmount = fixedAmount; }
+    public List<CommissionTier> getTiers() { return tiers; }
+    public void setTiers(List<CommissionTier> tiers) { this.tiers = tiers; }
 }

@@ -41,4 +41,13 @@ public class CommissionTier {
 
     @Column(name = "created_at", nullable = false)
     private Instant createdAt = Instant.now();
+
+    public BigDecimal getMinAmount() { return minAmount; }
+    public void setMinAmount(BigDecimal minAmount) { this.minAmount = minAmount; }
+    public BigDecimal getMaxAmount() { return maxAmount; }
+    public void setMaxAmount(BigDecimal maxAmount) { this.maxAmount = maxAmount; }
+    public BigDecimal getPercentage() { return percentage; }
+    public void setPercentage(BigDecimal percentage) { this.percentage = percentage; }
+    public BigDecimal getFixedAmount() { return fixedAmount; }
+    public void setFixedAmount(BigDecimal fixedAmount) { this.fixedAmount = fixedAmount; }
 }

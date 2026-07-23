@@ -62,4 +62,15 @@ public class Payout extends BaseEntity {
 
     @Column(name = "notes")
     private String notes;
+
+    public Commission.CommissionStatus getStatus() { return status; }
+    public void setStatus(Commission.CommissionStatus status) { this.status = status; }
+    public ZonedDateTime getPaidAt() { return paidAt; }
+    public void setPaidAt(ZonedDateTime paidAt) { this.paidAt = paidAt; }
+    public String getPaymentRef() { return paymentRef; }
+    public void setPaymentRef(String paymentRef) { this.paymentRef = paymentRef; }
+    public Employee getEmployee() { return employee; }
+    public void setEmployee(Employee employee) { this.employee = employee; }
+    public BigDecimal getAmount() { return amount; }
+    public void setAmount(BigDecimal amount) { this.amount = amount; }
 }

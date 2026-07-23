@@ -46,4 +46,17 @@ public class Notification {
     @Column(name = "created_at", nullable = false)
     @Builder.Default
     private Instant createdAt = Instant.now();
+
+    public User getRecipient() { return recipient; }
+    public void setRecipient(User recipient) { this.recipient = recipient; }
+    public boolean isRead() { return isRead; }
+    public void setRead(boolean read) { isRead = read; }
+    public Instant getReadAt() { return readAt; }
+    public void setReadAt(Instant readAt) { this.readAt = readAt; }
+    public NotificationType getType() { return type; }
+    public void setType(NotificationType type) { this.type = type; }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
+    public String getMessage() { return message; }
+    public void setMessage(String message) { this.message = message; }
 }
