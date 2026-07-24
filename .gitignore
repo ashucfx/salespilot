@@ -28,7 +28,7 @@ dist/
 .vercel/
 
 # Java / Backend (Spring Boot / Maven)
-target/
+/target/
 backend/target/
 *.class
 *.jar
