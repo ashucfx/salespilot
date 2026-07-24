@@ -103,12 +103,7 @@
         </dependency>
 
         <!-- Lombok -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>${lombok.version}</version>
-            <optional>true</optional>
-        </dependency>
+        
 
 
         <!-- API Documentation -->
@@ -195,10 +190,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
+                        
                     </excludes>
                 </configuration>
             </plugin>
@@ -213,11 +205,7 @@
                         <arg>-parameters</arg>
                     </compilerArgs>
                     <annotationProcessorPaths>
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                            <version>${lombok.version}</version>
-                        </path>
+                        
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
