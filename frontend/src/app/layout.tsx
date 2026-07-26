@@ -8,8 +8,11 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "SalesPilot | Enterprise CRM & Operations",
   description: "Enterprise Sales CRM and Operations Platform for managing leads, pipeline, and payouts.",
+  metadataBase: new URL('https://salespilot.theripplenexus.com'),
   icons: {
-    icon: '/icon.svg',
+    icon: [
+      { url: '/icon.svg', type: 'image/svg+xml' },
+    ],
     shortcut: '/icon.svg',
     apple: '/icon.svg',
   },
@@ -17,7 +20,8 @@ export const metadata: Metadata = {
     title: 'SalesPilot',
     description: 'Enterprise Sales CRM and Operations Platform',
     type: 'website',
-  }
+    url: 'https://salespilot.theripplenexus.com',
+  },
 };
 
 export default function RootLayout({
