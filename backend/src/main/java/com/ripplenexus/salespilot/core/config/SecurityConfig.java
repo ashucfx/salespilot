@@ -43,11 +43,28 @@ public class SecurityConfig {
     private final com.ripplenexus.salespilot.core.security.RateLimitFilter rateLimitFilter;
     @Value("${salespilot.allowed-origins}")
     private String allowedOrigins;
-    private static final String[] PUBLIC_URLS = {"/auth/**", "/jobs/**"};
+    private static final String[] PUBLIC_URLS = {"/auth/**", "/api/auth/**", "/jobs/**", "/api/jobs/**", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http.csrf(AbstractHttpConfigurer::disable).cors(cors -> cors.configurationSource(corsConfigurationSource())).sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).authorizeHttpRequests(auth -> auth.requestMatchers(PUBLIC_URLS).permitAll().requestMatchers(HttpMethod.OPTIONS, "/**").permitAll().anyRequest().authenticated()).exceptionHandling(ex -> ex.authenticationEntryPoint(authenticationEntryPoint())).authenticationProvider(authenticationProvider()).addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class).addFilterAfter(jwtAuthenticationFilter, com.ripplenexus.salespilot.core.security.RateLimitFilter.class).headers(headers -> headers.frameOptions(frame -> frame.deny()).contentSecurityPolicy(csp -> csp.policyDirectives("default-src \'self\'; frame-ancestors \'none\'")).xssProtection(xss -> xss.disable())).build();
+        return http.csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(PUBLIC_URLS).permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .exceptionHandling(ex -> ex.authenticationEntryPoint(authenticationEntryPoint()))
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(jwtAuthenticationFilter, com.ripplenexus.salespilot.core.security.RateLimitFilter.class)
+                .headers(headers -> headers
+                        .frameOptions(frame -> frame.deny())
+                        .contentSecurityPolicy(csp -> csp.policyDirectives("default-src 'self'; frame-ancestors 'none'"))
+                        .xssProtection(xss -> xss.disable())
+                )
+                .build();
     }
 
     @Bean
@@ -62,10 +79,14 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOriginPatterns(Arrays.asList(allowedOrigins.split(",")));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With", "Accept", "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers"));
-        config.setExposedHeaders(List.of("Authorization", "Content-Disposition"));
+        List<String> origins = Arrays.stream(allowedOrigins.split(","))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .toList();
+        config.setAllowedOriginPatterns(origins);
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setExposedHeaders(List.of("Authorization", "Content-Disposition", "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"));
         config.setAllowCredentials(true);
         config.setMaxAge(3600L);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

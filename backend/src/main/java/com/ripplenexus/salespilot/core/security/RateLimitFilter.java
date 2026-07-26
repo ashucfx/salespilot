@@ -34,9 +34,13 @@ public class RateLimitFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            filterChain.doFilter(request, response);
+            return;
+        }
         String ip = getClientIp(request);
         String path = request.getRequestURI();
-        int limit = path.startsWith("/api/auth/") ? AUTH_LIMIT : API_LIMIT;
+        int limit = path.contains("/auth/") ? AUTH_LIMIT : API_LIMIT;
         if (!allowRequest(ip, limit)) {
             log.warn("Rate limit exceeded for IP: {} on path: {}", ip, path);
             response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
