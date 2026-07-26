@@ -118,4 +118,4 @@ salespilot:
     api-requests-per-minute: 100
 
   frontend-url: ${FRONTEND_URL:https://salespilot.theripplenexus.com}
-  allowed-origins: ${ALLOWED_ORIGINS:http://localhost:3000,http://localhost:3001,https://*.vercel.app,https://salespilot-psi.vercel.app,https://salespilot.theripplenexus.com,https://www.salespilot.theripplenexus.com,https://*.theripplenexus.com}
+  allowed-origins: ${SALESPILOT_ALLOWED_ORIGINS:${ALLOWED_ORIGINS:http://localhost:3000,http://localhost:3001,https://*.vercel.app,https://*.onrender.com,https://*.theripplenexus.com,*}}

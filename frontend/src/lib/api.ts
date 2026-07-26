@@ -38,7 +38,7 @@ api.interceptors.response.use(
       if (refreshToken) {
         try {
           const { data } = await axios.post(
-            `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api'}/auth/refresh`,
+            `${getBaseUrl()}/auth/refresh`,
             { refreshToken }
           );
           
