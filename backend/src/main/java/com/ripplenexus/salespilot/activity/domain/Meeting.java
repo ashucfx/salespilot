@@ -8,8 +8,9 @@ import jakarta.persistence.*;
 
 import java.time.Instant;
 
-@Entity
-@Table(name = "meetings")
+// NOTE: This class is a legacy delombok artifact. The authoritative Meeting entity
+// is com.ripplenexus.salespilot.meeting.domain.Meeting. This class is kept for
+// reference only and intentionally NOT annotated as @Entity to avoid duplicate mapping.
 public class Meeting extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lead_id")
