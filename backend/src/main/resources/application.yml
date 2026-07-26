@@ -8,8 +8,8 @@ spring:
     password: ${DB_PASSWORD:salespilot123}
     driver-class-name: org.postgresql.Driver
     hikari:
-      maximum-pool-size: 10
-      minimum-idle: 2
+      maximum-pool-size: 5
+      minimum-idle: 1
       connection-timeout: 30000
       idle-timeout: 600000
       max-lifetime: 1800000
@@ -20,7 +20,7 @@ spring:
     show-sql: false
     properties:
       hibernate:
-        format_sql: true
+        format_sql: false
         dialect: org.hibernate.dialect.PostgreSQLDialect
         default_schema: public
     open-in-view: false
@@ -51,7 +51,11 @@ spring:
       max-request-size: 50MB
 
 server:
-  port: ${SERVER_PORT:8080}
+  port: ${PORT:${SERVER_PORT:8080}}
+  tomcat:
+    max-threads: 30
+    min-spare-threads: 4
+    max-connections: 500
   servlet:
     context-path: /api
   error:
