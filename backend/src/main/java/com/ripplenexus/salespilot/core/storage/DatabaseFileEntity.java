@@ -18,9 +18,8 @@ public class DatabaseFileEntity {
     private String contentType;
     @Column(nullable = false)
     private String folder;
-    @Lob
     @Basic(fetch = FetchType.LAZY)
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "BYTEA")
     private byte[] data;
     @CreationTimestamp
     @Column(updatable = false)
