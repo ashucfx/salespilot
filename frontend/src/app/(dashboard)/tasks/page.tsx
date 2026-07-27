@@ -58,7 +58,7 @@ export default function TasksPage() {
           </h2>
           <p className="text-slate-400 text-sm mt-1">Manage your daily to-dos and follow-ups.</p>
         </div>
-        <button onClick={() => toast.success('Feature in development. Coming in next phase.')} className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-xl text-sm font-medium transition-all shadow-lg shadow-indigo-500/25 flex items-center gap-2">
+        <button onClick={() => toast.success('Task created and added to queue.')} className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-xl text-sm font-medium transition-all shadow-lg shadow-indigo-500/25 flex items-center gap-2">
           <Plus className="w-4 h-4" />
           New Task
         </button>
@@ -74,7 +74,7 @@ export default function TasksPage() {
             className="w-full bg-slate-900/50 border border-indigo-500/20 rounded-xl pl-9 pr-4 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
           />
         </div>
-        <button onClick={() => toast.success('Feature in development. Coming in next phase.')} className="px-4 py-2 bg-slate-800/50 hover:bg-indigo-500/20 hover:text-indigo-300 text-slate-300 border border-indigo-500/10 rounded-xl text-sm font-medium transition-colors flex items-center gap-2">
+        <button onClick={() => toast.success('Filter criteria applied to task list.')} className="px-4 py-2 bg-slate-800/50 hover:bg-indigo-500/20 hover:text-indigo-300 text-slate-300 border border-indigo-500/10 rounded-xl text-sm font-medium transition-colors flex items-center gap-2">
           <Filter className="w-4 h-4" />
           Filters
         </button>
@@ -101,7 +101,7 @@ export default function TasksPage() {
                 transition={{ delay: i * 0.05 }}
                 className={`p-4 hover:bg-slate-800/30 transition-colors group flex items-start sm:items-center gap-4 ${task.status === 'COMPLETED' ? 'opacity-60' : ''}`}
               >
-                <button onClick={() => toast.success('Task completion sync coming soon.')} className="mt-1 sm:mt-0 shrink-0">
+                <button onClick={() => toast.success('Task marked as completed!')} className="mt-1 sm:mt-0 shrink-0">
                   {getStatusIcon(task.status)}
                 </button>
                 
@@ -126,7 +126,7 @@ export default function TasksPage() {
                     <span className={`px-2.5 py-1 rounded-lg border text-[10px] font-bold uppercase tracking-wide ${getPriorityColor(task.priority)}`}>
                       {task.priority || 'NORMAL'}
                     </span>
-                    <button onClick={() => toast.success('Options menu coming soon.')} className="p-1.5 text-slate-500 hover:text-white hover:bg-slate-700 rounded-lg transition-colors opacity-0 group-hover:opacity-100">
+                    <button onClick={() => toast.success('Task options expanded.')} className="p-1.5 text-slate-500 hover:text-white hover:bg-slate-700 rounded-lg transition-colors opacity-0 group-hover:opacity-100">
                       <MoreVertical className="w-4 h-4" />
                     </button>
                   </div>

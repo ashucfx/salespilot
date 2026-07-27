@@ -38,10 +38,11 @@ export default function UsersPage() {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const { data } = await api.get('/employees');
-      setEmployees(data.data.content || []);
+      const { data: responseData } = await api.get('/employees');
+      const pageData = responseData?.data || responseData;
+      setEmployees(pageData.content || (Array.isArray(pageData) ? pageData : []));
     } catch (err) {
-      console.error(err);
+      console.error('Failed to load users:', err);
     } finally {
       setLoading(false);
     }

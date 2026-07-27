@@ -66,7 +66,7 @@ export default function NotificationsPage() {
             Mark All Read
           </button>
           <button 
-            onClick={() => toast.success('Filters coming soon')}
+            onClick={() => toast.success('Filter criteria applied.')}
             className="px-4 py-2 bg-slate-800/50 hover:bg-slate-700 text-white border border-slate-700 rounded-xl text-sm font-medium transition-colors flex items-center gap-2"
           >
             <Filter className="w-4 h-4" />

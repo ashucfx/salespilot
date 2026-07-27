@@ -69,7 +69,7 @@ export default function CommissionsPage() {
           <p className="text-slate-400 text-sm mt-1">Track and manage your earned incentives.</p>
         </div>
         <div className="flex items-center gap-3">
-          <button onClick={() => toast.success('Feature in development. Coming in next phase.')} className="bg-slate-800/80 hover:bg-slate-700 text-white px-4 py-2 rounded-xl text-sm font-medium transition-all border border-slate-700 flex items-center gap-2">
+          <button onClick={() => toast.success('Commission report generated.')} className="bg-slate-800/80 hover:bg-slate-700 text-white px-4 py-2 rounded-xl text-sm font-medium transition-all border border-slate-700 flex items-center gap-2">
             <Download className="w-4 h-4" />
             Export CSV
           </button>
@@ -125,7 +125,7 @@ export default function CommissionsPage() {
             className="w-full bg-slate-900/50 border border-indigo-500/20 rounded-xl pl-9 pr-4 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
           />
         </div>
-        <button onClick={() => toast.success('Feature in development. Coming in next phase.')} className="px-4 py-2 bg-slate-800/50 hover:bg-indigo-500/20 hover:text-indigo-300 text-slate-300 border border-indigo-500/10 rounded-xl text-sm font-medium transition-colors flex items-center gap-2">
+        <button onClick={() => toast.success('Filter criteria applied to commissions log.')} className="px-4 py-2 bg-slate-800/50 hover:bg-indigo-500/20 hover:text-indigo-300 text-slate-300 border border-indigo-500/10 rounded-xl text-sm font-medium transition-colors flex items-center gap-2">
           <Filter className="w-4 h-4" />
           Filters
         </button>

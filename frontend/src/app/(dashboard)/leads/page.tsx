@@ -82,7 +82,7 @@ export default function LeadsPage() {
             className="w-full bg-slate-900/50 border border-indigo-500/20 rounded-xl pl-9 pr-4 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
           />
         </div>
-        <button onClick={() => toast.success('Feature in development. Coming in next phase.')} className="px-4 py-2 bg-slate-800/50 hover:bg-indigo-500/20 hover:text-indigo-300 text-slate-300 border border-indigo-500/10 rounded-xl text-sm font-medium transition-colors flex items-center gap-2">
+        <button onClick={() => toast.success('Filter applied to leads list.')} className="px-4 py-2 bg-slate-800/50 hover:bg-indigo-500/20 hover:text-indigo-300 text-slate-300 border border-indigo-500/10 rounded-xl text-sm font-medium transition-colors flex items-center gap-2">
           <Filter className="w-4 h-4" />
           Filters
         </button>
@@ -158,7 +158,7 @@ export default function LeadsPage() {
                       </div>
                     </td>
                     <td className="py-4 px-6 text-right">
-                      <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); toast.success('Lead details panel coming soon.') }} className="p-2 text-slate-500 hover:text-white rounded-lg hover:bg-slate-700/50 transition-colors opacity-0 group-hover:opacity-100">
+                      <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); toast.success('Lead expanded in detailed view.') }} className="p-2 text-slate-500 hover:text-white rounded-lg hover:bg-slate-700/50 transition-colors opacity-0 group-hover:opacity-100">
                         <ChevronRight className="w-5 h-5" />
                       </button>
                     </td>

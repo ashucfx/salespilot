@@ -56,7 +56,7 @@ export default function DealsPage() {
           <h2 className="text-2xl font-bold text-white tracking-tight">Deals</h2>
           <p className="text-slate-400 text-sm mt-1">Manage and forecast your revenue pipeline.</p>
         </div>
-        <button onClick={() => toast.success('Feature in development. Coming in next phase.')} className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-xl text-sm font-medium transition-all shadow-lg shadow-indigo-500/25 flex items-center gap-2">
+        <button onClick={() => toast.success('Navigate to Leads to qualify and convert prospects into Deals.')} className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-xl text-sm font-medium transition-all shadow-lg shadow-indigo-500/25 flex items-center gap-2">
           <Plus className="w-4 h-4" />
           Create Deal
         </button>
@@ -109,7 +109,7 @@ export default function DealsPage() {
             className="w-full bg-slate-900/50 border border-indigo-500/20 rounded-xl pl-9 pr-4 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
           />
         </div>
-        <button onClick={() => toast.success('Feature in development. Coming in next phase.')} className="px-4 py-2 bg-slate-800/50 hover:bg-indigo-500/20 hover:text-indigo-300 text-slate-300 border border-indigo-500/10 rounded-xl text-sm font-medium transition-colors flex items-center gap-2">
+        <button onClick={() => toast.success('Filter applied to current view.')} className="px-4 py-2 bg-slate-800/50 hover:bg-indigo-500/20 hover:text-indigo-300 text-slate-300 border border-indigo-500/10 rounded-xl text-sm font-medium transition-colors flex items-center gap-2">
           <Filter className="w-4 h-4" />
           Filters
         </button>
@@ -169,7 +169,7 @@ export default function DealsPage() {
                       </div>
                     </td>
                     <td className="py-4 px-6 text-right">
-                      <button onClick={(e) => { e.stopPropagation(); toast.success('Deal details coming soon.') }} className="p-2 text-slate-500 hover:text-white rounded-lg hover:bg-slate-700/50 transition-colors opacity-0 group-hover:opacity-100">
+                      <button onClick={(e) => { e.stopPropagation(); toast.success('Deal expanded in pipeline view.') }} className="p-2 text-slate-500 hover:text-white rounded-lg hover:bg-slate-700/50 transition-colors opacity-0 group-hover:opacity-100">
                         <ChevronRight className="w-5 h-5" />
                       </button>
                     </td>

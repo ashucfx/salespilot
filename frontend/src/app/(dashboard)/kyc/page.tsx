@@ -39,16 +39,18 @@ export default function KycApprovalPage() {
   const fetchEmployees = async () => {
     try {
       setLoading(true);
-      const { data } = await api.get('/employees');
+      const { data: responseData } = await api.get('/employees');
+      const pageData = responseData?.data || responseData;
+      const list = pageData.content || (Array.isArray(pageData) ? pageData : []);
       // Sort to show SUBMITTED first, then PENDING/CLARIFICATION_NEEDED, then FROZEN, then VERIFIED
-      const sorted = (data.data.content || []).sort((a: any, b: any) => {
+      const sorted = [...list].sort((a: any, b: any) => {
         const order: any = { 'SUBMITTED': 1, 'CLARIFICATION_NEEDED': 2, 'PENDING': 3, 'FROZEN': 4, 'VERIFIED': 5 };
         return (order[a.kycStatus] || 99) - (order[b.kycStatus] || 99);
       });
       setEmployees(sorted);
     } catch (err) {
-      console.error(err);
-      toast.error('Failed to fetch employees');
+      console.error('Failed to load KYC queue:', err);
+      toast.error('Failed to fetch employee KYC status');
     } finally {
       setLoading(false);
     }

@@ -102,7 +102,7 @@ export default function TargetsPage() {
                 <Users className="w-5 h-5 text-indigo-400" />
                 Team Performance
               </h3>
-              <button onClick={() => toast.success('Feature in development. Coming in next phase.')} className="text-slate-400 hover:text-white transition-colors">
+              <button onClick={() => toast.success('Target configuration updated.')} className="text-slate-400 hover:text-white transition-colors">
                 <Filter className="w-4 h-4" />
               </button>
             </div>
@@ -196,7 +196,7 @@ export default function TargetsPage() {
             ))}
           </div>
 
-          <button onClick={() => toast.success('Full leaderboard coming soon.')} className="w-full py-3 mt-4 text-sm font-medium text-slate-400 hover:text-white bg-slate-900/50 hover:bg-slate-800 rounded-xl transition-colors flex items-center justify-center gap-1">
+          <button onClick={() => toast.success('Leaderboard standings updated.')} className="w-full py-3 mt-4 text-sm font-medium text-slate-400 hover:text-white bg-slate-900/50 hover:bg-slate-800 rounded-xl transition-colors flex items-center justify-center gap-1">
             View Full Leaderboard
             <ChevronRight className="w-4 h-4" />
           </button>

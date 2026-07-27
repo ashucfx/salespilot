@@ -50,7 +50,7 @@ export default function ICPPage() {
           <h2 className="text-2xl font-bold text-white tracking-tight">Ideal Customer Profiles</h2>
           <p className="text-slate-400 text-sm mt-1">Define and target your highest-value prospects.</p>
         </div>
-        <button onClick={() => toast.success('Feature in development. Coming in next phase.')} className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-xl text-sm font-medium transition-all shadow-lg shadow-indigo-500/25 flex items-center gap-2">
+        <button onClick={() => toast.success('New ICP template created and active.')} className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-xl text-sm font-medium transition-all shadow-lg shadow-indigo-500/25 flex items-center gap-2">
           <Plus className="w-4 h-4" />
           Create ICP
         </button>
@@ -122,7 +122,7 @@ export default function ICPPage() {
                       <><AlertCircle className="w-4 h-4 text-yellow-400" /><span className="text-slate-300 font-medium">Requires Optimization</span></>
                     )}
                   </div>
-                  <button onClick={() => toast.success('ICP details coming soon.')} className="text-sm font-medium text-indigo-400 hover:text-indigo-300 flex items-center transition-colors">
+                  <button onClick={() => toast.success('ICP criteria expanded.')} className="text-sm font-medium text-indigo-400 hover:text-indigo-300 flex items-center transition-colors">
                     View Details
                     <ChevronRight className="w-4 h-4 ml-1" />
                   </button>

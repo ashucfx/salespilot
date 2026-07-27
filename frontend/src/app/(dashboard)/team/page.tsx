@@ -53,7 +53,7 @@ export default function TeamPage() {
           <h2 className="text-2xl font-bold text-white tracking-tight">Team Management</h2>
           <p className="text-slate-400 text-sm mt-1">Manage sales representatives and their commissions.</p>
         </div>
-        <button onClick={() => toast.success('Feature in development. Coming in next phase.')} className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-xl text-sm font-medium transition-all shadow-lg shadow-indigo-500/25 flex items-center gap-2">
+        <button onClick={() => router.push('/users')} className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-xl text-sm font-medium transition-all shadow-lg shadow-indigo-500/25 flex items-center gap-2">
           <Plus className="w-4 h-4" />
           Onboard Employee
         </button>

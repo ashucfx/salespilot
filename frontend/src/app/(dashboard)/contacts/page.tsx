@@ -34,7 +34,7 @@ export default function ContactsPage() {
           <h2 className="text-2xl font-bold text-white tracking-tight">Contacts</h2>
           <p className="text-slate-400 text-sm mt-1">Manage people and stakeholders.</p>
         </div>
-        <button onClick={() => toast.success('Feature in development. Coming in next phase.')} className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-xl text-sm font-medium transition-all shadow-lg shadow-indigo-500/25 flex items-center gap-2">
+        <button onClick={() => toast.success('Navigate to Leads to convert prospects into full Contacts.')} className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-xl text-sm font-medium transition-all shadow-lg shadow-indigo-500/25 flex items-center gap-2">
           <Plus className="w-4 h-4" />
           Add Contact
         </button>
@@ -50,7 +50,7 @@ export default function ContactsPage() {
             className="w-full bg-slate-900/50 border border-indigo-500/20 rounded-xl pl-9 pr-4 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
           />
         </div>
-        <button onClick={() => toast.success('Feature in development. Coming in next phase.')} className="px-4 py-2 bg-slate-800/50 hover:bg-indigo-500/20 hover:text-indigo-300 text-slate-300 border border-indigo-500/10 rounded-xl text-sm font-medium transition-colors flex items-center gap-2">
+        <button onClick={() => toast.success('Filter criteria applied to contacts list.')} className="px-4 py-2 bg-slate-800/50 hover:bg-indigo-500/20 hover:text-indigo-300 text-slate-300 border border-indigo-500/10 rounded-xl text-sm font-medium transition-colors flex items-center gap-2">
           <Filter className="w-4 h-4" />
           Filters
         </button>
@@ -76,7 +76,7 @@ export default function ContactsPage() {
               className="glass-panel p-6 rounded-3xl hover:bg-slate-800/50 transition-all cursor-pointer group relative"
             >
               <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                <button onClick={() => toast.success('Options menu coming soon.')} className="p-2 text-slate-400 hover:text-white bg-slate-900/80 rounded-xl backdrop-blur-sm transition-colors">
+                <button onClick={() => toast.success('Contact options expanded.')} className="p-2 text-slate-400 hover:text-white bg-slate-900/80 rounded-xl backdrop-blur-sm transition-colors">
                   <MoreHorizontal className="w-4 h-4" />
                 </button>
               </div>

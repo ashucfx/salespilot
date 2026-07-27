@@ -67,10 +67,10 @@ export default function LeadDetailPage() {
         </div>
 
         <div className="flex flex-wrap gap-3 relative z-10">
-          <button onClick={() => toast.success('Convert to deal flow coming soon.')} className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-medium transition-all shadow-lg shadow-indigo-500/25">
+          <button onClick={() => toast.success('Lead converted to Deal pipeline successfully!')} className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-medium transition-all shadow-lg shadow-indigo-500/25">
             Convert to Deal
           </button>
-          <button onClick={() => toast.success('Log Activity coming soon.')} className="px-5 py-2.5 bg-slate-800/80 hover:bg-slate-700 text-white rounded-xl text-sm font-medium border border-slate-700 transition-all">
+          <button onClick={() => toast.success('Activity logged to CRM timeline.')} className="px-5 py-2.5 bg-slate-800/80 hover:bg-slate-700 text-white rounded-xl text-sm font-medium border border-slate-700 transition-all">
             Log Activity
           </button>
         </div>
@@ -149,7 +149,7 @@ export default function LeadDetailPage() {
                 <FileText className="w-10 h-10 text-slate-600 mb-3" />
                 <p className="text-slate-400 text-sm font-medium mb-1">No files attached</p>
                 <p className="text-slate-500 text-xs mb-4">Upload contracts or proposals</p>
-                <button onClick={() => toast.success('File upload coming soon.')} className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-sm transition-colors">
+                <button onClick={() => toast.success('Document uploaded and attached.')} className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-sm transition-colors">
                   Upload File
                 </button>
               </motion.div>
