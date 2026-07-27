@@ -1,8 +1,8 @@
 package com.ripplenexus.salespilot.notification.presentation;
 
 import com.ripplenexus.salespilot.auth.domain.User;
-import com.ripplenexus.salespilot.core.presentation.dto.ApiResponse;
-import com.ripplenexus.salespilot.core.presentation.dto.PageResponse;
+import com.ripplenexus.salespilot.core.dto.ApiResponse;
+import com.ripplenexus.salespilot.core.dto.PageResponse;
 import com.ripplenexus.salespilot.notification.application.NotificationService;
 import com.ripplenexus.salespilot.notification.domain.Notification;
 import io.swagger.v3.oas.annotations.Operation;
