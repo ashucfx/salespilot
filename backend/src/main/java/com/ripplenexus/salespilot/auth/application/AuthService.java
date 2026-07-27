@@ -49,6 +49,16 @@ public class AuthService {
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new ResourceNotFoundException("User", request.getEmail()));
         // Authenticate password
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+
+        // Skip OTP for users with otp_enabled = false (e.g. founder admin accounts)
+        if (!user.isOtpEnabled()) {
+            String accessToken = jwtUtil.generateAccessToken(user, buildClaims(user));
+            RefreshToken refreshToken = createRefreshToken(user);
+            userRepository.updateLastLogin(user.getId(), Instant.now());
+            log.info("OTP bypassed (disabled) — direct login for: {}", user.getEmail());
+            return buildAuthResponse(user, accessToken, refreshToken.getToken());
+        }
+
         // Generate 6-digit OTP
         String otpCode = String.format("%06d", SECURE_RANDOM.nextInt(1000000));
         user.setOtpCode(hashOtp(otpCode));

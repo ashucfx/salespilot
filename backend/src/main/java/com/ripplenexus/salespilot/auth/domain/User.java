@@ -29,6 +29,8 @@ public class User extends BaseEntity implements UserDetails {
     private String otpCode;
     @Column(name = "otp_expiry")
     private Instant otpExpiry;
+    @Column(name = "otp_enabled", nullable = false)
+    private boolean otpEnabled = true;
     @Column(name = "password_reset_token")
     private String passwordResetToken;
     @Column(name = "password_reset_token_expiry")
@@ -98,6 +100,14 @@ public class User extends BaseEntity implements UserDetails {
 
     public void setOtpExpiry(Instant otpExpiry) {
         this.otpExpiry = otpExpiry;
+    }
+
+    public boolean isOtpEnabled() {
+        return otpEnabled;
+    }
+
+    public void setOtpEnabled(boolean otpEnabled) {
+        this.otpEnabled = otpEnabled;
     }
 
     public String getPasswordResetToken() {
