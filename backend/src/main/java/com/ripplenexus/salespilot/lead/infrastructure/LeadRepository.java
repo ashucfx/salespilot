@@ -24,10 +24,10 @@ public interface LeadRepository extends JpaRepository<Lead, UUID> {
         AND l.assignedTo.id = :employeeId
         AND (
             :search IS NULL OR
-            LOWER(l.contactName) LIKE LOWER(CONCAT('%', :search, '%'))
-            OR LOWER(l.companyName) LIKE LOWER(CONCAT('%', :search, '%'))
-            OR LOWER(l.contactEmail) LIKE LOWER(CONCAT('%', :search, '%'))
-            OR LOWER(l.leadNumber) LIKE LOWER(CONCAT('%', :search, '%'))
+            LOWER(l.contactName) LIKE CONCAT('%', LOWER(CAST(:search AS string)), '%')
+            OR LOWER(l.companyName) LIKE CONCAT('%', LOWER(CAST(:search AS string)), '%')
+            OR LOWER(l.contactEmail) LIKE CONCAT('%', LOWER(CAST(:search AS string)), '%')
+            OR LOWER(l.leadNumber) LIKE CONCAT('%', LOWER(CAST(:search AS string)), '%')
         )
         AND (:status IS NULL OR CAST(l.status AS string) = :status)
         AND (:priority IS NULL OR CAST(l.priority AS string) = :priority)
@@ -41,10 +41,10 @@ public interface LeadRepository extends JpaRepository<Lead, UUID> {
         WHERE l.deletedAt IS NULL
         AND (
             :search IS NULL OR
-            LOWER(l.contactName) LIKE LOWER(CONCAT('%', :search, '%'))
-            OR LOWER(l.companyName) LIKE LOWER(CONCAT('%', :search, '%'))
-            OR LOWER(l.contactEmail) LIKE LOWER(CONCAT('%', :search, '%'))
-            OR LOWER(l.leadNumber) LIKE LOWER(CONCAT('%', :search, '%'))
+            LOWER(l.contactName) LIKE CONCAT('%', LOWER(CAST(:search AS string)), '%')
+            OR LOWER(l.companyName) LIKE CONCAT('%', LOWER(CAST(:search AS string)), '%')
+            OR LOWER(l.contactEmail) LIKE CONCAT('%', LOWER(CAST(:search AS string)), '%')
+            OR LOWER(l.leadNumber) LIKE CONCAT('%', LOWER(CAST(:search AS string)), '%')
         )
         AND (:status IS NULL OR CAST(l.status AS string) = :status)
         AND (:priority IS NULL OR CAST(l.priority AS string) = :priority)

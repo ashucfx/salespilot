@@ -14,4 +14,16 @@ public class SalesPilotApplication {
         SpringApplication.run(SalesPilotApplication.class, args);
     }
 
+    @org.springframework.context.annotation.Bean
+    public org.springframework.beans.factory.config.BeanPostProcessor hikariConfigPostProcessor() {
+        return new org.springframework.beans.factory.config.BeanPostProcessor() {
+            @Override
+            public Object postProcessBeforeInitialization(Object bean, String beanName) {
+                if (bean instanceof com.zaxxer.hikari.HikariDataSource hikariDataSource) {
+                    hikariDataSource.addDataSourceProperty("stringtype", "unspecified");
+                }
+                return bean;
+            }
+        };
+    }
 }

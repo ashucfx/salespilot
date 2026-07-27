@@ -26,6 +26,21 @@ public class CommissionController {
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 
+    @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'SALES_MANAGER', 'SALES_EXEC')")
+    public ResponseEntity<ApiResponse<PageResponse<Commission>>> getAllCommissions(@RequestParam(required = false) String status, @org.springframework.security.core.annotation.AuthenticationPrincipal com.ripplenexus.salespilot.auth.domain.User currentUser, Pageable pageable) {
+        boolean isAdminOrManager = currentUser.getRoles().stream().anyMatch(r -> r.getName().equals("ADMIN") || r.getName().equals("SALES_MANAGER"));
+        if (isAdminOrManager) {
+            return ResponseEntity.ok(ApiResponse.success(commissionService.getAll(status, pageable)));
+        } else {
+            com.ripplenexus.salespilot.employee.domain.Employee employee = employeeRepository.findByUserId(currentUser.getId()).orElse(null);
+            if (employee == null) {
+                return ResponseEntity.ok(ApiResponse.success(PageResponse.of(org.springframework.data.domain.Page.empty(pageable))));
+            }
+            return ResponseEntity.ok(ApiResponse.success(commissionService.getByEmployee(employee.getId(), status, pageable)));
+        }
+    }
+
     @GetMapping("/employee/{employeeId}")
     @PreAuthorize("hasAnyRole(\'ADMIN\', \'SALES_MANAGER\', \'SALES_EXEC\')")
     public ResponseEntity<ApiResponse<PageResponse<Commission>>> getEmployeeCommissions(@PathVariable UUID employeeId, @org.springframework.security.core.annotation.AuthenticationPrincipal com.ripplenexus.salespilot.auth.domain.User currentUser, Pageable pageable) {

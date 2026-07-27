@@ -123,13 +123,16 @@ public class LeadService {
     }
 
     public PageResponse<LeadDto> getAll(String search, String status, String priority, UUID assignedTo, User currentUser, Pageable pageable) {
+        String cleanSearch = (search != null && !search.isBlank() && !search.equals("null")) ? search.trim() : null;
+        String cleanStatus = (status != null && !status.isBlank() && !status.equals("null") && !status.equals("ALL")) ? status.trim() : null;
+        String cleanPriority = (priority != null && !priority.isBlank() && !priority.equals("null") && !priority.equals("ALL")) ? priority.trim() : null;
         Page<Lead> page;
         if (currentUser.hasRole("ADMIN") || currentUser.hasRole("SALES_MANAGER")) {
-            page = leadRepository.findAll(search, status, priority, assignedTo, pageable);
+            page = leadRepository.findAll(cleanSearch, cleanStatus, cleanPriority, assignedTo, pageable);
         } else {
             // Employee: only see own assigned leads
             Employee emp = employeeRepository.findByUserId(currentUser.getId()).orElseThrow(() -> new ResourceNotFoundException("Employee profile not found"));
-            page = leadRepository.findByAssignedToId(emp.getId(), search, status, priority, pageable);
+            page = leadRepository.findByAssignedToId(emp.getId(), cleanSearch, cleanStatus, cleanPriority, pageable);
         }
         return PageResponse.of(page.map(LeadDto::from));
     }

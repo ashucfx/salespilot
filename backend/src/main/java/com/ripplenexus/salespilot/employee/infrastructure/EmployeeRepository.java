@@ -32,10 +32,11 @@ public interface EmployeeRepository extends JpaRepository<Employee, UUID> {
         SELECT e FROM Employee e
         WHERE e.deletedAt IS NULL
         AND (
-            LOWER(e.firstName) LIKE LOWER(CONCAT('%', :search, '%'))
-            OR LOWER(e.lastName) LIKE LOWER(CONCAT('%', :search, '%'))
-            OR LOWER(e.workEmail) LIKE LOWER(CONCAT('%', :search, '%'))
-            OR LOWER(e.employeeNumber) LIKE LOWER(CONCAT('%', :search, '%'))
+            :search IS NULL OR
+            LOWER(e.firstName) LIKE CONCAT('%', LOWER(CAST(:search AS string)), '%')
+            OR LOWER(e.lastName) LIKE CONCAT('%', LOWER(CAST(:search AS string)), '%')
+            OR LOWER(e.workEmail) LIKE CONCAT('%', LOWER(CAST(:search AS string)), '%')
+            OR LOWER(e.employeeNumber) LIKE CONCAT('%', LOWER(CAST(:search AS string)), '%')
         )
         """)
     Page<Employee> searchEmployees(String search, Pageable pageable);
