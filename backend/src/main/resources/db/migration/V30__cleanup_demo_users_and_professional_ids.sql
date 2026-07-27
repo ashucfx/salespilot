@@ -36,9 +36,12 @@ BEGIN
             DELETE FROM employee_commission_plans WHERE employee_id = target_emp_id;
             DELETE FROM employee_incentives WHERE employee_id = target_emp_id;
             DELETE FROM deals WHERE employee_id = target_emp_id;
-            DELETE FROM leads WHERE assigned_to = target_emp_id OR uploaded_by = target_emp_id OR changed_by = target_emp_id;
+            DELETE FROM lead_attachments WHERE uploaded_by = target_emp_id;
+            DELETE FROM lead_status_history WHERE changed_by = target_emp_id;
+            DELETE FROM leads WHERE assigned_to = target_emp_id;
             DELETE FROM task_comments WHERE author_id = target_emp_id;
-            DELETE FROM tasks WHERE assigned_by = target_emp_id OR author_id = target_emp_id;
+            DELETE FROM task_attachments WHERE task_id IN (SELECT id FROM tasks WHERE assigned_by = target_emp_id OR assigned_to = target_emp_id);
+            DELETE FROM tasks WHERE assigned_by = target_emp_id OR assigned_to = target_emp_id;
             DELETE FROM meetings WHERE organizer_id = target_emp_id;
             DELETE FROM pipeline_stage_history WHERE moved_by = target_emp_id;
             DELETE FROM proposals WHERE uploaded_by = target_emp_id OR approved_by = target_emp_id;
