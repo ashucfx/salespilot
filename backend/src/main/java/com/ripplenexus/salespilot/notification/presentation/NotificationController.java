@@ -34,7 +34,7 @@ public class NotificationController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
         Page<Notification> notifPage = notificationService.getByUser(user.getId(), unreadOnly, PageRequest.of(page, size));
-        return ResponseEntity.ok(ApiResponse.success(PageResponse.fromPage(notifPage)));
+        return ResponseEntity.ok(ApiResponse.success(PageResponse.of(notifPage)));
     }
 
     @Operation(summary = "Get count of unread notifications")
