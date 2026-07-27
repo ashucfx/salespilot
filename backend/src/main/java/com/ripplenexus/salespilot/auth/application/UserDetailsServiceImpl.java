@@ -15,7 +15,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return userRepository.findByEmail(email).filter(u -> u.getDeletedAt() == null).orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
+        com.ripplenexus.salespilot.auth.domain.User user = userRepository.findByEmailWithRolesAndPermissions(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
+        // Force initialization of authorities while inside the read-only transaction
+        user.getAuthorities();
+        return user;
     }
 
     @java.lang.SuppressWarnings("all")

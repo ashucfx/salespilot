@@ -42,7 +42,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
         } catch (Exception e) {
-            log.debug("JWT validation failed: {}", e.getMessage());
+            log.warn("JWT validation failed: {}", e.getMessage(), e);
         }
         filterChain.doFilter(request, response);
     }
