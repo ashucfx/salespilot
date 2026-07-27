@@ -32,7 +32,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, UUID> {
         SELECT e FROM Employee e
         WHERE e.deletedAt IS NULL
         AND (
-            :search IS NULL OR
+            CAST(:search AS string) IS NULL OR
             LOWER(e.firstName) LIKE CONCAT('%', LOWER(CAST(:search AS string)), '%')
             OR LOWER(e.lastName) LIKE CONCAT('%', LOWER(CAST(:search AS string)), '%')
             OR LOWER(e.workEmail) LIKE CONCAT('%', LOWER(CAST(:search AS string)), '%')

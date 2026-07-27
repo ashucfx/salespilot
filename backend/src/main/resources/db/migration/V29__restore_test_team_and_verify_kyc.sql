@@ -4,10 +4,10 @@
 -- ═══════════════════════════════════════════════════════════════
 
 -- 1. Ensure required departments exist
-INSERT INTO departments (id, name, description, status, created_at, updated_at)
+INSERT INTO departments (id, name, description, created_at, updated_at)
 VALUES 
-    ('11111111-1000-0000-0000-000000000001', 'Management', 'Executive Management', 'ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    ('11111111-1000-0000-0000-000000000002', 'Sales', 'Global Sales Team', 'ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+    ('11111111-1000-0000-0000-000000000001', 'Management', 'Executive Management', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('11111111-1000-0000-0000-000000000002', 'Sales', 'Global Sales Team', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
 ON CONFLICT (name) DO NOTHING;
 
 -- 2. Ensure all required roles exist
@@ -72,7 +72,7 @@ SELECT
     (SELECT id FROM departments WHERE name = 'Sales' LIMIT 1), 'Sales Executive', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
 FROM users u WHERE u.email = 'ankit.kumar@theripplenexus.com'
 ON CONFLICT (work_email) DO UPDATE SET 
-    status = 'ACTIVE', kyc_status = 'VERIFIED', designation = 'Sales Executive',
+    status = 'ACTIVE', kyc_status = 'VERIFIED', designation = 'Senior Sales Executive',
     department_id = (SELECT id FROM departments WHERE name = 'Sales' LIMIT 1), updated_at = CURRENT_TIMESTAMP;
 
 -- 6. Guarantee ALL employees in the system are KYC Verified and Active for seamless frontend/backend testing

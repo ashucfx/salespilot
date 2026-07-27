@@ -23,14 +23,14 @@ public interface LeadRepository extends JpaRepository<Lead, UUID> {
         WHERE l.deletedAt IS NULL
         AND l.assignedTo.id = :employeeId
         AND (
-            :search IS NULL OR
+            CAST(:search AS string) IS NULL OR
             LOWER(l.contactName) LIKE CONCAT('%', LOWER(CAST(:search AS string)), '%')
             OR LOWER(l.companyName) LIKE CONCAT('%', LOWER(CAST(:search AS string)), '%')
             OR LOWER(l.contactEmail) LIKE CONCAT('%', LOWER(CAST(:search AS string)), '%')
             OR LOWER(l.leadNumber) LIKE CONCAT('%', LOWER(CAST(:search AS string)), '%')
         )
-        AND (:status IS NULL OR CAST(l.status AS string) = :status)
-        AND (:priority IS NULL OR CAST(l.priority AS string) = :priority)
+        AND (CAST(:status AS string) IS NULL OR CAST(l.status AS string) = CAST(:status AS string))
+        AND (CAST(:priority AS string) IS NULL OR CAST(l.priority AS string) = CAST(:priority AS string))
         """)
     Page<Lead> findByAssignedToId(UUID employeeId, String search, String status,
                                    String priority, Pageable pageable);
@@ -40,15 +40,15 @@ public interface LeadRepository extends JpaRepository<Lead, UUID> {
         SELECT l FROM Lead l
         WHERE l.deletedAt IS NULL
         AND (
-            :search IS NULL OR
+            CAST(:search AS string) IS NULL OR
             LOWER(l.contactName) LIKE CONCAT('%', LOWER(CAST(:search AS string)), '%')
             OR LOWER(l.companyName) LIKE CONCAT('%', LOWER(CAST(:search AS string)), '%')
             OR LOWER(l.contactEmail) LIKE CONCAT('%', LOWER(CAST(:search AS string)), '%')
             OR LOWER(l.leadNumber) LIKE CONCAT('%', LOWER(CAST(:search AS string)), '%')
         )
-        AND (:status IS NULL OR CAST(l.status AS string) = :status)
-        AND (:priority IS NULL OR CAST(l.priority AS string) = :priority)
-        AND (:assignedTo IS NULL OR l.assignedTo.id = :assignedTo)
+        AND (CAST(:status AS string) IS NULL OR CAST(l.status AS string) = CAST(:status AS string))
+        AND (CAST(:priority AS string) IS NULL OR CAST(l.priority AS string) = CAST(:priority AS string))
+        AND (CAST(:assignedTo AS string) IS NULL OR CAST(l.assignedTo.id AS string) = CAST(:assignedTo AS string))
         """)
     Page<Lead> findAll(String search, String status, String priority,
                         UUID assignedTo, Pageable pageable);
