@@ -21,8 +21,9 @@ export default function CommissionsPage() {
 
   const fetchCommissions = async () => {
     try {
-      const { data } = await api.get('/commissions');
-      setCommissions(data);
+      const { data: res } = await api.get('/commissions');
+      const list = res?.data?.content || res?.data || res?.content || res || [];
+      setCommissions(Array.isArray(list) ? list : []);
     } catch (err) {
       console.error('Failed to fetch commissions', err);
     } finally {

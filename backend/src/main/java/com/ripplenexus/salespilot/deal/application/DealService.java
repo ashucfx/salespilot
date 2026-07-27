@@ -80,6 +80,18 @@ public class DealService {
         return PageResponse.of(dealRepository.findByEmployeeIdAndDeletedAtIsNull(employeeId, pageable).map(DealDto::from));
     }
 
+    public PageResponse<DealDto> getAllDeals(com.ripplenexus.salespilot.auth.domain.User currentUser, Pageable pageable) {
+        if (currentUser.hasRole("ADMIN") || currentUser.hasRole("SALES_MANAGER")) {
+            return PageResponse.of(dealRepository.findAll(pageable).map(DealDto::from));
+        } else {
+            Employee emp = employeeRepository.findByUserId(currentUser.getId()).orElse(null);
+            if (emp == null) {
+                return PageResponse.of(org.springframework.data.domain.Page.empty(pageable));
+            }
+            return getByEmployee(emp.getId(), pageable);
+        }
+    }
+
     private String generateDealNumber() {
         YearMonth now = YearMonth.now();
         String randomSuffix = UUID.randomUUID().toString().substring(0, 8).toUpperCase();

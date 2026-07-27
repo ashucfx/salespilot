@@ -37,9 +37,8 @@ export default function MeetingsPage() {
     try {
       setLoading(true);
       const res = await api.get('/meetings');
-      if (res.data?.data?.content) {
-        setMeetings(res.data.data.content);
-      }
+      const list = res.data?.data?.content || res.data?.data || res.data?.content || res.data || [];
+      setMeetings(Array.isArray(list) ? list : []);
     } catch (error) {
       toast.error('Failed to load meetings');
     } finally {

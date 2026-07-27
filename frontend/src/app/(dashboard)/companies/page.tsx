@@ -18,8 +18,9 @@ export default function CompaniesPage() {
 
   const fetchCompanies = async () => {
     try {
-      const { data } = await api.get('/companies');
-      setCompanies(data);
+      const { data: res } = await api.get('/companies');
+      const list = res?.data?.content || res?.data || res?.content || res || [];
+      setCompanies(Array.isArray(list) ? list : []);
     } catch (err) {
       console.error('Failed to fetch companies', err);
     } finally {

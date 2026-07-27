@@ -41,7 +41,7 @@ export default function KycApprovalPage() {
       setLoading(true);
       const { data: responseData } = await api.get('/employees');
       const pageData = responseData?.data || responseData;
-      const list = pageData.content || (Array.isArray(pageData) ? pageData : []);
+      const list = pageData?.content || (Array.isArray(pageData) ? pageData : []);
       // Sort to show SUBMITTED first, then PENDING/CLARIFICATION_NEEDED, then FROZEN, then VERIFIED
       const sorted = [...list].sort((a: any, b: any) => {
         const order: any = { 'SUBMITTED': 1, 'CLARIFICATION_NEEDED': 2, 'PENDING': 3, 'FROZEN': 4, 'VERIFIED': 5 };

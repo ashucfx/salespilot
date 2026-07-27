@@ -19,8 +19,9 @@ export default function LeadsPage() {
   useEffect(() => {
     const fetchLeads = async () => {
       try {
-        const { data } = await api.get('/leads');
-        setLeads(data.data.content || []);
+        const { data: res } = await api.get('/leads');
+        const list = res?.data?.content || res?.data || res?.content || res || [];
+        setLeads(Array.isArray(list) ? list : []);
       } catch (error) {
         console.error('Failed to load leads', error);
         // Fallback for development if API is incomplete

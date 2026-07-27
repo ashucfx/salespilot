@@ -40,7 +40,7 @@ export default function UsersPage() {
       setLoading(true);
       const { data: responseData } = await api.get('/employees');
       const pageData = responseData?.data || responseData;
-      setEmployees(pageData.content || (Array.isArray(pageData) ? pageData : []));
+      setEmployees(pageData?.content || (Array.isArray(pageData) ? pageData : []));
     } catch (err) {
       console.error('Failed to load users:', err);
     } finally {

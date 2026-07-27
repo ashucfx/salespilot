@@ -47,8 +47,10 @@ export default function PipelinePage() {
         api.get('/pipeline/entries')
       ]);
 
-      const stages = stagesRes.data;
-      const entries = entriesRes.data;
+      const rawStages = stagesRes.data?.data?.content || stagesRes.data?.data || stagesRes.data || [];
+      const stages = Array.isArray(rawStages) ? rawStages : [];
+      const rawEntries = entriesRes.data?.data?.content || entriesRes.data?.data || entriesRes.data || [];
+      const entries = Array.isArray(rawEntries) ? rawEntries : [];
 
       const formattedStages: Record<string, any> = {};
       const stageOrder: string[] = [];

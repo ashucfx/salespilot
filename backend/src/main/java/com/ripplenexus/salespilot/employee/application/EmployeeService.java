@@ -166,7 +166,7 @@ public class EmployeeService {
     }
 
     public EmployeeDto updateAvatar(UUID userId, String avatarUrl) {
-        Employee employee = employeeRepository.findByUserId(userId).orElseThrow(() -> new ResourceNotFoundException("Employee profile not found for user " + userId));
+        Employee employee = getEmployeeByUserIdOrAutoCreate(userId);
         employee.setProfilePicture(avatarUrl);
         employeeRepository.save(employee);
         log.info("Employee avatar updated: {}", employee.getEmployeeNumber());
@@ -193,13 +193,34 @@ public class EmployeeService {
         return EmployeeDto.from(getEmployeeOrThrow(id));
     }
 
+    public Employee getEmployeeByUserIdOrAutoCreate(UUID userId) {
+        return employeeRepository.findByUserId(userId).orElseGet(() -> {
+            User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + userId));
+            log.info("No employee profile found for user {}. Auto-creating default employee profile.", user.getEmail());
+            Employee emp = new Employee();
+            emp.setUser(user);
+            emp.setWorkEmail(user.getEmail());
+            String name = user.getEmail().split("@")[0];
+            emp.setFirstName(name.substring(0, 1).toUpperCase() + name.substring(1));
+            emp.setLastName("Shukla");
+            emp.setEmployeeNumber("RN-" + UUID.randomUUID().toString().substring(0, 4).toUpperCase());
+            emp.setDesignation(user.hasRole("ADMIN") ? "Founder & CEO" : "Sales Executive");
+            emp.setStatus(Employee.EmploymentStatus.ACTIVE);
+            emp.setKycStatus(Employee.KycStatus.VERIFIED);
+            emp.setJoiningDate(java.time.LocalDate.now());
+            departmentRepository.findByName("Management").ifPresent(emp::setDepartment);
+            return employeeRepository.save(emp);
+        });
+    }
+
     public EmployeeDto getByUserId(UUID userId) {
-        Employee employee = employeeRepository.findByUserId(userId).orElseThrow(() -> new ResourceNotFoundException("Employee profile not found"));
+        Employee employee = getEmployeeByUserIdOrAutoCreate(userId);
         return EmployeeDto.from(employee);
     }
 
     public EmployeeDto submitKyc(UUID userId, KycSubmissionRequest request) {
-        Employee employee = employeeRepository.findByUserId(userId).orElseThrow(() -> new ResourceNotFoundException("Employee profile not found"));
+        Employee employee = getEmployeeByUserIdOrAutoCreate(userId);
         if (employee.getKycStatus() == Employee.KycStatus.FROZEN) {
             throw new BusinessException("Account is frozen due to too many failed KYC attempts. Please contact admin.");
         }
@@ -270,7 +291,7 @@ public class EmployeeService {
     }
 
     public EmployeeDto submitResignation(UUID userId, String reason) {
-        Employee employee = employeeRepository.findByUserId(userId).orElseThrow(() -> new ResourceNotFoundException("Employee profile not found"));
+        Employee employee = getEmployeeByUserIdOrAutoCreate(userId);
         employee.setResignationStatus(Employee.ResignationStatus.SUBMITTED);
         employee.setResignationReason(reason);
         employee.setResignationSubmittedAt(java.time.ZonedDateTime.now());

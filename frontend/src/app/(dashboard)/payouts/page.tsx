@@ -19,8 +19,9 @@ export default function PayoutsPage() {
     try {
       setLoading(true);
       const endpoint = isAdmin ? '/payouts' : '/payouts/me';
-      const { data } = await api.get(endpoint);
-      setPayouts(data.data?.content || []);
+      const { data: res } = await api.get(endpoint);
+      const list = res?.data?.content || res?.data || res?.content || res || [];
+      setPayouts(Array.isArray(list) ? list : []);
     } catch (err) {
       console.error(err);
       // Dummy data fallback

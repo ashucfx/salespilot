@@ -18,8 +18,9 @@ export default function ICPPage() {
 
   const fetchIcps = async () => {
     try {
-      const { data } = await api.get('/icps');
-      setIcps(data);
+      const { data: res } = await api.get('/icps');
+      const list = res?.data?.content || res?.data || res?.content || res || [];
+      setIcps(Array.isArray(list) ? list : []);
     } catch (err) {
       console.error('Failed to fetch ICPs', err);
     } finally {

@@ -17,8 +17,9 @@ export default function ContactsPage() {
 
   const fetchContacts = async () => {
     try {
-      const { data } = await api.get('/contacts');
-      setContacts(data);
+      const { data: res } = await api.get('/contacts');
+      const list = res?.data?.content || res?.data || res?.content || res || [];
+      setContacts(Array.isArray(list) ? list : []);
     } catch (err) {
       console.error('Failed to fetch contacts', err);
     } finally {

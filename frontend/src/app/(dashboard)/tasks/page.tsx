@@ -21,9 +21,11 @@ export default function TasksPage() {
     try {
       // Assuming tasks are a subset of activities or a dedicated endpoint. 
       // For now, mapping to an expected /tasks or /activities?type=TASK endpoint.
-      const { data } = await api.get('/activities');
+      const { data: res } = await api.get('/activities');
+      const list = res?.data?.content || res?.data || res?.content || res || [];
+      const activitiesArray = Array.isArray(list) ? list : [];
       // Filter only tasks if the backend returns all activities
-      const taskList = data.filter((item: any) => item.activityType === 'TASK' || item.type === 'TASK' || !item.activityType);
+      const taskList = activitiesArray.filter((item: any) => item.activityType === 'TASK' || item.type === 'TASK' || !item.activityType);
       setTasks(taskList);
     } catch (err) {
       console.error('Failed to fetch tasks', err);

@@ -27,8 +27,10 @@ export default function IncentivesPage() {
         api.get('/incentives/leaderboard')
       ]);
 
-      setIncentives(incRes.data.data || []);
-      setLeaderboard(leadRes.data.data || []);
+      const incList = incRes.data?.data?.content || incRes.data?.data || incRes.data?.content || incRes.data || [];
+      setIncentives(Array.isArray(incList) ? incList : []);
+      const leadList = leadRes.data?.data?.content || leadRes.data?.data || leadRes.data?.content || leadRes.data || [];
+      setLeaderboard(Array.isArray(leadList) ? leadList : []);
     } catch (err) {
       console.error('Failed to load incentive data', err);
       toast.error('Failed to load incentive challenges');

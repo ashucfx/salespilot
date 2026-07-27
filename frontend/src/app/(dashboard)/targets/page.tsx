@@ -21,11 +21,13 @@ export default function TargetsPage() {
     try {
       setLoading(true);
       const res = await api.get('/targets/me');
-      setTargets(res.data?.data || []);
+      const list = res.data?.data?.content || res.data?.data || res.data?.content || res.data || [];
+      setTargets(Array.isArray(list) ? list : []);
     } catch (err) {
       try {
         const resAll = await api.get('/targets');
-        setTargets(resAll.data?.data || []);
+        const listAll = resAll.data?.data?.content || resAll.data?.data || resAll.data?.content || resAll.data || [];
+        setTargets(Array.isArray(listAll) ? listAll : []);
       } catch (e) {
         console.error('Failed to fetch targets', e);
       }

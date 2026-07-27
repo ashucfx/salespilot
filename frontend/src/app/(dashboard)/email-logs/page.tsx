@@ -18,9 +18,8 @@ export default function EmailLogsPage() {
     try {
       setLoading(true);
       const res = await api.get('/email-logs?size=100'); // Fetch latest 100
-      if (res.data?.data?.content) {
-        setLogs(res.data.data.content);
-      }
+      const list = res.data?.data?.content || res.data?.data || res.data?.content || res.data || [];
+      setLogs(Array.isArray(list) ? list : []);
     } catch (error) {
       toast.error('Failed to load email logs');
     } finally {

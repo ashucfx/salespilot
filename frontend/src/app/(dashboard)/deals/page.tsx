@@ -20,12 +20,14 @@ export default function DealsPage() {
 
   const fetchDeals = async () => {
     try {
-      const { data } = await api.get('/deals');
-      setDeals(data);
+      const { data: res } = await api.get('/deals');
+      const list = res?.data?.content || res?.data || res?.content || res || [];
+      const dealsArray = Array.isArray(list) ? list : [];
+      setDeals(dealsArray);
       
       // Calculate basic stats for the KPI cards
-      const pipeline = data.reduce((acc: number, deal: any) => acc + (deal.dealValue || 0), 0);
-      const won = data
+      const pipeline = dealsArray.reduce((acc: number, deal: any) => acc + (deal.dealValue || 0), 0);
+      const won = dealsArray
         .filter((d: any) => d.status === 'WON')
         .reduce((acc: number, deal: any) => acc + (deal.dealValue || 0), 0);
         
