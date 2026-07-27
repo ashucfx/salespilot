@@ -52,6 +52,8 @@ api.interceptors.response.use(
     // Only attempt token refresh on 401 — and only once per request
     if (status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
+        // Mark as retried before queuing so it won't attempt another refresh if it fails again
+        originalRequest._retry = true;
         // If refresh is already in progress, queue this request until refresh finishes
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
