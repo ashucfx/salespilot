@@ -20,9 +20,10 @@ public class SmtpEmailService implements EmailService {
     private String from;
     @Value("${salespilot.email.from-name:Sales Pilot}")
     private String fromName;
-    @Value("${spring.mail.password}")
-    private String apiKey; // The xkeysib- API key from application.yml
-    @Value("${salespilot.frontend.url:http://localhost:3000}")
+    // Accepts BREVO_API_KEY env var (preferred) or MAIL_PASSWORD (legacy fallback)
+    @Value("${BREVO_API_KEY:${spring.mail.password:none}}")
+    private String apiKey;
+    @Value("${salespilot.frontend-url:http://localhost:3000}")
     private String frontendUrl;
 
     @Override
@@ -120,6 +121,12 @@ public class SmtpEmailService implements EmailService {
     @Override
     @Async
     public void sendEmail(String to, String subject, String htmlBody) {
+        // Validate API key is configured before attempting send
+        if (apiKey == null || apiKey.isBlank() || apiKey.equals("none")) {
+            log.error("MAIL_PASSWORD / BREVO_API_KEY is not configured. Email to {} was NOT sent. Set MAIL_PASSWORD env var on Render.", to);
+            logEmailResult(to, subject, "FAILED", "Brevo API key is not configured (MAIL_PASSWORD env var missing)");
+            return;
+        }
         try {
             String url = "https://api.brevo.com/v3/smtp/email";
             HttpHeaders headers = new HttpHeaders();
@@ -138,29 +145,28 @@ public class SmtpEmailService implements EmailService {
             HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
             ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
             if (response.getStatusCode().is2xxSuccessful()) {
-                log.info("Email successfully dispatched to {} via Brevo API | Subject: {}", to, subject);
-                EmailLog successLog = new EmailLog();
-                successLog.setRecipient(to);
-                successLog.setSubject(subject);
-                successLog.setStatus("SUCCESS");
-                emailLogRepository.save(successLog);
+                log.info("Email dispatched to {} via Brevo API | Subject: {}", to, subject);
+                logEmailResult(to, subject, "SUCCESS", null);
             } else {
-                log.error("Brevo API error: {}", response.getBody());
-                EmailLog errorLog = new EmailLog();
-                errorLog.setRecipient(to);
-                errorLog.setSubject(subject);
-                errorLog.setStatus("FAILED");
-                errorLog.setErrorMessage(response.getBody());
-                emailLogRepository.save(errorLog);
+                log.error("Brevo API rejected email to {}: HTTP {} — {}", to, response.getStatusCode(), response.getBody());
+                logEmailResult(to, subject, "FAILED", "HTTP " + response.getStatusCode() + " — " + response.getBody());
             }
         } catch (Exception e) {
-            log.error("Failed to send email to {}: {}", to, e.getMessage());
-            EmailLog errorLog = new EmailLog();
-            errorLog.setRecipient(to);
-            errorLog.setSubject(subject);
-            errorLog.setStatus("FAILED");
-            errorLog.setErrorMessage(e.getMessage());
-            emailLogRepository.save(errorLog);
+            log.error("Exception sending email to {}: {}", to, e.getMessage(), e);
+            logEmailResult(to, subject, "FAILED", e.getMessage());
+        }
+    }
+
+    private void logEmailResult(String to, String subject, String status, String error) {
+        try {
+            EmailLog emailLog = new EmailLog();
+            emailLog.setRecipient(to);
+            emailLog.setSubject(subject);
+            emailLog.setStatus(status);
+            if (error != null) emailLog.setErrorMessage(error);
+            emailLogRepository.save(emailLog);
+        } catch (Exception ex) {
+            log.warn("Could not persist email log: {}", ex.getMessage());
         }
     }
 
