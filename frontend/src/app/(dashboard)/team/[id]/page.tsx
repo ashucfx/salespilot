@@ -19,34 +19,38 @@ export default function TeamMemberPage() {
   const [isEditingCommission, setIsEditingCommission] = useState(false);
   const [commissionRate, setCommissionRate] = useState(10);
   const [summary, setSummary] = useState<any>(null);
+  const [recentDeals, setRecentDeals] = useState<any[]>([]);
 
   useEffect(() => {
-    fetchEmployeeDetails();
+    if (id) fetchEmployeeDetails();
   }, [id]);
 
   const fetchEmployeeDetails = async () => {
     try {
-      // Mock data for development
-      setEmployee({
-        id,
-        firstName: 'Alex',
-        lastName: 'Johnson',
-        email: 'alex@salespilot.com',
-        roles: ['SALES_REP'],
-        kycStatus: 'VERIFIED',
-        commissionRate: 10,
-        createdAt: new Date().toISOString(),
-      });
-      setSummary({
-        totalWonDeals: 5,
-        totalPendingCommissions: 2500,
-        totalPaidCommissions: 12000,
-      });
+      setLoading(true);
+      const { data: empRes } = await api.get(`/employees/${id}`);
+      const empData = empRes?.data || empRes;
+      if (empData) {
+        setEmployee(empData);
+        setCommissionRate(empData.commissionRate || 10);
+      }
 
-      // Actual API calls would be:
-      // const { data: empData } = await api.get(`/employees/${id}`);
-      // const { data: summaryData } = await api.get(`/analytics/admin/payout-summary`);
-      // setEmployee(empData);
+      const { data: commRes } = await api.get(`/commissions/employee/${id}`);
+      const commList = commRes?.data?.content || commRes?.data || commRes?.content || commRes || [];
+      const commArray = Array.isArray(commList) ? commList : [];
+      const totalPaid = commArray.filter((c: any) => c.status === 'PAID').reduce((acc: number, c: any) => acc + (Number(c.commissionAmount) || 0), 0);
+      const totalPending = commArray.filter((c: any) => c.status === 'PENDING').reduce((acc: number, c: any) => acc + (Number(c.commissionAmount) || 0), 0);
+      
+      const { data: dealsRes } = await api.get(`/deals/employee/${id}`);
+      const dealsList = dealsRes?.data?.content || dealsRes?.data || dealsRes?.content || dealsRes || [];
+      const dealsArray = Array.isArray(dealsList) ? dealsList : [];
+      setRecentDeals(dealsArray);
+
+      setSummary({
+        totalWonDeals: dealsArray.length,
+        totalPendingCommissions: totalPending,
+        totalPaidCommissions: totalPaid,
+      });
     } catch (err) {
       console.error('Failed to load employee', err);
       toast.error('Failed to load employee details');
@@ -57,7 +61,7 @@ export default function TeamMemberPage() {
 
   const handleUpdateCommission = async () => {
     try {
-      // await api.put(`/analytics/admin/commissions/rule`, { employeeId: id, percentage: commissionRate });
+      await api.put(`/commissions/employee/${id}/rule?percentage=${commissionRate}`);
       toast.success('Commission rate updated successfully');
       setIsEditingCommission(false);
       setEmployee((prev: any) => ({ ...prev, commissionRate }));
@@ -186,23 +190,29 @@ export default function TeamMemberPage() {
 
           {/* Activity Section */}
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="glass-panel p-6 rounded-3xl">
-            <h3 className="text-lg font-bold text-white mb-4">Recent Deals</h3>
+            <h3 className="text-lg font-bold text-white mb-4">Recent Deals ({recentDeals.length})</h3>
             <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 bg-slate-900/50 rounded-2xl border border-slate-800/50">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
-                    <Target className="w-5 h-5" />
+              {recentDeals.length === 0 ? (
+                <p className="text-sm text-slate-400 py-4 text-center">No deals recorded for this team member yet.</p>
+              ) : (
+                recentDeals.slice(0, 5).map((deal: any, index: number) => (
+                  <div key={deal.id || index} className="flex items-center justify-between p-4 bg-slate-900/50 rounded-2xl border border-slate-800/50">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                        <Target className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-white">{deal.title || deal.name || `Deal #${deal.dealNumber || index + 1}`}</p>
+                        <p className="text-xs text-slate-400">Closed on {deal.closedAt ? new Date(deal.closedAt).toLocaleDateString() : 'Recent'}</p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-bold text-emerald-400">${Number(deal.value || deal.dealValue || 0).toLocaleString()}</p>
+                      <p className="text-xs text-slate-400">Deal Value</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-medium text-white">Acme Corp Enterprise Deal</p>
-                    <p className="text-xs text-slate-400">Closed on {new Date().toLocaleDateString()}</p>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <p className="font-bold text-emerald-400">+$2,500</p>
-                  <p className="text-xs text-slate-400">Commission Earned</p>
-                </div>
-              </div>
+                ))
+              )}
             </div>
             <button onClick={() => router.push('/deals')} className="w-full mt-4 py-3 border border-indigo-500/20 rounded-xl text-indigo-400 hover:bg-indigo-500/10 transition-colors text-sm font-medium">
               View All Deals

@@ -20,14 +20,14 @@ public class CommissionController {
     private final com.ripplenexus.salespilot.employee.infrastructure.EmployeeRepository employeeRepository;
 
     @PutMapping("/employee/{employeeId}/rule")
-    @PreAuthorize("hasRole(\'ADMIN\')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SALES_MANAGER')")
     public ResponseEntity<ApiResponse<Void>> updateEmployeeCommissionRule(@PathVariable UUID employeeId, @RequestParam BigDecimal percentage) {
         commissionService.updateEmployeeCommissionRule(employeeId, percentage);
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'SALES_MANAGER', 'SALES_EXEC')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SALES_MANAGER', 'SALES_EXEC', 'SALES_EMPLOYEE')")
     public ResponseEntity<ApiResponse<PageResponse<Commission>>> getAllCommissions(@RequestParam(required = false) String status, @org.springframework.security.core.annotation.AuthenticationPrincipal com.ripplenexus.salespilot.auth.domain.User currentUser, Pageable pageable) {
         boolean isAdminOrManager = currentUser.getRoles().stream().anyMatch(r -> r.getName().equals("ADMIN") || r.getName().equals("SALES_MANAGER"));
         if (isAdminOrManager) {
@@ -42,7 +42,7 @@ public class CommissionController {
     }
 
     @GetMapping("/employee/{employeeId}")
-    @PreAuthorize("hasAnyRole(\'ADMIN\', \'SALES_MANAGER\', \'SALES_EXEC\')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SALES_MANAGER', 'SALES_EXEC', 'SALES_EMPLOYEE')")
     public ResponseEntity<ApiResponse<PageResponse<Commission>>> getEmployeeCommissions(@PathVariable UUID employeeId, @org.springframework.security.core.annotation.AuthenticationPrincipal com.ripplenexus.salespilot.auth.domain.User currentUser, Pageable pageable) {
         boolean isAdminOrManager = currentUser.getRoles().stream().anyMatch(r -> r.getName().equals("ADMIN") || r.getName().equals("SALES_MANAGER"));
         if (!isAdminOrManager) {

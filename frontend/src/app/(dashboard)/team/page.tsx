@@ -35,11 +35,7 @@ export default function TeamPage() {
     } catch (err) {
       console.error('Failed to fetch employees', err);
       toast.error('Failed to load team members');
-      // Mock data for development when backend is down
-      setEmployees([
-        { id: 1, firstName: 'Alex', lastName: 'Johnson', email: 'alex@salespilot.com', roles: ['SALES_REP'], designation: 'Senior Account Executive', kycStatus: 'VERIFIED', commissionRate: 10, joiningDate: '2024-01-15' },
-        { id: 2, firstName: 'Sarah', lastName: 'Williams', email: 'sarah@salespilot.com', roles: ['SALES_REP'], designation: 'Sales Development Rep', kycStatus: 'PENDING', commissionRate: 10, joiningDate: '2025-06-01' },
-      ]);
+      setEmployees([]);
     } finally {
       setLoading(false);
     }

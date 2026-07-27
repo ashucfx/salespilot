@@ -49,7 +49,7 @@ public class DealController {
     }
 
     @GetMapping("/employee/{employeeId}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'SALES_MANAGER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SALES_MANAGER', 'SALES_EXEC', 'SALES_EMPLOYEE')")
     @Operation(summary = "Get deals by employee ID")
     public ResponseEntity<ApiResponse<PageResponse<DealDto>>> getByEmployee(
             @PathVariable UUID employeeId,
