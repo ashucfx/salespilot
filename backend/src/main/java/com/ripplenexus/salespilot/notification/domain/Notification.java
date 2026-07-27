@@ -17,6 +17,7 @@ public class Notification {
     @JoinColumn(name = "recipient_id", nullable = false)
     private User recipient;
     @Enumerated(EnumType.STRING)
+    @org.hibernate.annotations.JdbcTypeCode(org.hibernate.type.SqlTypes.NAMED_ENUM)
     @Column(name = "type", nullable = false)
     private NotificationType type;
     @Column(name = "title", nullable = false)

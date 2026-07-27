@@ -73,9 +73,9 @@ public class EmployeeDto {
         dto.setCountry(e.getCountry());
         dto.setCity(e.getCity());
         dto.setPerformanceRating(e.getPerformanceRating());
-        dto.setTerritories(e.getTerritories());
-        dto.setIndustries(e.getIndustries());
-        dto.setServices(e.getServices());
+        try { dto.setTerritories(e.getTerritories() != null ? new java.util.HashSet<>(e.getTerritories()) : new java.util.HashSet<>()); } catch (Exception ex) { dto.setTerritories(new java.util.HashSet<>()); }
+        try { dto.setIndustries(e.getIndustries() != null ? new java.util.HashSet<>(e.getIndustries()) : new java.util.HashSet<>()); } catch (Exception ex) { dto.setIndustries(new java.util.HashSet<>()); }
+        try { dto.setServices(e.getServices() != null ? new java.util.HashSet<>(e.getServices()) : new java.util.HashSet<>()); } catch (Exception ex) { dto.setServices(new java.util.HashSet<>()); }
         dto.setNotes(e.getNotes());
         dto.setNationalId(e.getNationalId());
         dto.setCountryOfId(e.getCountryOfId());

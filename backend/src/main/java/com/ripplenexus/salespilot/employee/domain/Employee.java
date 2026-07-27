@@ -91,17 +91,17 @@ public class Employee extends BaseEntity {
     private BigDecimal performanceRating;
     @Column(name = "notes")
     private String notes;
-    @ElementCollection(fetch = FetchType.LAZY)
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "employee_territories", joinColumns = @JoinColumn(name = "employee_id"))
     @Column(name = "country")
     @org.hibernate.annotations.Fetch(org.hibernate.annotations.FetchMode.SUBSELECT)
     private Set<String> territories;
-    @ElementCollection(fetch = FetchType.LAZY)
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "employee_industries", joinColumns = @JoinColumn(name = "employee_id"))
     @Column(name = "industry")
     @org.hibernate.annotations.Fetch(org.hibernate.annotations.FetchMode.SUBSELECT)
     private Set<String> industries;
-    @ElementCollection(fetch = FetchType.LAZY)
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "employee_services", joinColumns = @JoinColumn(name = "employee_id"))
     @Column(name = "service")
     @org.hibernate.annotations.Fetch(org.hibernate.annotations.FetchMode.SUBSELECT)

@@ -61,6 +61,18 @@ public class NotificationService {
         notificationRepository.markAllReadByUser(userId, Instant.now());
     }
 
+    public void delete(UUID notificationId, UUID userId) {
+        notificationRepository.findById(notificationId).ifPresent(n -> {
+            if (n.getRecipient().getId().equals(userId)) {
+                notificationRepository.delete(n);
+            }
+        });
+    }
+
+    public void deleteAll(UUID userId) {
+        notificationRepository.deleteAllByUser(userId);
+    }
+
     public Page<Notification> getByUser(UUID userId, boolean unreadOnly, Pageable pageable) {
         if (unreadOnly) {
             return notificationRepository.findUnreadByUser(userId, pageable);

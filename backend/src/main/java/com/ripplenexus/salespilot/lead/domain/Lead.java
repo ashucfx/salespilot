@@ -45,6 +45,7 @@ public class Lead extends BaseEntity {
     @Column(name = "interested_services", columnDefinition = "text[]")
     private String[] interestedServices;
     @Enumerated(EnumType.STRING)
+    @org.hibernate.annotations.JdbcTypeCode(org.hibernate.type.SqlTypes.NAMED_ENUM)
     @Column(name = "priority", nullable = false)
     private LeadPriority priority = LeadPriority.MEDIUM;
     @ManyToOne(fetch = FetchType.LAZY)
@@ -54,6 +55,7 @@ public class Lead extends BaseEntity {
     @JoinColumn(name = "assigned_to")
     private Employee assignedTo;
     @Enumerated(EnumType.STRING)
+    @org.hibernate.annotations.JdbcTypeCode(org.hibernate.type.SqlTypes.NAMED_ENUM)
     @Column(name = "status", nullable = false)
     private LeadStatus status = LeadStatus.NEW;
     @Column(name = "expected_close_date")
