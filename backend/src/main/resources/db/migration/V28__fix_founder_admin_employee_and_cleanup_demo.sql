@@ -67,16 +67,41 @@ BEGIN
     DELETE FROM employee_services WHERE employee_id IN (
         SELECT id FROM employees WHERE work_email = ANY(demo_emails)
     );
-    -- Delete deals & leads associated with demo employees
+    -- Delete payments and commissions for demo employees or their deals
+    DELETE FROM payments WHERE deal_id IN (
+        SELECT id FROM deals WHERE employee_id IN (
+            SELECT id FROM employees WHERE work_email = ANY(demo_emails)
+        )
+    );
+    DELETE FROM commissions WHERE employee_id IN (
+        SELECT id FROM employees WHERE work_email = ANY(demo_emails)
+    );
+    -- Delete deals and proposals
     DELETE FROM deals WHERE employee_id IN (
         SELECT id FROM employees WHERE work_email = ANY(demo_emails)
     );
-    DELETE FROM lead_attachments WHERE lead_id IN (
+    DELETE FROM proposals WHERE lead_id IN (
         SELECT id FROM leads WHERE assigned_to IN (
             SELECT id FROM employees WHERE work_email = ANY(demo_emails)
         )
     );
-    DELETE FROM lead_interested_services WHERE lead_id IN (
+    -- Delete pipeline entries & history
+    DELETE FROM pipeline_entries WHERE lead_id IN (
+        SELECT id FROM leads WHERE assigned_to IN (
+            SELECT id FROM employees WHERE work_email = ANY(demo_emails)
+        )
+    );
+    DELETE FROM pipeline_stage_history WHERE lead_id IN (
+        SELECT id FROM leads WHERE assigned_to IN (
+            SELECT id FROM employees WHERE work_email = ANY(demo_emails)
+        )
+    );
+    DELETE FROM lead_status_history WHERE lead_id IN (
+        SELECT id FROM leads WHERE assigned_to IN (
+            SELECT id FROM employees WHERE work_email = ANY(demo_emails)
+        )
+    );
+    DELETE FROM lead_attachments WHERE lead_id IN (
         SELECT id FROM leads WHERE assigned_to IN (
             SELECT id FROM employees WHERE work_email = ANY(demo_emails)
         )
