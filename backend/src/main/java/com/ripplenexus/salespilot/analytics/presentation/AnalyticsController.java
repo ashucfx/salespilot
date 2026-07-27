@@ -34,9 +34,17 @@ public class AnalyticsController {
     @Operation(summary = "Get current user dashboard statistics")
     @GetMapping("/me")
     public ResponseEntity<ApiResponse<Map<String, Object>>> getMyStats(@AuthenticationPrincipal User user) {
-        Employee employee = employeeRepository.findByUserId(user.getId()).orElseThrow(() -> new RuntimeException("Employee profile not found"));
-        Map<String, Object> stats = analyticsService.getEmployeeDashboard(employee.getId());
-        return ResponseEntity.ok(ApiResponse.success(stats));
+        return employeeRepository.findByUserId(user.getId())
+                .map(employee -> ResponseEntity.ok(ApiResponse.success(analyticsService.getEmployeeDashboard(employee.getId()))))
+                .orElseGet(() -> {
+                    // User has no employee profile yet (e.g. super-admin without employee record)
+                    Map<String, Object> empty = Map.of(
+                            "totalLeads", 0, "openLeads", 0, "wonDeals", 0,
+                            "totalRevenue", 0, "paidCommission", 0, "pendingCommission", 0,
+                            "conversionRate", 0.0, "message", "No employee profile linked to this account."
+                    );
+                    return ResponseEntity.ok(ApiResponse.success(empty));
+                });
     }
 
     @java.lang.SuppressWarnings("all")

@@ -103,15 +103,20 @@ export default function ProfilePage() {
         bankAccount: empData.bankAccount || '',
         bankIfsc: empData.bankIfsc || ''
       });
-
-      // Also fetch analytics summary
-      const statsRes = await api.get('/analytics/me');
-      setSummary(statsRes.data.data);
     } catch (err) {
       console.error('Failed to load profile', err);
       toast.error('Failed to load profile details');
     } finally {
       setLoading(false);
+    }
+
+    // Fetch analytics separately — non-critical, failure won't break the page
+    try {
+      const statsRes = await api.get('/analytics/me');
+      setSummary(statsRes.data.data);
+    } catch (err) {
+      console.warn('Analytics data unavailable:', err);
+      // Leave summary as null — UI handles this gracefully
     }
   };
 

@@ -29,39 +29,48 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    
-    // Auto-refresh token if 401 Unauthorized
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    const status = error.response?.status;
+
+    // Only attempt token refresh on 401 — and only once
+    if (status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       const refreshToken = useAuthStore.getState().refreshToken;
-      
+
       if (refreshToken) {
         try {
           const { data } = await axios.post(
             `${getBaseUrl()}/auth/refresh`,
             { refreshToken }
           );
-          
           useAuthStore.getState().setTokens(data.data.accessToken, data.data.refreshToken);
           originalRequest.headers.Authorization = `Bearer ${data.data.accessToken}`;
           return api(originalRequest);
         } catch {
+          // Refresh failed — session truly expired, logout
           useAuthStore.getState().logout();
           toast.error('Session expired. Please log in again.');
           if (typeof window !== 'undefined') window.location.href = '/login';
+          return Promise.reject(error);
         }
       } else {
-        useAuthStore.getState().logout();
-        if (typeof window !== 'undefined') window.location.href = '/login';
+        // No refresh token at all — likely just not logged in yet
+        // Don't call logout() here to avoid clearing partial auth state
+        if (typeof window !== 'undefined' && !window.location.pathname.startsWith('/login')) {
+          window.location.href = '/login';
+        }
+        return Promise.reject(error);
       }
     }
-    
-    // Global error handler
-    const message = error.response?.data?.message || 'An unexpected error occurred';
-    if (error.response?.status !== 401) {
-      toast.error(message);
+
+    // For non-401 errors, show toast but do NOT logout
+    if (status !== 401) {
+      const message = error.response?.data?.message || error.message || 'An unexpected error occurred';
+      // Don't show toast for network errors on initial load (no response at all)
+      if (error.response) {
+        toast.error(message);
+      }
     }
-    
+
     return Promise.reject(error);
   }
 );
