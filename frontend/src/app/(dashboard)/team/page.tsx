@@ -83,7 +83,7 @@ export default function TeamPage() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {employees.map((employee, i) => (
-            <Link href={`/team/${employee.id}`} key={employee.id}>
+            <Link href={`/team/${employee.employeeNumber || employee.id}`} key={employee.id}>
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}

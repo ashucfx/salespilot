@@ -85,6 +85,14 @@ public class AuthController {
         return ResponseEntity.ok(ApiResponse.success(UserInfoDto.from(user)));
     }
 
+    @Operation(summary = "Toggle 2FA (OTP) status")
+    @PostMapping("/2fa")
+    public ResponseEntity<ApiResponse<UserInfoDto>> toggle2fa(@AuthenticationPrincipal User user, @RequestParam boolean enabled) {
+        authService.toggle2fa(user.getId(), enabled);
+        user.setOtpEnabled(enabled);
+        return ResponseEntity.ok(ApiResponse.success("2FA status updated to " + enabled, UserInfoDto.from(user)));
+    }
+
     private String getClientIp(HttpServletRequest request) {
         String xForwardedFor = request.getHeader("X-Forwarded-For");
         if (xForwardedFor != null && !xForwardedFor.isEmpty()) {

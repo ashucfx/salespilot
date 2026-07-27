@@ -116,8 +116,16 @@ public class LeadService {
         leadRepository.save(lead);
     }
 
-    public LeadDto getById(UUID id, User currentUser) {
-        Lead lead = getLeadOrThrow(id);
+    public LeadDto getById(String idOrNumber, User currentUser) {
+        Lead lead;
+        try {
+            UUID uuid = UUID.fromString(idOrNumber);
+            lead = getLeadOrThrow(uuid);
+        } catch (IllegalArgumentException e) {
+            lead = leadRepository.findByLeadNumber(idOrNumber)
+                    .filter(l -> l.getDeletedAt() == null)
+                    .orElseThrow(() -> new ResourceNotFoundException("Lead not found with ID or number: " + idOrNumber));
+        }
         enforceDataAccess(lead, currentUser);
         return LeadDto.from(lead);
     }

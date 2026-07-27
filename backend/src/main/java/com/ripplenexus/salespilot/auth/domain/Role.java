@@ -9,6 +9,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "roles")
+@com.fasterxml.jackson.annotation.JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "permissions", "users"})
 public class Role extends BaseEntity {
     @Column(name = "name", nullable = false, unique = true)
     private String name;

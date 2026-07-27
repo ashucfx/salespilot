@@ -12,6 +12,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "employees")
+@com.fasterxml.jackson.annotation.JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "user", "manager", "department"})
 public class Employee extends BaseEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false, unique = true)
@@ -57,6 +58,16 @@ public class Employee extends BaseEntity {
     private Employee manager;
     @Column(name = "joining_date", nullable = false)
     private LocalDate joiningDate;
+    @Column(name = "contract_end_date")
+    private LocalDate contractEndDate;
+
+    public LocalDate getContractEndDate() {
+        return contractEndDate;
+    }
+
+    public void setContractEndDate(LocalDate contractEndDate) {
+        this.contractEndDate = contractEndDate;
+    }
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private EmploymentStatus status;

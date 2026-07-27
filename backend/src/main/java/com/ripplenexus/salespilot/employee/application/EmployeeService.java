@@ -129,6 +129,7 @@ public class EmployeeService {
         if (request.getEmergencyName() != null) employee.setEmergencyName(request.getEmergencyName());
         if (request.getEmergencyPhone() != null) employee.setEmergencyPhone(request.getEmergencyPhone());
         if (request.getEmergencyRelation() != null) employee.setEmergencyRelation(request.getEmergencyRelation());
+        if (request.getContractEndDate() != null) employee.setContractEndDate(request.getContractEndDate());
         if (request.getDepartmentId() != null) {
             Department dept = departmentRepository.findById(request.getDepartmentId()).orElseThrow(() -> new ResourceNotFoundException("Department", request.getDepartmentId()));
             employee.setDepartment(dept);
@@ -160,6 +161,7 @@ public class EmployeeService {
         if (request.getEmergencyPhone() != null) employee.setEmergencyPhone(request.getEmergencyPhone());
         if (request.getEmergencyRelation() != null) employee.setEmergencyRelation(request.getEmergencyRelation());
         if (request.getProfilePicture() != null) employee.setProfilePicture(request.getProfilePicture());
+        if (request.getDesignation() != null) employee.setDesignation(request.getDesignation());
         employeeRepository.save(employee);
         log.info("Employee profile updated by self: {}", employee.getEmployeeNumber());
         return EmployeeDto.from(employee);
@@ -189,8 +191,16 @@ public class EmployeeService {
         log.info("Employee soft-deleted: {}", employee.getEmployeeNumber());
     }
 
-    public EmployeeDto getById(UUID id) {
-        return EmployeeDto.from(getEmployeeOrThrow(id));
+    public EmployeeDto getById(String idOrNumber) {
+        try {
+            UUID uuid = UUID.fromString(idOrNumber);
+            return EmployeeDto.from(getEmployeeOrThrow(uuid));
+        } catch (IllegalArgumentException e) {
+            Employee employee = employeeRepository.findByEmployeeNumber(idOrNumber)
+                    .filter(emp -> emp.getDeletedAt() == null)
+                    .orElseThrow(() -> new ResourceNotFoundException("Employee not found with ID or number: " + idOrNumber));
+            return EmployeeDto.from(employee);
+        }
     }
 
     public Employee getEmployeeByUserIdOrAutoCreate(UUID userId) {
@@ -292,6 +302,9 @@ public class EmployeeService {
 
     public EmployeeDto submitResignation(UUID userId, String reason) {
         Employee employee = getEmployeeByUserIdOrAutoCreate(userId);
+        if (employee.getContractEndDate() != null && java.time.LocalDate.now().isBefore(employee.getContractEndDate())) {
+            throw new IllegalArgumentException("Cannot submit resignation before your contract end date (" + employee.getContractEndDate() + "). Please contact HR or administration.");
+        }
         employee.setResignationStatus(Employee.ResignationStatus.SUBMITTED);
         employee.setResignationReason(reason);
         employee.setResignationSubmittedAt(java.time.ZonedDateTime.now());
@@ -318,10 +331,7 @@ public class EmployeeService {
     }
 
     private String generateEmployeeNumber() {
-        YearMonth now = YearMonth.now();
-        String prefix = String.format("EMP-%04d%02d", now.getYear(), now.getMonthValue());
-        String randomSuffix = UUID.randomUUID().toString().substring(0, 8).toUpperCase();
-        return String.format("%s-%s", prefix, randomSuffix);
+        return "SP-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
     }
 
     private String generateTempPassword() {

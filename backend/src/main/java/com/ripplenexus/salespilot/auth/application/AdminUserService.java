@@ -17,6 +17,7 @@ import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.util.Base64;
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -44,7 +45,7 @@ public class AdminUserService {
         user.setRoles(Set.of(role));
         user = userRepository.save(user);
         // Generate unique employee number
-        String empNum = "EMP-" + LocalDate.now().getYear() + "-" + (System.currentTimeMillis() % 10000);
+        String empNum = "SP-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
         Employee employee = new Employee();
         employee.setUser(user);
         employee.setEmployeeNumber(empNum);

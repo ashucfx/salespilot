@@ -198,6 +198,15 @@ public class AuthService {
         return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
     }
 
+    @Transactional
+    public void toggle2fa(UUID userId, boolean enabled) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        user.setOtpEnabled(enabled);
+        userRepository.save(user);
+        log.info("Updated 2FA (OTP) enabled = {} for user {}", enabled, user.getEmail());
+    }
+
     @java.lang.SuppressWarnings("all")
     
     public AuthService(final UserRepository userRepository, final RefreshTokenRepository refreshTokenRepository, final RoleRepository roleRepository, final JwtUtil jwtUtil, final PasswordEncoder passwordEncoder, final AuthenticationManager authenticationManager, final EmailService emailService) {

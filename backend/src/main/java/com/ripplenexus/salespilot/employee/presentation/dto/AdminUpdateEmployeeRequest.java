@@ -29,6 +29,10 @@ public class AdminUpdateEmployeeRequest {
     private Set<String> territories;
     private Set<String> industries;
     private Set<String> services;
+    private java.time.LocalDate contractEndDate;
+
+    public java.time.LocalDate getContractEndDate() { return contractEndDate; }
+    public void setContractEndDate(java.time.LocalDate contractEndDate) { this.contractEndDate = contractEndDate; }
 
     public String getFirstName() {
         return firstName;

@@ -14,6 +14,7 @@ public class UserInfoDto {
     private String email;
     private Set<String> roles;
     private boolean emailVerified;
+    private boolean otpEnabled;
 
     public static UserInfoDto from(User user) {
         UserInfoDto dto = new UserInfoDto();
@@ -21,6 +22,7 @@ public class UserInfoDto {
         dto.setEmail(user.getEmail());
         dto.setRoles(user.getRoles().stream().map(Role::getName).collect(Collectors.toSet()));
         dto.setEmailVerified(user.isEmailVerified());
+        dto.setOtpEnabled(user.isOtpEnabled());
         return dto;
     }
 
@@ -32,4 +34,6 @@ public class UserInfoDto {
     public void setRoles(Set<String> roles) { this.roles = roles; }
     public boolean isEmailVerified() { return emailVerified; }
     public void setEmailVerified(boolean emailVerified) { this.emailVerified = emailVerified; }
+    public boolean isOtpEnabled() { return otpEnabled; }
+    public void setOtpEnabled(boolean otpEnabled) { this.otpEnabled = otpEnabled; }
 }

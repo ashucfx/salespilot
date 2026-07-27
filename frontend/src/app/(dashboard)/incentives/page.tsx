@@ -8,6 +8,7 @@ import {
   Sparkles, TrendingUp, Users, DollarSign, ArrowRight
 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { formatCurrency } from '@/lib/utils';
 
 export default function IncentivesPage() {
   const [loading, setLoading] = useState(true);
@@ -149,7 +150,7 @@ export default function IncentivesPage() {
                       {getBadgeIcon(item.incentive?.badgeIcon)}
                     </div>
                     <span className="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold">
-                      +₹{item.incentive?.rewardAmount?.toLocaleString()}
+                      +{formatCurrency(item.incentive?.rewardAmount || 0)}
                     </span>
                   </div>
 
@@ -241,7 +242,7 @@ export default function IncentivesPage() {
                   </div>
 
                   <div className="text-right">
-                    <p className="text-xs font-bold text-emerald-400">₹{user.totalRevenue?.toLocaleString()}</p>
+                    <p className="text-xs font-bold text-emerald-400">{formatCurrency(user.totalRevenue || 0)}</p>
                     <div className="mt-0.5">{getRankBadge(user.rank)}</div>
                   </div>
                 </div>

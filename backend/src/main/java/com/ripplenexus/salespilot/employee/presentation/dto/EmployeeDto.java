@@ -45,6 +45,10 @@ public class EmployeeDto {
     private String bankIfsc;
     private String kycStatus;
     private LocalDate endDate;
+    private LocalDate contractEndDate;
+
+    public LocalDate getContractEndDate() { return contractEndDate; }
+    public void setContractEndDate(LocalDate contractEndDate) { this.contractEndDate = contractEndDate; }
     private String resignationStatus;
     private String resignationReason;
     private Instant createdAt;
@@ -85,6 +89,7 @@ public class EmployeeDto {
         dto.setBankIfsc(e.getBankIfsc());
         dto.setKycStatus(e.getKycStatus() != null ? e.getKycStatus().name() : null);
         dto.setEndDate(e.getEndDate());
+        dto.setContractEndDate(e.getContractEndDate());
         dto.setResignationStatus(e.getResignationStatus() != null ? e.getResignationStatus().name() : null);
         dto.setResignationReason(e.getResignationReason());
         dto.setCreatedAt(e.getCreatedAt());

@@ -53,7 +53,7 @@ public class EmployeeController {
     @Operation(summary = "Get employee by ID")
     @GetMapping("/{id}")
     @PreAuthorize("hasRole(\'ADMIN\') or hasRole(\'SALES_MANAGER\')")
-    public ResponseEntity<ApiResponse<EmployeeDto>> getById(@PathVariable UUID id) {
+    public ResponseEntity<ApiResponse<EmployeeDto>> getById(@PathVariable String id) {
         return ResponseEntity.ok(ApiResponse.success(employeeService.getById(id)));
     }
 

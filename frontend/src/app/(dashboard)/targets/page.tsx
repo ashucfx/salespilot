@@ -11,6 +11,7 @@ import toast from 'react-hot-toast';
 
 export default function TargetsPage() {
   const [targets, setTargets] = useState<any[]>([]);
+  const [leaderboard, setLeaderboard] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -20,6 +21,13 @@ export default function TargetsPage() {
   const fetchTargets = async () => {
     try {
       setLoading(true);
+      api.get('/incentives/leaderboard')
+        .then((res) => {
+          const leadList = res.data?.data || res.data || [];
+          setLeaderboard(Array.isArray(leadList) ? leadList : []);
+        })
+        .catch((err) => console.error('Failed to fetch leaderboard', err));
+
       const res = await api.get('/targets/me');
       const list = res.data?.data?.content || res.data?.data || res.data?.content || res.data || [];
       setTargets(Array.isArray(list) ? list : []);
@@ -174,31 +182,38 @@ export default function TargetsPage() {
           </h3>
 
           <div className="space-y-4 flex-1">
-            {[1, 2, 3].map((rank) => (
-              <div key={rank} className="relative flex items-center gap-4 p-4 rounded-2xl bg-slate-900/40 border border-slate-800 overflow-hidden">
-                {rank === 1 && <div className="absolute left-0 top-0 bottom-0 w-1 bg-yellow-500" />}
-                
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shrink-0
-                  ${rank === 1 ? 'bg-yellow-500/20 text-yellow-500 border border-yellow-500/30' : 
-                    rank === 2 ? 'bg-slate-300/20 text-slate-300 border border-slate-300/30' : 
-                    'bg-orange-700/20 text-orange-500 border border-orange-700/30'}`}
-                >
-                  #{rank}
-                </div>
-                
-                <div className="flex-1 min-w-0">
-                  <h4 className="text-sm font-bold text-white truncate">Sales Rep {rank}</h4>
-                  <p className="text-xs text-slate-400 truncate">12 deals closed</p>
-                </div>
+            {leaderboard.length === 0 ? (
+              <p className="text-sm text-slate-400 text-center py-4">No leaderboard data yet.</p>
+            ) : (
+              leaderboard.slice(0, 5).map((user, idx) => {
+                const rank = user.rank || idx + 1;
+                return (
+                  <div key={user.employeeId || idx} className="relative flex items-center gap-4 p-4 rounded-2xl bg-slate-900/40 border border-slate-800 overflow-hidden">
+                    {rank === 1 && <div className="absolute left-0 top-0 bottom-0 w-1 bg-yellow-500" />}
+                    
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shrink-0
+                      ${rank === 1 ? 'bg-yellow-500/20 text-yellow-500 border border-yellow-500/30' : 
+                        rank === 2 ? 'bg-slate-300/20 text-slate-300 border border-slate-300/30' : 
+                        'bg-orange-700/20 text-orange-500 border border-orange-700/30'}`}
+                    >
+                      #{rank}
+                    </div>
+                    
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-sm font-bold text-white truncate">{user.employeeName}</h4>
+                      <p className="text-xs text-slate-400 truncate">{user.dealsClosed || 0} deals closed</p>
+                    </div>
 
-                <div className="text-right shrink-0">
-                  <p className="text-sm font-bold text-emerald-400">{formatCurrency(800000 - (rank * 50000))}</p>
-                </div>
-              </div>
-            ))}
+                    <div className="text-right shrink-0">
+                      <p className="text-sm font-bold text-emerald-400">{formatCurrency(user.totalRevenue || 0)}</p>
+                    </div>
+                  </div>
+                );
+              })
+            )}
           </div>
 
-          <button onClick={() => toast.success('Leaderboard standings updated.')} className="w-full py-3 mt-4 text-sm font-medium text-slate-400 hover:text-white bg-slate-900/50 hover:bg-slate-800 rounded-xl transition-colors flex items-center justify-center gap-1">
+          <button onClick={() => window.location.href = '/incentives'} className="w-full py-3 mt-4 text-sm font-medium text-slate-400 hover:text-white bg-slate-900/50 hover:bg-slate-800 rounded-xl transition-colors flex items-center justify-center gap-1">
             View Full Leaderboard
             <ChevronRight className="w-4 h-4" />
           </button>

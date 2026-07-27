@@ -64,6 +64,11 @@ export default function SettingsPage() {
     const savedApp = localStorage.getItem('sp_settings_appearance');
     if (savedApp) setAppearance(JSON.parse(savedApp));
 
+    const savedSec = localStorage.getItem('sp_settings_security');
+    if (savedSec) {
+      try { setSecurity(prev => ({ ...prev, ...JSON.parse(savedSec) })); } catch (e) {}
+    }
+
     if (user?.id) {
       api.get('/employees/me').then(({ data }) => {
         if (data?.data) {
@@ -75,8 +80,28 @@ export default function SettingsPage() {
           });
         }
       }).catch(() => {});
+
+      api.get('/auth/me').then(({ data }) => {
+        if (data?.data) {
+          setSecurity(prev => ({ ...prev, twoFactor: !!data.data.otpEnabled }));
+        }
+      }).catch(() => {});
     }
   }, [user?.id]);
+
+  useEffect(() => {
+    let t = appearance.theme || 'dark';
+    if (t === 'system') {
+      t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    }
+    if (t === 'light') {
+      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.add('light');
+    } else {
+      document.documentElement.classList.remove('light');
+      document.documentElement.classList.add('dark');
+    }
+  }, [appearance.theme]);
 
   const handleSaveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -84,7 +109,8 @@ export default function SettingsPage() {
       await api.put('/employees/me', {
         firstName: profileForm.firstName,
         lastName: profileForm.lastName,
-        phone: profileForm.phone
+        phone: profileForm.phone,
+        designation: profileForm.designation
       });
       toast.success('Profile settings updated successfully!');
     } catch (err: any) {
@@ -104,20 +130,24 @@ export default function SettingsPage() {
     toast.success('Notification preferences saved!');
   };
 
-  const handleSaveSecurity = (e: React.FormEvent) => {
+  const handleSaveSecurity = async (e: React.FormEvent) => {
     e.preventDefault();
     if (security.newPassword && security.newPassword !== security.confirmPassword) {
       toast.error('New passwords do not match');
       return;
     }
-    toast.success('Security settings and password updated successfully!');
+    try {
+      await api.post(`/auth/2fa?enabled=${security.twoFactor}`);
+    } catch (err) {}
+    localStorage.setItem('sp_settings_security', JSON.stringify({ twoFactor: security.twoFactor, sessionTimeout: security.sessionTimeout, ipRestriction: security.ipRestriction }));
+    toast.success('Security settings and 2FA updated successfully!');
     setSecurity(prev => ({ ...prev, currentPassword: '', newPassword: '', confirmPassword: '' }));
   };
 
   const handleSaveAppearance = (e: React.FormEvent) => {
     e.preventDefault();
     localStorage.setItem('sp_settings_appearance', JSON.stringify(appearance));
-    toast.success('Appearance preferences updated!');
+    toast.success('Appearance & theme preferences saved and applied across platform!');
   };
 
   const tabs = [

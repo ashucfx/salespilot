@@ -15,9 +15,9 @@ public class AdminUserController {
 
     @PostMapping("/onboard")
     @PreAuthorize("hasRole(\'ADMIN\')")
-    public ResponseEntity<ApiResponse<Employee>> onboardUser(@jakarta.validation.Valid @RequestBody OnboardUserRequest request) {
+    public ResponseEntity<ApiResponse<com.ripplenexus.salespilot.employee.presentation.dto.EmployeeDto>> onboardUser(@jakarta.validation.Valid @RequestBody OnboardUserRequest request) {
         Employee employee = adminUserService.onboardNewUser(request.getEmail(), request.getFirstName(), request.getLastName(), request.getRoleName());
-        return ResponseEntity.ok(ApiResponse.success(employee));
+        return ResponseEntity.ok(ApiResponse.success(com.ripplenexus.salespilot.employee.presentation.dto.EmployeeDto.from(employee)));
     }
 
 

@@ -33,7 +33,7 @@ public class LeadController {
 
     @Operation(summary = "Get lead by ID")
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<LeadDto>> getById(@PathVariable UUID id, @AuthenticationPrincipal User user) {
+    public ResponseEntity<ApiResponse<LeadDto>> getById(@PathVariable String id, @AuthenticationPrincipal User user) {
         return ResponseEntity.ok(ApiResponse.success(leadService.getById(id, user)));
     }
 

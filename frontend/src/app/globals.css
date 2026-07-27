@@ -89,3 +89,51 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-primary);
 }
+
+/* Light Mode Overrides */
+html.light, body.light, :root.light {
+  --color-background: #f8fafc;
+  --color-foreground: #0f172a;
+  --color-card: #ffffff;
+  --color-card-foreground: #0f172a;
+  --color-muted: #f1f5f9;
+  --color-muted-foreground: #64748b;
+  --color-border: rgba(99, 102, 241, 0.15);
+  color-scheme: light;
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+html.light body {
+  background-image: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.08) 0%, transparent 50%);
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+html.light .glass {
+  background: rgba(255, 255, 255, 0.85) !important;
+  border-color: rgba(99, 102, 241, 0.2) !important;
+  color: #0f172a !important;
+}
+html.light .glass-panel {
+  background: rgba(255, 255, 255, 0.92) !important;
+  border-color: rgba(203, 213, 225, 0.8) !important;
+  color: #0f172a !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+}
+html.light .text-white { color: #0f172a !important; }
+html.light .text-slate-400 { color: #475569 !important; }
+html.light .text-slate-300 { color: #334155 !important; }
+html.light .bg-slate-900\/50, html.light .bg-slate-900\/40, html.light .bg-slate-900\/60, html.light .bg-slate-900\/80, html.light .bg-slate-900 {
+  background-color: rgba(241, 245, 249, 0.85) !important;
+  border-color: rgba(203, 213, 225, 0.6) !important;
+}
+html.light .bg-slate-800, html.light .bg-slate-800\/50 {
+  background-color: rgba(226, 232, 240, 0.9) !important;
+}
+html.light .border-slate-800, html.light .border-slate-800\/60, html.light .border-slate-700 {
+  border-color: rgba(203, 213, 225, 0.7) !important;
+}
+html.light input, html.light select, html.light textarea {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+}
