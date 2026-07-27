@@ -28,19 +28,28 @@ BEGIN
         SELECT id INTO target_emp_id FROM employees WHERE work_email = demo_email OR user_id = target_user_id;
 
         IF target_emp_id IS NOT NULL THEN
-            DELETE FROM lead_activities WHERE created_by = target_user_id;
-            DELETE FROM deal_activities WHERE created_by = target_user_id;
-            DELETE FROM commissions WHERE employee_id = target_emp_id;
+            DELETE FROM activity_attachments WHERE activity_id IN (SELECT id FROM activities WHERE performed_by = target_emp_id);
+            DELETE FROM activities WHERE performed_by = target_emp_id;
+            DELETE FROM payments WHERE deal_id IN (SELECT id FROM deals WHERE employee_id = target_emp_id);
+            DELETE FROM commissions WHERE employee_id = target_emp_id OR approved_by = target_emp_id OR paid_by = target_emp_id;
             DELETE FROM payouts WHERE employee_id = target_emp_id;
             DELETE FROM employee_commission_plans WHERE employee_id = target_emp_id;
             DELETE FROM employee_incentives WHERE employee_id = target_emp_id;
-            DELETE FROM deals WHERE assigned_to = target_emp_id;
-            DELETE FROM leads WHERE assigned_to = target_emp_id;
+            DELETE FROM deals WHERE employee_id = target_emp_id;
+            DELETE FROM leads WHERE assigned_to = target_emp_id OR uploaded_by = target_emp_id OR changed_by = target_emp_id;
+            DELETE FROM task_comments WHERE author_id = target_emp_id;
+            DELETE FROM tasks WHERE assigned_by = target_emp_id OR author_id = target_emp_id;
+            DELETE FROM meetings WHERE organizer_id = target_emp_id;
+            DELETE FROM pipeline_stage_history WHERE moved_by = target_emp_id;
+            DELETE FROM proposals WHERE uploaded_by = target_emp_id OR approved_by = target_emp_id;
+            UPDATE employees SET manager_id = NULL WHERE manager_id = target_emp_id;
             DELETE FROM employees WHERE id = target_emp_id;
         END IF;
 
         IF target_user_id IS NOT NULL THEN
             DELETE FROM user_roles WHERE user_id = target_user_id;
+            DELETE FROM refresh_tokens WHERE user_id = target_user_id;
+            DELETE FROM device_sessions WHERE user_id = target_user_id;
             DELETE FROM users WHERE id = target_user_id;
         END IF;
     END LOOP;
