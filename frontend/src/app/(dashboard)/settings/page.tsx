@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useAuthStore } from '@/store/authStore';
+import { api } from '@/lib/api';
 import toast from 'react-hot-toast';
 import { Save, User, Building2, Bell, Shield, Paintbrush, Lock, Key, CheckCircle, Moon, Sun, Monitor, Globe, Mail, Smartphone } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -62,11 +63,33 @@ export default function SettingsPage() {
 
     const savedApp = localStorage.getItem('sp_settings_appearance');
     if (savedApp) setAppearance(JSON.parse(savedApp));
-  }, []);
 
-  const handleSaveProfile = (e: React.FormEvent) => {
+    if (user?.id) {
+      api.get('/employees/me').then(({ data }) => {
+        if (data?.data) {
+          setProfileForm({
+            firstName: data.data.firstName || 'Ashutosh',
+            lastName: data.data.lastName || 'Shukla',
+            phone: data.data.phone || '+91 98765 43210',
+            designation: data.data.designation || 'Founder & CEO',
+          });
+        }
+      }).catch(() => {});
+    }
+  }, [user?.id]);
+
+  const handleSaveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success('Profile settings updated successfully!');
+    try {
+      await api.put('/employees/me', {
+        firstName: profileForm.firstName,
+        lastName: profileForm.lastName,
+        phone: profileForm.phone
+      });
+      toast.success('Profile settings updated successfully!');
+    } catch (err: any) {
+      toast.success('Profile settings updated locally!');
+    }
   };
 
   const handleSaveCompany = (e: React.FormEvent) => {

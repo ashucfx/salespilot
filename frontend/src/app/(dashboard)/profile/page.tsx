@@ -62,10 +62,10 @@ export default function ProfilePage() {
   const [isSubmittingResignation, setIsSubmittingResignation] = useState(false);
 
   useEffect(() => {
-    if (user) {
+    if (user?.id) {
       fetchProfileData();
     }
-  }, [user]);
+  }, [user?.id]);
 
   const fetchProfileData = async () => {
     try {
@@ -75,7 +75,7 @@ export default function ProfilePage() {
       setProfile(empData);
       
       // Update local store avatar if updated
-      if (empData.profilePicture) {
+      if (empData.profilePicture && empData.profilePicture !== user?.profilePicture) {
         updateUser({ profilePicture: empData.profilePicture });
       }
 
