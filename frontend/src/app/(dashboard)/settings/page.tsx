@@ -173,8 +173,8 @@ export default function SettingsPage() {
   return (
     <div className="space-y-6 max-w-5xl">
       <div className="mb-8">
-        <h2 className="text-2xl font-bold text-white tracking-tight">System Settings & Preferences</h2>
-        <p className="text-slate-400 text-sm mt-1">Configure your personal profile, company organization, notifications, and enterprise security.</p>
+        <h2 className="text-2xl font-bold text-foreground tracking-tight">System Settings & Preferences</h2>
+        <p className="text-muted-foreground text-sm mt-1">Configure your personal profile, company organization, notifications, and enterprise security.</p>
       </div>
 
       <div className="flex flex-col md:flex-row gap-8">
@@ -188,8 +188,8 @@ export default function SettingsPage() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
                   isActive 
-                    ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 shadow-lg shadow-indigo-500/5' 
-                    : 'text-slate-400 hover:text-white hover:bg-slate-800/50 border border-transparent'
+                    ? 'bg-indigo-500/10 text-indigo-400 border border-border shadow-lg shadow-indigo-500/5' 
+                    : 'text-muted-foreground hover:text-foreground hover:bg-muted border border-transparent'
                 }`}
               >
                 <tab.icon className={`w-4 h-4 ${isActive ? 'text-indigo-400' : 'text-slate-500'}`} />
@@ -204,59 +204,59 @@ export default function SettingsPage() {
           {/* PROFILE TAB */}
           {activeTab === 'profile' && (
             <motion.form onSubmit={handleSaveProfile} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
-              <h3 className="text-lg font-semibold text-white border-b border-slate-800 pb-4">Personal Profile Information</h3>
+              <h3 className="text-lg font-semibold text-foreground border-b border-border pb-4">Personal Profile Information</h3>
               
-              <div className="flex items-center gap-6 pb-6 border-b border-slate-800">
-                <div className="w-20 h-20 rounded-full bg-gradient-to-tr from-violet-500 to-cyan-500 flex items-center justify-center text-white font-bold text-2xl shadow-[0_0_15px_rgba(139,92,246,0.3)]">
+              <div className="flex items-center gap-6 pb-6 border-b border-border">
+                <div className="w-20 h-20 rounded-full bg-gradient-to-tr from-violet-500 to-cyan-500 flex items-center justify-center text-foreground font-bold text-2xl shadow-[0_0_15px_rgba(139,92,246,0.3)]">
                   {user?.email?.charAt(0).toUpperCase() || 'A'}
                 </div>
                 <div className="flex flex-col gap-1">
-                  <span className="text-sm font-medium text-white">{user?.email}</span>
+                  <span className="text-sm font-medium text-foreground">{user?.email}</span>
                   <span className="text-xs text-indigo-400 font-mono">Role: {user?.roles?.join(', ') || 'ADMIN'}</span>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-slate-400 mb-2">First Name</label>
+                  <label className="block text-sm font-medium text-muted-foreground mb-2">First Name</label>
                   <input 
                     type="text" 
                     value={profileForm.firstName} 
                     onChange={e => setProfileForm({ ...profileForm, firstName: e.target.value })} 
-                    className="w-full bg-slate-900/50 border border-indigo-500/20 rounded-xl px-4 py-2 text-white focus:ring-2 focus:ring-indigo-500/50 outline-none" 
+                    className="w-full bg-background border border-border rounded-xl px-4 py-2 text-foreground focus:ring-2 focus:ring-indigo-500/50 outline-none" 
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-400 mb-2">Last Name</label>
+                  <label className="block text-sm font-medium text-muted-foreground mb-2">Last Name</label>
                   <input 
                     type="text" 
                     value={profileForm.lastName} 
                     onChange={e => setProfileForm({ ...profileForm, lastName: e.target.value })} 
-                    className="w-full bg-slate-900/50 border border-indigo-500/20 rounded-xl px-4 py-2 text-white focus:ring-2 focus:ring-indigo-500/50 outline-none" 
+                    className="w-full bg-background border border-border rounded-xl px-4 py-2 text-foreground focus:ring-2 focus:ring-indigo-500/50 outline-none" 
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-400 mb-2">Phone Number</label>
+                  <label className="block text-sm font-medium text-muted-foreground mb-2">Phone Number</label>
                   <input 
                     type="text" 
                     value={profileForm.phone} 
                     onChange={e => setProfileForm({ ...profileForm, phone: e.target.value })} 
-                    className="w-full bg-slate-900/50 border border-indigo-500/20 rounded-xl px-4 py-2 text-white focus:ring-2 focus:ring-indigo-500/50 outline-none" 
+                    className="w-full bg-background border border-border rounded-xl px-4 py-2 text-foreground focus:ring-2 focus:ring-indigo-500/50 outline-none" 
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-400 mb-2">Designation</label>
+                  <label className="block text-sm font-medium text-muted-foreground mb-2">Designation</label>
                   <input 
                     type="text" 
                     value={profileForm.designation} 
                     onChange={e => setProfileForm({ ...profileForm, designation: e.target.value })} 
-                    className="w-full bg-slate-900/50 border border-indigo-500/20 rounded-xl px-4 py-2 text-white focus:ring-2 focus:ring-indigo-500/50 outline-none" 
+                    className="w-full bg-background border border-border rounded-xl px-4 py-2 text-foreground focus:ring-2 focus:ring-indigo-500/50 outline-none" 
                   />
                 </div>
               </div>
 
-              <div className="flex justify-end border-t border-slate-700/50 pt-6 mt-6">
-                <button type="submit" className="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2 rounded-xl text-sm font-medium transition-all shadow-lg shadow-indigo-500/25 flex items-center gap-2">
+              <div className="flex justify-end border-t border-border pt-6 mt-6">
+                <button type="submit" className="bg-indigo-600 hover:bg-indigo-500 text-foreground px-6 py-2 rounded-xl text-sm font-medium transition-all shadow-lg shadow-indigo-500/25 flex items-center gap-2">
                   <Save className="w-4 h-4" />
                   Save Profile
                 </button>
@@ -267,42 +267,42 @@ export default function SettingsPage() {
           {/* COMPANY TAB */}
           {activeTab === 'company' && (
             <motion.form onSubmit={handleSaveCompany} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
-              <h3 className="text-lg font-semibold text-white border-b border-slate-800 pb-4">Company & Organization Settings</h3>
+              <h3 className="text-lg font-semibold text-foreground border-b border-border pb-4">Company & Organization Settings</h3>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-slate-400 mb-2">Company Name</label>
+                  <label className="block text-sm font-medium text-muted-foreground mb-2">Company Name</label>
                   <input 
                     type="text" 
                     value={companyForm.companyName} 
                     onChange={e => setCompanyForm({ ...companyForm, companyName: e.target.value })} 
-                    className="w-full bg-slate-900/50 border border-indigo-500/20 rounded-xl px-4 py-2 text-white focus:ring-2 focus:ring-indigo-500/50 outline-none" 
+                    className="w-full bg-background border border-border rounded-xl px-4 py-2 text-foreground focus:ring-2 focus:ring-indigo-500/50 outline-none" 
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-400 mb-2">Website URL</label>
+                  <label className="block text-sm font-medium text-muted-foreground mb-2">Website URL</label>
                   <input 
                     type="text" 
                     value={companyForm.website} 
                     onChange={e => setCompanyForm({ ...companyForm, website: e.target.value })} 
-                    className="w-full bg-slate-900/50 border border-indigo-500/20 rounded-xl px-4 py-2 text-white focus:ring-2 focus:ring-indigo-500/50 outline-none" 
+                    className="w-full bg-background border border-border rounded-xl px-4 py-2 text-foreground focus:ring-2 focus:ring-indigo-500/50 outline-none" 
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-400 mb-2">Industry Sector</label>
+                  <label className="block text-sm font-medium text-muted-foreground mb-2">Industry Sector</label>
                   <input 
                     type="text" 
                     value={companyForm.industry} 
                     onChange={e => setCompanyForm({ ...companyForm, industry: e.target.value })} 
-                    className="w-full bg-slate-900/50 border border-indigo-500/20 rounded-xl px-4 py-2 text-white focus:ring-2 focus:ring-indigo-500/50 outline-none" 
+                    className="w-full bg-background border border-border rounded-xl px-4 py-2 text-foreground focus:ring-2 focus:ring-indigo-500/50 outline-none" 
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-400 mb-2">Company Size</label>
+                  <label className="block text-sm font-medium text-muted-foreground mb-2">Company Size</label>
                   <select 
                     value={companyForm.employeesCount} 
                     onChange={e => setCompanyForm({ ...companyForm, employeesCount: e.target.value })} 
-                    className="w-full bg-slate-900/50 border border-indigo-500/20 rounded-xl px-4 py-2 text-white focus:ring-2 focus:ring-indigo-500/50 outline-none"
+                    className="w-full bg-background border border-border rounded-xl px-4 py-2 text-foreground focus:ring-2 focus:ring-indigo-500/50 outline-none"
                   >
                     <option value="1-10">1-10 Employees</option>
                     <option value="11-50">11-50 Employees</option>
@@ -311,27 +311,27 @@ export default function SettingsPage() {
                   </select>
                 </div>
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-slate-400 mb-2">Headquarters Address</label>
+                  <label className="block text-sm font-medium text-muted-foreground mb-2">Headquarters Address</label>
                   <input 
                     type="text" 
                     value={companyForm.address} 
                     onChange={e => setCompanyForm({ ...companyForm, address: e.target.value })} 
-                    className="w-full bg-slate-900/50 border border-indigo-500/20 rounded-xl px-4 py-2 text-white focus:ring-2 focus:ring-indigo-500/50 outline-none" 
+                    className="w-full bg-background border border-border rounded-xl px-4 py-2 text-foreground focus:ring-2 focus:ring-indigo-500/50 outline-none" 
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-400 mb-2">Tax ID / GST Registration</label>
+                  <label className="block text-sm font-medium text-muted-foreground mb-2">Tax ID / GST Registration</label>
                   <input 
                     type="text" 
                     value={companyForm.taxId} 
                     onChange={e => setCompanyForm({ ...companyForm, taxId: e.target.value })} 
-                    className="w-full bg-slate-900/50 border border-indigo-500/20 rounded-xl px-4 py-2 text-white focus:ring-2 focus:ring-indigo-500/50 outline-none" 
+                    className="w-full bg-background border border-border rounded-xl px-4 py-2 text-foreground focus:ring-2 focus:ring-indigo-500/50 outline-none" 
                   />
                 </div>
               </div>
 
-              <div className="flex justify-end border-t border-slate-700/50 pt-6 mt-6">
-                <button type="submit" className="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2 rounded-xl text-sm font-medium transition-all shadow-lg shadow-indigo-500/25 flex items-center gap-2">
+              <div className="flex justify-end border-t border-border pt-6 mt-6">
+                <button type="submit" className="bg-indigo-600 hover:bg-indigo-500 text-foreground px-6 py-2 rounded-xl text-sm font-medium transition-all shadow-lg shadow-indigo-500/25 flex items-center gap-2">
                   <Save className="w-4 h-4" />
                   Save Company Preferences
                 </button>
@@ -342,15 +342,15 @@ export default function SettingsPage() {
           {/* NOTIFICATIONS TAB */}
           {activeTab === 'notifications' && (
             <motion.form onSubmit={handleSaveNotifications} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
-              <h3 className="text-lg font-semibold text-white border-b border-slate-800 pb-4">Notification & Alert Preferences</h3>
+              <h3 className="text-lg font-semibold text-foreground border-b border-border pb-4">Notification & Alert Preferences</h3>
               
               <div className="space-y-4">
-                <div className="flex items-center justify-between p-4 bg-slate-900/40 rounded-xl border border-slate-800">
+                <div className="flex items-center justify-between p-4 bg-background/40 rounded-xl border border-border">
                   <div className="flex items-center gap-3">
                     <Mail className="w-5 h-5 text-indigo-400" />
                     <div>
-                      <h4 className="text-sm font-medium text-white">Email Notifications</h4>
-                      <p className="text-xs text-slate-400">Receive transactional and system emails to your work address.</p>
+                      <h4 className="text-sm font-medium text-foreground">Email Notifications</h4>
+                      <p className="text-xs text-muted-foreground">Receive transactional and system emails to your work address.</p>
                     </div>
                   </div>
                   <input 
@@ -361,12 +361,12 @@ export default function SettingsPage() {
                   />
                 </div>
 
-                <div className="flex items-center justify-between p-4 bg-slate-900/40 rounded-xl border border-slate-800">
+                <div className="flex items-center justify-between p-4 bg-background/40 rounded-xl border border-border">
                   <div className="flex items-center gap-3">
                     <User className="w-5 h-5 text-emerald-400" />
                     <div>
-                      <h4 className="text-sm font-medium text-white">Lead Assignment Alerts</h4>
-                      <p className="text-xs text-slate-400">Notify instantly when a new lead is assigned to you or your territory.</p>
+                      <h4 className="text-sm font-medium text-foreground">Lead Assignment Alerts</h4>
+                      <p className="text-xs text-muted-foreground">Notify instantly when a new lead is assigned to you or your territory.</p>
                     </div>
                   </div>
                   <input 
@@ -377,12 +377,12 @@ export default function SettingsPage() {
                   />
                 </div>
 
-                <div className="flex items-center justify-between p-4 bg-slate-900/40 rounded-xl border border-slate-800">
+                <div className="flex items-center justify-between p-4 bg-background/40 rounded-xl border border-border">
                   <div className="flex items-center gap-3">
                     <CheckCircle className="w-5 h-5 text-cyan-400" />
                     <div>
-                      <h4 className="text-sm font-medium text-white">Deal Closure Notifications</h4>
-                      <p className="text-xs text-slate-400">Get notified when team deals reach Won or Lost status.</p>
+                      <h4 className="text-sm font-medium text-foreground">Deal Closure Notifications</h4>
+                      <p className="text-xs text-muted-foreground">Get notified when team deals reach Won or Lost status.</p>
                     </div>
                   </div>
                   <input 
@@ -393,12 +393,12 @@ export default function SettingsPage() {
                   />
                 </div>
 
-                <div className="flex items-center justify-between p-4 bg-slate-900/40 rounded-xl border border-slate-800">
+                <div className="flex items-center justify-between p-4 bg-background/40 rounded-xl border border-border">
                   <div className="flex items-center gap-3">
                     <Globe className="w-5 h-5 text-amber-400" />
                     <div>
-                      <h4 className="text-sm font-medium text-white">Weekly Performance Digest</h4>
-                      <p className="text-xs text-slate-400">Receive a weekly automated summary of revenue and team KPIs every Monday.</p>
+                      <h4 className="text-sm font-medium text-foreground">Weekly Performance Digest</h4>
+                      <p className="text-xs text-muted-foreground">Receive a weekly automated summary of revenue and team KPIs every Monday.</p>
                     </div>
                   </div>
                   <input 
@@ -409,12 +409,12 @@ export default function SettingsPage() {
                   />
                 </div>
 
-                <div className="flex items-center justify-between p-4 bg-slate-900/40 rounded-xl border border-slate-800">
+                <div className="flex items-center justify-between p-4 bg-background/40 rounded-xl border border-border">
                   <div className="flex items-center gap-3">
                     <Smartphone className="w-5 h-5 text-violet-400" />
                     <div>
-                      <h4 className="text-sm font-medium text-white">SMS / WhatsApp Urgent Alerts</h4>
-                      <p className="text-xs text-slate-400">Send high-priority KYC approval requests via WhatsApp / SMS.</p>
+                      <h4 className="text-sm font-medium text-foreground">SMS / WhatsApp Urgent Alerts</h4>
+                      <p className="text-xs text-muted-foreground">Send high-priority KYC approval requests via WhatsApp / SMS.</p>
                     </div>
                   </div>
                   <input 
@@ -426,8 +426,8 @@ export default function SettingsPage() {
                 </div>
               </div>
 
-              <div className="flex justify-end border-t border-slate-700/50 pt-6 mt-6">
-                <button type="submit" className="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2 rounded-xl text-sm font-medium transition-all shadow-lg shadow-indigo-500/25 flex items-center gap-2">
+              <div className="flex justify-end border-t border-border pt-6 mt-6">
+                <button type="submit" className="bg-indigo-600 hover:bg-indigo-500 text-foreground px-6 py-2 rounded-xl text-sm font-medium transition-all shadow-lg shadow-indigo-500/25 flex items-center gap-2">
                   <Save className="w-4 h-4" />
                   Save Notification Settings
                 </button>
@@ -438,15 +438,15 @@ export default function SettingsPage() {
           {/* SECURITY TAB */}
           {activeTab === 'security' && (
             <motion.form onSubmit={handleSaveSecurity} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
-              <h3 className="text-lg font-semibold text-white border-b border-slate-800 pb-4">Security & Authentication Settings</h3>
+              <h3 className="text-lg font-semibold text-foreground border-b border-border pb-4">Security & Authentication Settings</h3>
               
               <div className="space-y-6">
-                <div className="p-4 bg-indigo-500/5 border border-indigo-500/20 rounded-xl flex items-center justify-between">
+                <div className="p-4 bg-indigo-500/5 border border-border rounded-xl flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <Lock className="w-5 h-5 text-indigo-400" />
                     <div>
-                      <h4 className="text-sm font-medium text-white">Two-Factor Authentication (2FA / OTP)</h4>
-                      <p className="text-xs text-slate-400">Require an OTP security code sent to your email on login.</p>
+                      <h4 className="text-sm font-medium text-foreground">Two-Factor Authentication (2FA / OTP)</h4>
+                      <p className="text-xs text-muted-foreground">Require an OTP security code sent to your email on login.</p>
                     </div>
                   </div>
                   <input 
@@ -469,11 +469,11 @@ export default function SettingsPage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-slate-400 mb-2">Session Timeout (Minutes)</label>
+                    <label className="block text-sm font-medium text-muted-foreground mb-2">Session Timeout (Minutes)</label>
                     <select 
                       value={security.sessionTimeout} 
                       onChange={e => setSecurity({ ...security, sessionTimeout: e.target.value })} 
-                      className="w-full bg-slate-900/50 border border-indigo-500/20 rounded-xl px-4 py-2 text-white focus:ring-2 focus:ring-indigo-500/50 outline-none"
+                      className="w-full bg-background border border-border rounded-xl px-4 py-2 text-foreground focus:ring-2 focus:ring-indigo-500/50 outline-none"
                     >
                       <option value="30">30 Minutes</option>
                       <option value="60">1 Hour (Recommended)</option>
@@ -483,47 +483,47 @@ export default function SettingsPage() {
                   </div>
                 </div>
 
-                <div className="border-t border-slate-800 pt-6">
-                  <h4 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+                <div className="border-t border-border pt-6">
+                  <h4 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
                     <Key className="w-4 h-4 text-indigo-400" /> Change Account Password
                   </h4>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
-                      <label className="block text-xs text-slate-400 mb-1">Current Password</label>
+                      <label className="block text-xs text-muted-foreground mb-1">Current Password</label>
                       <input 
                         type="password" 
                         value={security.currentPassword} 
                         onChange={e => setSecurity({ ...security, currentPassword: e.target.value })} 
                         placeholder="••••••••" 
-                        className="w-full bg-slate-900/50 border border-indigo-500/20 rounded-xl px-3 py-2 text-sm text-white focus:ring-2 focus:ring-indigo-500/50 outline-none" 
+                        className="w-full bg-background border border-border rounded-xl px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-indigo-500/50 outline-none" 
                       />
                     </div>
                     <div>
-                      <label className="block text-xs text-slate-400 mb-1">New Password</label>
+                      <label className="block text-xs text-muted-foreground mb-1">New Password</label>
                       <input 
                         type="password" 
                         value={security.newPassword} 
                         onChange={e => setSecurity({ ...security, newPassword: e.target.value })} 
                         placeholder="••••••••" 
-                        className="w-full bg-slate-900/50 border border-indigo-500/20 rounded-xl px-3 py-2 text-sm text-white focus:ring-2 focus:ring-indigo-500/50 outline-none" 
+                        className="w-full bg-background border border-border rounded-xl px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-indigo-500/50 outline-none" 
                       />
                     </div>
                     <div>
-                      <label className="block text-xs text-slate-400 mb-1">Confirm New Password</label>
+                      <label className="block text-xs text-muted-foreground mb-1">Confirm New Password</label>
                       <input 
                         type="password" 
                         value={security.confirmPassword} 
                         onChange={e => setSecurity({ ...security, confirmPassword: e.target.value })} 
                         placeholder="••••••••" 
-                        className="w-full bg-slate-900/50 border border-indigo-500/20 rounded-xl px-3 py-2 text-sm text-white focus:ring-2 focus:ring-indigo-500/50 outline-none" 
+                        className="w-full bg-background border border-border rounded-xl px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-indigo-500/50 outline-none" 
                       />
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="flex justify-end border-t border-slate-700/50 pt-6 mt-6">
-                <button type="submit" className="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2 rounded-xl text-sm font-medium transition-all shadow-lg shadow-indigo-500/25 flex items-center gap-2">
+              <div className="flex justify-end border-t border-border pt-6 mt-6">
+                <button type="submit" className="bg-indigo-600 hover:bg-indigo-500 text-foreground px-6 py-2 rounded-xl text-sm font-medium transition-all shadow-lg shadow-indigo-500/25 flex items-center gap-2">
                   <Save className="w-4 h-4" />
                   Save Security Preferences
                 </button>
@@ -534,16 +534,16 @@ export default function SettingsPage() {
           {/* APPEARANCE TAB */}
           {activeTab === 'appearance' && (
             <motion.form onSubmit={handleSaveAppearance} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
-              <h3 className="text-lg font-semibold text-white border-b border-slate-800 pb-4">Appearance & Interface Customization</h3>
+              <h3 className="text-lg font-semibold text-foreground border-b border-border pb-4">Appearance & Interface Customization</h3>
               
               <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-slate-400 mb-3">Color Mode</label>
+                  <label className="block text-sm font-medium text-muted-foreground mb-3">Color Mode</label>
                   <div className="grid grid-cols-3 gap-4">
                     <button 
                       type="button" 
                       onClick={() => applyAndSaveTheme('dark')} 
-                      className={`flex flex-col items-center gap-2 p-4 rounded-xl border transition-all ${appearance.theme === 'dark' ? 'bg-indigo-500/10 border-indigo-500 text-indigo-400' : 'bg-slate-900/50 border-slate-800 text-slate-400 hover:text-white'}`}
+                      className={`flex flex-col items-center gap-2 p-4 rounded-xl border transition-all ${appearance.theme === 'dark' ? 'bg-indigo-500/10 border-indigo-500 text-indigo-400' : 'bg-background border-border text-muted-foreground hover:text-foreground'}`}
                     >
                       <Moon className="w-6 h-6" />
                       <span className="text-xs font-medium">Dark Mode (Default)</span>
@@ -551,7 +551,7 @@ export default function SettingsPage() {
                     <button 
                       type="button" 
                       onClick={() => applyAndSaveTheme('light')} 
-                      className={`flex flex-col items-center gap-2 p-4 rounded-xl border transition-all ${appearance.theme === 'light' ? 'bg-indigo-500/10 border-indigo-500 text-indigo-400' : 'bg-slate-900/50 border-slate-800 text-slate-400 hover:text-white'}`}
+                      className={`flex flex-col items-center gap-2 p-4 rounded-xl border transition-all ${appearance.theme === 'light' ? 'bg-indigo-500/10 border-indigo-500 text-indigo-400' : 'bg-background border-border text-muted-foreground hover:text-foreground'}`}
                     >
                       <Sun className="w-6 h-6" />
                       <span className="text-xs font-medium">Light Mode</span>
@@ -559,7 +559,7 @@ export default function SettingsPage() {
                     <button 
                       type="button" 
                       onClick={() => applyAndSaveTheme('system')} 
-                      className={`flex flex-col items-center gap-2 p-4 rounded-xl border transition-all ${appearance.theme === 'system' ? 'bg-indigo-500/10 border-indigo-500 text-indigo-400' : 'bg-slate-900/50 border-slate-800 text-slate-400 hover:text-white'}`}
+                      className={`flex flex-col items-center gap-2 p-4 rounded-xl border transition-all ${appearance.theme === 'system' ? 'bg-indigo-500/10 border-indigo-500 text-indigo-400' : 'bg-background border-border text-muted-foreground hover:text-foreground'}`}
                     >
                       <Monitor className="w-6 h-6" />
                       <span className="text-xs font-medium">System Auto</span>
@@ -567,11 +567,11 @@ export default function SettingsPage() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-slate-800">
-                  <div className="flex items-center justify-between p-4 bg-slate-900/40 rounded-xl border border-slate-800">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-border">
+                  <div className="flex items-center justify-between p-4 bg-background/40 rounded-xl border border-border">
                     <div>
-                      <h4 className="text-sm font-medium text-white">Compact Table Mode</h4>
-                      <p className="text-xs text-slate-400">Reduce cell padding in data grids for dense displays.</p>
+                      <h4 className="text-sm font-medium text-foreground">Compact Table Mode</h4>
+                      <p className="text-xs text-muted-foreground">Reduce cell padding in data grids for dense displays.</p>
                     </div>
                     <input 
                       type="checkbox" 
@@ -581,10 +581,10 @@ export default function SettingsPage() {
                     />
                   </div>
 
-                  <div className="flex items-center justify-between p-4 bg-slate-900/40 rounded-xl border border-slate-800">
+                  <div className="flex items-center justify-between p-4 bg-background/40 rounded-xl border border-border">
                     <div>
-                      <h4 className="text-sm font-medium text-white">Fluid Animations</h4>
-                      <p className="text-xs text-slate-400">Enable micro-animations and smooth page transitions.</p>
+                      <h4 className="text-sm font-medium text-foreground">Fluid Animations</h4>
+                      <p className="text-xs text-muted-foreground">Enable micro-animations and smooth page transitions.</p>
                     </div>
                     <input 
                       type="checkbox" 
@@ -596,8 +596,8 @@ export default function SettingsPage() {
                 </div>
               </div>
 
-              <div className="flex justify-end border-t border-slate-700/50 pt-6 mt-6">
-                <button type="submit" className="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2 rounded-xl text-sm font-medium transition-all shadow-lg shadow-indigo-500/25 flex items-center gap-2">
+              <div className="flex justify-end border-t border-border pt-6 mt-6">
+                <button type="submit" className="bg-indigo-600 hover:bg-indigo-500 text-foreground px-6 py-2 rounded-xl text-sm font-medium transition-all shadow-lg shadow-indigo-500/25 flex items-center gap-2">
                   <Save className="w-4 h-4" />
                   Save Appearance
                 </button>
