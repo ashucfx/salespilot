@@ -127,7 +127,7 @@ export default function OfferLetterPage() {
           <div className="bg-slate-50 p-6 rounded-xl border border-slate-200 my-6">
             <ul className="space-y-3 list-none">
               <li className="flex gap-4"><span className="w-40 font-semibold text-slate-700">Designation:</span> <span className="font-bold text-slate-900">{employee.designation || 'Sales Executive'}</span></li>
-              <li className="flex gap-4"><span className="w-40 font-semibold text-slate-700">Joining Date:</span> <span className="font-bold text-indigo-700">{joiningDate}</span></li>
+              <li className="flex gap-4"><span className="w-40 font-semibold text-slate-700">Joining Date:</span> <span className="font-extrabold text-indigo-700 bg-indigo-50 px-2 rounded">{joiningDate}</span></li>
               <li className="flex gap-4"><span className="w-40 font-semibold text-slate-700">Base Salary:</span> <span className="font-bold text-slate-900">${employee.salary?.toLocaleString() || 'N/A'} per annum</span></li>
               <li className="flex gap-4"><span className="w-40 font-semibold text-slate-700">Commission Rate:</span> <span className="font-bold text-slate-900">{employee.commissionRate || 10}%</span></li>
               <li className="flex gap-4"><span className="w-40 font-semibold text-slate-700">Employment Type:</span> <span className="font-bold text-slate-900">Full-Time</span></li>
