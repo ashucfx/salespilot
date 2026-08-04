@@ -12,8 +12,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.util.UUID;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -45,11 +43,11 @@ class LeadIntegrationTest extends AbstractIntegrationTest {
     void createLead_WithAdminAuth_Success() throws Exception {
         String token = getAdminAccessToken();
 
+        // CreateLeadRequest uses contactName/contactEmail (not firstName/lastName/email/companyId)
         CreateLeadRequest leadRequest = new CreateLeadRequest();
-        leadRequest.setFirstName("Bruce");
-        leadRequest.setLastName("Wayne");
-        leadRequest.setEmail("bruce@wayne.com");
-        leadRequest.setCompanyId(UUID.fromString("11111111-1111-1111-1111-111111111111")); // Seeded company
+        leadRequest.setContactName("Bruce Wayne");
+        leadRequest.setContactEmail("bruce@wayne.com");
+        leadRequest.setCompanyName("Wayne Enterprises");
 
         mockMvc.perform(post("/api/v1/leads")
                 .header("Authorization", "Bearer " + token)
@@ -57,8 +55,7 @@ class LeadIntegrationTest extends AbstractIntegrationTest {
                 .content(objectMapper.writeValueAsString(leadRequest)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").exists())
-                .andExpect(jsonPath("$.firstName").value("Bruce"))
-                .andExpect(jsonPath("$.lastName").value("Wayne"));
+                .andExpect(jsonPath("$.contactName").value("Bruce Wayne"));
     }
 
     @Test
