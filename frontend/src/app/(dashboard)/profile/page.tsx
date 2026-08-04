@@ -240,7 +240,7 @@ export default function ProfilePage() {
   const getKycBadge = (status: string) => {
     switch (status) {
       case 'VERIFIED': return <span className="text-emerald-400 font-semibold flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4" /> Fully Verified</span>;
-      case 'PENDING': return <span className="text-slate-400 font-semibold flex items-center gap-1.5"><ShieldAlert className="w-4 h-4" /> Action Required</span>;
+      case 'PENDING': return <span className="text-muted-foreground font-semibold flex items-center gap-1.5"><ShieldAlert className="w-4 h-4" /> Action Required</span>;
       case 'SUBMITTED': return <span className="text-amber-400 font-semibold flex items-center gap-1.5"><ShieldAlert className="w-4 h-4" /> Under Review</span>;
       case 'CLARIFICATION_NEEDED': return <span className="text-orange-400 font-semibold flex items-center gap-1.5"><ShieldAlert className="w-4 h-4" /> Clarification Needed</span>;
       case 'FROZEN': return <span className="text-red-400 font-semibold flex items-center gap-1.5"><Lock className="w-4 h-4" /> Account Frozen</span>;
@@ -259,7 +259,7 @@ export default function ProfilePage() {
   return (
     <div className="space-y-8 max-w-6xl mx-auto pb-12">
       {/* Profile Header Banner */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-indigo-950/70 to-slate-900 border border-indigo-500/20 p-8">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-indigo-950/70 to-slate-900 border border-border p-8">
         <div className="flex flex-col md:flex-row items-center gap-6">
           {/* Avatar Upload Container */}
           <div className="relative group">
@@ -277,7 +277,7 @@ export default function ProfilePage() {
 
             {/* Upload Overlay Button */}
             <label className="absolute inset-0 bg-slate-950/60 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer">
-              <Camera className="w-7 h-7 text-white" />
+              <Camera className="w-7 h-7 text-foreground" />
               <input 
                 type="file" 
                 accept="image/*" 
@@ -291,23 +291,23 @@ export default function ProfilePage() {
           {/* User Meta */}
           <div className="flex-1 text-center md:text-left space-y-2">
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
-              <h1 className="text-2xl font-extrabold text-white tracking-tight">{profile?.fullName}</h1>
+              <h1 className="text-2xl font-extrabold text-foreground tracking-tight">{profile?.fullName}</h1>
               <span className="px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-xs font-bold uppercase tracking-wider">
                 {user?.roles?.[0] || 'EMPLOYEE'}
               </span>
             </div>
 
-            <p className="text-slate-400 text-sm flex flex-wrap items-center justify-center md:justify-start gap-4">
+            <p className="text-muted-foreground text-sm flex flex-wrap items-center justify-center md:justify-start gap-4">
               <span className="flex items-center gap-1.5"><Briefcase className="w-4 h-4 text-indigo-400" /> {profile?.designation || 'Sales Agent'}</span>
               <span className="flex items-center gap-1.5"><Building className="w-4 h-4 text-violet-400" /> {profile?.department || 'Sales & Operations'}</span>
-              <span className="flex items-center gap-1.5"><Calendar className="w-4 h-4 text-slate-400" /> Joined {profile?.joiningDate || 'N/A'}</span>
+              <span className="flex items-center gap-1.5"><Calendar className="w-4 h-4 text-muted-foreground" /> Joined {profile?.joiningDate || 'N/A'}</span>
             </p>
           </div>
 
           {/* Sales Tier Badge */}
-          <div className="glass-panel px-5 py-4 rounded-2xl border border-indigo-500/20 text-center">
-            <p className="text-xs text-slate-400">Employee ID</p>
-            <p className="text-base font-extrabold text-white">{profile?.employeeNumber}</p>
+          <div className="glass-panel px-5 py-4 rounded-2xl border border-border text-center">
+            <p className="text-xs text-muted-foreground">Employee ID</p>
+            <p className="text-base font-extrabold text-foreground">{profile?.employeeNumber}</p>
             <div className="mt-2 inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-bold">
               <Sparkles className="w-3.5 h-3.5" /> Gold Representative
             </div>
@@ -316,13 +316,13 @@ export default function ProfilePage() {
       </div>
 
       {/* Tabs Navigation */}
-      <div className="flex overflow-x-auto bg-slate-900/50 p-1 rounded-xl w-full max-w-full mb-6 border border-slate-800 custom-scrollbar whitespace-nowrap">
+      <div className="flex overflow-x-auto bg-background p-1 rounded-xl w-full max-w-full mb-6 border border-border custom-scrollbar whitespace-nowrap">
         <button
           onClick={() => setActiveTab('overview')}
           className={`min-w-fit px-4 flex-1 flex items-center justify-center gap-2 py-2 text-sm font-medium rounded-lg transition-colors ${
             activeTab === 'overview' 
-              ? 'bg-indigo-500 text-white shadow-lg' 
-              : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
+              ? 'bg-indigo-500 text-foreground shadow-lg' 
+              : 'text-muted-foreground hover:text-foreground hover:bg-muted'
           }`}
         >
           <User className="w-4 h-4" /> Personal Details
@@ -332,8 +332,8 @@ export default function ProfilePage() {
           onClick={() => setActiveTab('incentives')}
           className={`min-w-fit px-4 flex-1 flex items-center justify-center gap-2 py-2 text-sm font-medium rounded-lg transition-colors ${
             activeTab === 'incentives' 
-              ? 'bg-indigo-500 text-white shadow-lg' 
-              : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
+              ? 'bg-indigo-500 text-foreground shadow-lg' 
+              : 'text-muted-foreground hover:text-foreground hover:bg-muted'
           }`}
         >
           <Trophy className="w-4 h-4" /> Incentive & Performance
@@ -343,8 +343,8 @@ export default function ProfilePage() {
           onClick={() => setActiveTab('kyc')}
           className={`min-w-fit px-4 flex-1 flex items-center justify-center gap-2 py-2 text-sm font-medium rounded-lg transition-colors ${
             activeTab === 'kyc' 
-              ? 'bg-indigo-500 text-white shadow-lg' 
-              : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
+              ? 'bg-indigo-500 text-foreground shadow-lg' 
+              : 'text-muted-foreground hover:text-foreground hover:bg-muted'
           }`}
         >
           <CreditCard className="w-4 h-4" /> KYC & Bank Info
@@ -354,8 +354,8 @@ export default function ProfilePage() {
           onClick={() => setActiveTab('security')}
           className={`min-w-fit px-4 flex-1 flex items-center justify-center gap-2 py-2 text-sm font-medium rounded-lg transition-colors ${
             activeTab === 'security' 
-              ? 'bg-indigo-500 text-white shadow-lg' 
-              : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
+              ? 'bg-indigo-500 text-foreground shadow-lg' 
+              : 'text-muted-foreground hover:text-foreground hover:bg-muted'
           }`}
         >
           <Lock className="w-4 h-4" /> Security & Access
@@ -366,13 +366,13 @@ export default function ProfilePage() {
       {activeTab === 'overview' && (
         <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="glass-panel p-6 rounded-3xl space-y-6">
           <div className="flex items-center justify-between">
-            <h3 className="text-xl font-bold text-white flex items-center gap-2">
+            <h3 className="text-xl font-bold text-foreground flex items-center gap-2">
               <User className="w-5 h-5 text-indigo-400" />
               Personal Information
             </h3>
             <button
               onClick={() => setIsEditing(!isEditing)}
-              className="px-4 py-2 rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 hover:bg-indigo-500/20 text-xs font-semibold flex items-center gap-1.5 transition-colors"
+              className="px-4 py-2 rounded-xl bg-indigo-500/10 text-indigo-400 border border-border hover:bg-indigo-500/20 text-xs font-semibold flex items-center gap-1.5 transition-colors"
             >
               <Edit3 className="w-4 h-4" /> {isEditing ? 'Cancel Edit' : 'Edit Information'}
             </button>
@@ -382,88 +382,88 @@ export default function ProfilePage() {
             <form onSubmit={handleSaveProfile} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-xs font-medium text-slate-400">First Name</label>
+                  <label className="text-xs font-medium text-muted-foreground">First Name</label>
                   <input
                     type="text"
                     value={editForm.firstName}
                     onChange={(e) => setEditForm({ ...editForm, firstName: e.target.value })}
-                    className="w-full mt-1 px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
+                    className="w-full mt-1 px-4 py-2.5 bg-background border border-border rounded-xl text-sm text-foreground focus:outline-none focus:border-indigo-500"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs font-medium text-slate-400">Last Name</label>
+                  <label className="text-xs font-medium text-muted-foreground">Last Name</label>
                   <input
                     type="text"
                     value={editForm.lastName}
                     onChange={(e) => setEditForm({ ...editForm, lastName: e.target.value })}
-                    className="w-full mt-1 px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
+                    className="w-full mt-1 px-4 py-2.5 bg-background border border-border rounded-xl text-sm text-foreground focus:outline-none focus:border-indigo-500"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs font-medium text-slate-400">Phone Number</label>
+                  <label className="text-xs font-medium text-muted-foreground">Phone Number</label>
                   <input
                     type="text"
                     value={editForm.phone}
                     onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
-                    className="w-full mt-1 px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
+                    className="w-full mt-1 px-4 py-2.5 bg-background border border-border rounded-xl text-sm text-foreground focus:outline-none focus:border-indigo-500"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs font-medium text-slate-400">WhatsApp Number</label>
+                  <label className="text-xs font-medium text-muted-foreground">WhatsApp Number</label>
                   <input
                     type="text"
                     value={editForm.whatsapp}
                     onChange={(e) => setEditForm({ ...editForm, whatsapp: e.target.value })}
-                    className="w-full mt-1 px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
+                    className="w-full mt-1 px-4 py-2.5 bg-background border border-border rounded-xl text-sm text-foreground focus:outline-none focus:border-indigo-500"
                   />
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="text-xs font-medium text-slate-400">Residential Address</label>
+                  <label className="text-xs font-medium text-muted-foreground">Residential Address</label>
                   <input
                     type="text"
                     value={editForm.address}
                     onChange={(e) => setEditForm({ ...editForm, address: e.target.value })}
-                    className="w-full mt-1 px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
+                    className="w-full mt-1 px-4 py-2.5 bg-background border border-border rounded-xl text-sm text-foreground focus:outline-none focus:border-indigo-500"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs font-medium text-slate-400">City</label>
+                  <label className="text-xs font-medium text-muted-foreground">City</label>
                   <input
                     type="text"
                     value={editForm.city}
                     onChange={(e) => setEditForm({ ...editForm, city: e.target.value })}
-                    className="w-full mt-1 px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
+                    className="w-full mt-1 px-4 py-2.5 bg-background border border-border rounded-xl text-sm text-foreground focus:outline-none focus:border-indigo-500"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs font-medium text-slate-400">Country</label>
+                  <label className="text-xs font-medium text-muted-foreground">Country</label>
                   <input
                     type="text"
                     value={editForm.country}
                     onChange={(e) => setEditForm({ ...editForm, country: e.target.value })}
-                    className="w-full mt-1 px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
+                    className="w-full mt-1 px-4 py-2.5 bg-background border border-border rounded-xl text-sm text-foreground focus:outline-none focus:border-indigo-500"
                   />
                 </div>
               </div>
 
-              <div className="flex justify-end gap-3 pt-4 border-t border-slate-800">
+              <div className="flex justify-end gap-3 pt-4 border-t border-border">
                 <button
                   type="button"
                   onClick={() => setIsEditing(false)}
-                  className="px-5 py-2.5 rounded-xl border border-slate-800 text-slate-400 text-xs font-semibold"
+                  className="px-5 py-2.5 rounded-xl border border-border text-muted-foreground text-xs font-semibold"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSavingProfile}
-                  className="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition-all flex items-center gap-2"
+                  className="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-foreground text-xs font-bold transition-all flex items-center gap-2"
                 >
                   <Save className="w-4 h-4" /> {isSavingProfile ? 'Saving...' : 'Save Profile Changes'}
                 </button>
@@ -471,24 +471,24 @@ export default function ProfilePage() {
             </form>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="p-4 rounded-2xl bg-slate-900/50 border border-slate-800/50 space-y-1">
-                <span className="text-xs text-slate-400 flex items-center gap-1.5"><Mail className="w-3.5 h-3.5 text-indigo-400" /> Work Email</span>
-                <p className="text-sm font-semibold text-white">{profile?.workEmail}</p>
+              <div className="p-4 rounded-2xl bg-background border border-border/50 space-y-1">
+                <span className="text-xs text-muted-foreground flex items-center gap-1.5"><Mail className="w-3.5 h-3.5 text-indigo-400" /> Work Email</span>
+                <p className="text-sm font-semibold text-foreground">{profile?.workEmail}</p>
               </div>
 
-              <div className="p-4 rounded-2xl bg-slate-900/50 border border-slate-800/50 space-y-1">
-                <span className="text-xs text-slate-400 flex items-center gap-1.5"><Phone className="w-3.5 h-3.5 text-indigo-400" /> Phone Number</span>
-                <p className="text-sm font-semibold text-white">{profile?.phone || 'Not provided'}</p>
+              <div className="p-4 rounded-2xl bg-background border border-border/50 space-y-1">
+                <span className="text-xs text-muted-foreground flex items-center gap-1.5"><Phone className="w-3.5 h-3.5 text-indigo-400" /> Phone Number</span>
+                <p className="text-sm font-semibold text-foreground">{profile?.phone || 'Not provided'}</p>
               </div>
 
-              <div className="p-4 rounded-2xl bg-slate-900/50 border border-slate-800/50 space-y-1">
-                <span className="text-xs text-slate-400 flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5 text-indigo-400" /> Location / City</span>
-                <p className="text-sm font-semibold text-white">{profile?.city ? `${profile.city}, ${profile.country || ''}` : 'Not provided'}</p>
+              <div className="p-4 rounded-2xl bg-background border border-border/50 space-y-1">
+                <span className="text-xs text-muted-foreground flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5 text-indigo-400" /> Location / City</span>
+                <p className="text-sm font-semibold text-foreground">{profile?.city ? `${profile.city}, ${profile.country || ''}` : 'Not provided'}</p>
               </div>
 
-              <div className="p-4 rounded-2xl bg-slate-900/50 border border-slate-800/50 space-y-1">
-                <span className="text-xs text-slate-400 flex items-center gap-1.5"><Briefcase className="w-3.5 h-3.5 text-indigo-400" /> Manager</span>
-                <p className="text-sm font-semibold text-white">{profile?.managerName || 'Direct Founder'}</p>
+              <div className="p-4 rounded-2xl bg-background border border-border/50 space-y-1">
+                <span className="text-xs text-muted-foreground flex items-center gap-1.5"><Briefcase className="w-3.5 h-3.5 text-indigo-400" /> Manager</span>
+                <p className="text-sm font-semibold text-foreground">{profile?.managerName || 'Direct Founder'}</p>
               </div>
             </div>
           )}
@@ -500,31 +500,31 @@ export default function ProfilePage() {
         <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="glass-panel p-6 rounded-3xl space-y-2 border border-emerald-500/20">
-              <span className="text-xs text-slate-400">Total Paid Commissions</span>
+              <span className="text-xs text-muted-foreground">Total Paid Commissions</span>
               <p className="text-2xl font-extrabold text-emerald-400">₹{summary?.paidCommission?.toLocaleString() || 0}</p>
             </div>
 
             <div className="glass-panel p-6 rounded-3xl space-y-2 border border-amber-500/20">
-              <span className="text-xs text-slate-400">Pending Commissions</span>
+              <span className="text-xs text-muted-foreground">Pending Commissions</span>
               <p className="text-2xl font-extrabold text-amber-400">₹{summary?.pendingCommission?.toLocaleString() || 0}</p>
             </div>
 
-            <div className="glass-panel p-6 rounded-3xl space-y-2 border border-indigo-500/20">
-              <span className="text-xs text-slate-400">Total Won Deals</span>
+            <div className="glass-panel p-6 rounded-3xl space-y-2 border border-border">
+              <span className="text-xs text-muted-foreground">Total Won Deals</span>
               <p className="text-2xl font-extrabold text-indigo-400">{summary?.wonDeals || 0}</p>
             </div>
           </div>
 
           <div className="glass-panel p-6 rounded-3xl space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-bold text-white flex items-center gap-2">
+              <h3 className="text-lg font-bold text-foreground flex items-center gap-2">
                 <Trophy className="w-5 h-5 text-amber-400" /> Incentive Milestones
               </h3>
               <button onClick={() => router.push('/incentives')} className="text-xs font-semibold text-indigo-400 hover:underline">
                 Open Incentives Hub →
               </button>
             </div>
-            <p className="text-xs text-slate-400">Track and claim your performance bonuses from the Incentives Hub.</p>
+            <p className="text-xs text-muted-foreground">Track and claim your performance bonuses from the Incentives Hub.</p>
           </div>
         </motion.div>
       )}
@@ -533,7 +533,7 @@ export default function ProfilePage() {
       {activeTab === 'kyc' && (
         <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="glass-panel p-6 rounded-3xl space-y-6">
           <div className="flex items-center justify-between">
-            <h3 className="text-xl font-bold text-white flex items-center gap-2">
+            <h3 className="text-xl font-bold text-foreground flex items-center gap-2">
               <CreditCard className="w-5 h-5 text-indigo-400" />
               KYC & Payout Details
             </h3>
@@ -543,51 +543,51 @@ export default function ProfilePage() {
           <form onSubmit={handleKycSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="text-xs font-medium text-slate-400">National ID / Passport Number</label>
+                <label className="text-xs font-medium text-muted-foreground">National ID / Passport Number</label>
                 <input
                   type="text"
                   value={kycForm.nationalId}
                   onChange={(e) => setKycForm({ ...kycForm, nationalId: e.target.value })}
                   placeholder="e.g. ABCDE1234F"
-                  className="w-full mt-1 px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
+                  className="w-full mt-1 px-4 py-2.5 bg-background border border-border rounded-xl text-sm text-foreground focus:outline-none focus:border-indigo-500"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-medium text-slate-400">Bank Name</label>
+                <label className="text-xs font-medium text-muted-foreground">Bank Name</label>
                 <input
                   type="text"
                   value={kycForm.bankName}
                   onChange={(e) => setKycForm({ ...kycForm, bankName: e.target.value })}
                   placeholder="e.g. HDFC Bank"
-                  className="w-full mt-1 px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
+                  className="w-full mt-1 px-4 py-2.5 bg-background border border-border rounded-xl text-sm text-foreground focus:outline-none focus:border-indigo-500"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-medium text-slate-400">Bank Account Number</label>
+                <label className="text-xs font-medium text-muted-foreground">Bank Account Number</label>
                 <input
                   type="text"
                   value={kycForm.bankAccount}
                   onChange={(e) => setKycForm({ ...kycForm, bankAccount: e.target.value })}
                   placeholder="Account Number"
-                  className="w-full mt-1 px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
+                  className="w-full mt-1 px-4 py-2.5 bg-background border border-border rounded-xl text-sm text-foreground focus:outline-none focus:border-indigo-500"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-medium text-slate-400">UPI ID for Quick Payouts</label>
+                <label className="text-xs font-medium text-muted-foreground">UPI ID for Quick Payouts</label>
                 <input
                   type="text"
                   value={kycForm.upiId}
                   onChange={(e) => setKycForm({ ...kycForm, upiId: e.target.value })}
                   placeholder="username@upi"
-                  className="w-full mt-1 px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
+                  className="w-full mt-1 px-4 py-2.5 bg-background border border-border rounded-xl text-sm text-foreground focus:outline-none focus:border-indigo-500"
                 />
               </div>
 
               <div className="md:col-span-2">
-                <label className="text-xs font-medium text-slate-400">Upload Identity / KYC Document (PDF or Image)</label>
+                <label className="text-xs font-medium text-muted-foreground">Upload Identity / KYC Document (PDF or Image)</label>
                 <div className="mt-2 flex items-center gap-4">
                   <input
                     type="file"
@@ -598,7 +598,7 @@ export default function ProfilePage() {
                   />
                   <label
                     htmlFor="kyc-doc-upload"
-                    className="px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-indigo-500 text-slate-300 text-xs font-semibold cursor-pointer flex items-center gap-2 transition-colors"
+                    className="px-4 py-2.5 rounded-xl bg-background border border-slate-700 hover:border-indigo-500 text-muted-foreground text-xs font-semibold cursor-pointer flex items-center gap-2 transition-colors"
                   >
                     <Upload className="w-4 h-4 text-indigo-400" />
                     {uploadingKycDoc ? 'Uploading...' : 'Choose Document File'}
@@ -615,7 +615,7 @@ export default function ProfilePage() {
             <button
               type="submit"
               disabled={isSubmittingKyc}
-              className="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all flex items-center gap-2"
+              className="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-foreground text-xs font-bold transition-all flex items-center gap-2"
             >
               <Save className="w-4 h-4" /> {isSubmittingKyc ? 'Submitting...' : 'Submit KYC & Bank Details'}
             </button>
@@ -626,23 +626,23 @@ export default function ProfilePage() {
       {/* Tab 4: Security & Resignation */}
       {activeTab === 'security' && (
         <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="glass-panel p-6 rounded-3xl space-y-6">
-          <h3 className="text-xl font-bold text-white flex items-center gap-2">
+          <h3 className="text-xl font-bold text-foreground flex items-center gap-2">
             <Lock className="w-5 h-5 text-indigo-400" /> Account & Security
           </h3>
 
           <div className="space-y-4 pt-2">
-            <div className="p-4 rounded-2xl bg-slate-900/50 border border-slate-800/50 flex items-center justify-between">
+            <div className="p-4 rounded-2xl bg-background border border-border/50 flex items-center justify-between">
               <div>
-                <p className="text-sm font-bold text-white">Password & OTP Security</p>
-                <p className="text-xs text-slate-400 mt-0.5">Your account uses dual-factor authentication and OTP validation.</p>
+                <p className="text-sm font-bold text-foreground">Password & OTP Security</p>
+                <p className="text-xs text-muted-foreground mt-0.5">Your account uses dual-factor authentication and OTP validation.</p>
               </div>
               <span className="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-semibold">Active</span>
             </div>
 
-            <div className="p-4 rounded-2xl bg-indigo-950/20 border border-indigo-500/20 flex items-center justify-between">
+            <div className="p-4 rounded-2xl bg-indigo-950/20 border border-border flex items-center justify-between">
               <div>
                 <p className="text-sm font-bold text-indigo-300">Contractual Commitment</p>
-                <p className="text-xs text-slate-400 mt-0.5">
+                <p className="text-xs text-muted-foreground mt-0.5">
                   {profile?.contractEndDate ? `Your contract commitment ends on ${profile.contractEndDate}.` : 'No formal contract end date specified.'}
                 </p>
               </div>
@@ -654,7 +654,7 @@ export default function ProfilePage() {
             <div className="p-4 rounded-2xl bg-rose-950/20 border border-rose-500/20 flex items-center justify-between">
               <div>
                 <p className="text-sm font-bold text-rose-300">Employment Resignation</p>
-                <p className="text-xs text-slate-400 mt-0.5">
+                <p className="text-xs text-muted-foreground mt-0.5">
                   {profile?.resignationStatus && profile.resignationStatus !== 'NONE'
                     ? `Current Status: ${profile.resignationStatus}${profile.resignationReason ? ` ("${profile.resignationReason}")` : ''}`
                     : 'Submit formal resignation to initiating exit workflows.'}
@@ -687,7 +687,7 @@ export default function ProfilePage() {
                   <AlertTriangle className="w-5 h-5" />
                   <span>Submit Formal Resignation</span>
                 </div>
-                <button onClick={() => setShowResignModal(false)} className="text-slate-400 hover:text-white">
+                <button onClick={() => setShowResignModal(false)} className="text-muted-foreground hover:text-foreground">
                   <X className="w-5 h-5" />
                 </button>
               </div>
@@ -699,13 +699,13 @@ export default function ProfilePage() {
                   </div>
                 )}
                 <div className="space-y-1">
-                  <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">Reason for Resignation</label>
+                  <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Reason for Resignation</label>
                   <textarea 
                     required 
                     rows={4}
                     value={resignReason} 
                     onChange={e => setResignReason(e.target.value)} 
-                    className="w-full p-3 bg-slate-900/80 border border-rose-500/30 rounded-xl text-white text-sm focus:outline-none focus:border-rose-500" 
+                    className="w-full p-3 bg-background/80 border border-rose-500/30 rounded-xl text-foreground text-sm focus:outline-none focus:border-rose-500" 
                     placeholder="Please state your primary reason for leaving..." 
                   />
                 </div>
@@ -714,14 +714,14 @@ export default function ProfilePage() {
                   <button 
                     type="button" 
                     onClick={() => setShowResignModal(false)}
-                    className="flex-1 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium transition-colors"
+                    className="flex-1 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-muted-foreground font-medium transition-colors"
                   >
                     Cancel
                   </button>
                   <button 
                     disabled={isSubmittingResignation || !resignReason.trim()} 
                     type="submit" 
-                    className="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 disabled:opacity-50 text-white font-medium transition-colors flex items-center justify-center gap-2"
+                    className="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 disabled:opacity-50 text-foreground font-medium transition-colors flex items-center justify-center gap-2"
                   >
                     {isSubmittingResignation && <Loader2 className="w-4 h-4 animate-spin" />}
                     <span>Confirm Resignation</span>
