@@ -25,6 +25,9 @@ export default function TeamMemberPage() {
   // Contract & Resignation & Deletion State
   const [isEditingContract, setIsEditingContract] = useState(false);
   const [contractDate, setContractDate] = useState('');
+  
+  const [isEditingJoining, setIsEditingJoining] = useState(false);
+  const [joiningDateInput, setJoiningDateInput] = useState('');
   const [showDeleteOtpModal, setShowDeleteOtpModal] = useState(false);
   const [deleteOtpInput, setDeleteOtpInput] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
@@ -41,7 +44,8 @@ export default function TeamMemberPage() {
       if (empData) {
         setEmployee(empData);
         setCommissionRate(empData.commissionRate || 10);
-        setContractDate(empData.contractEndDate || '');
+        setContractDate(empData.contractEndDate ? empData.contractEndDate.split('T')[0] : '');
+        setJoiningDateInput(empData.joiningDate ? empData.joiningDate.split('T')[0] : '');
       }
 
       const { data: commRes } = await api.get(`/commissions/employee/${id}`);
@@ -76,6 +80,17 @@ export default function TeamMemberPage() {
       setEmployee((prev: any) => ({ ...prev, commissionRate }));
     } catch (err) {
       toast.error('Failed to update commission rate');
+    }
+  };
+
+  const handleUpdateJoiningDate = async () => {
+    try {
+      await api.patch(`/employees/${id}`, { joiningDate: joiningDateInput ? new Date(joiningDateInput).toISOString() : null });
+      toast.success('Joining date updated');
+      setIsEditingJoining(false);
+      setEmployee({ ...employee, joiningDate: joiningDateInput ? new Date(joiningDateInput).toISOString() : null });
+    } catch (err) {
+      toast.error('Failed to update joining date');
     }
   };
 
@@ -188,7 +203,28 @@ export default function TeamMemberPage() {
               <span className="px-2 py-1 rounded-full bg-slate-800 border border-slate-700 text-xs font-medium text-slate-300 uppercase tracking-wider">
                 {employee.roles?.[0] || 'EMPLOYEE'}
               </span>
-              <p className="text-sm text-slate-400 mt-2 font-semibold">Joined: <span className="text-indigo-400">{employee.joiningDate ? new Date(employee.joiningDate).toLocaleDateString() : 'N/A'}</span></p>
+              <div className="mt-2 flex items-center gap-2">
+                <span className="text-sm font-semibold text-slate-400">Joined:</span>
+                {isEditingJoining ? (
+                  <div className="flex items-center gap-1">
+                    <input 
+                      type="date" 
+                      value={joiningDateInput}
+                      onChange={(e) => setJoiningDateInput(e.target.value)}
+                      className="bg-slate-900 border border-indigo-500/30 rounded-lg px-2 py-1 text-white text-xs focus:outline-none w-32"
+                    />
+                    <button onClick={handleUpdateJoiningDate} className="text-xs text-emerald-400 hover:text-emerald-300 font-semibold">Save</button>
+                    <button onClick={() => setIsEditingJoining(false)} className="text-xs text-slate-400 hover:text-slate-300">Cancel</button>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-bold text-indigo-400 bg-indigo-500/10 px-2 rounded">{employee.joiningDate ? new Date(employee.joiningDate).toLocaleDateString() : 'TBD'}</span>
+                    <button onClick={() => setIsEditingJoining(true)} className="p-1 text-slate-500 hover:text-indigo-400 transition-colors">
+                      <Settings className="w-3 h-3" />
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
           <div className="w-full">
