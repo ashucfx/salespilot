@@ -56,9 +56,9 @@ const StatCard = ({ title, value, icon: Icon, color, delay }: any) => (
     <div className={`absolute top-0 right-0 w-32 h-32 bg-${color}-500/5 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110`}></div>
     <div className="flex justify-between items-start relative z-10">
       <div>
-        <p className="text-sm font-medium text-slate-400 mb-1">{title}</p>
-        <h3 className="text-2xl font-bold text-white tracking-tight">
-          {value === undefined ? <div className="h-8 w-24 bg-slate-800 rounded animate-pulse" /> : value}
+        <p className="text-sm font-medium text-muted-foreground mb-1">{title}</p>
+        <h3 className="text-2xl font-bold text-foreground tracking-tight">
+          {value === undefined ? <div className="h-8 w-24 bg-muted rounded animate-pulse" /> : value}
         </h3>
       </div>
       <div className={`p-3 rounded-xl bg-${color}-500/10 text-${color}-400`}>
@@ -135,7 +135,7 @@ function EmployeeDashboardView({ stats }: { stats: DashboardStats | null }) {
           <div className="w-12 h-12 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400 mb-3">
             <TrendingUp className="w-6 h-6" />
           </div>
-          <h3 className="text-lg font-bold text-white">You&apos;re crushing it!</h3>
+          <h3 className="text-lg font-bold text-foreground">You&apos;re crushing it!</h3>
           <p className="text-sm text-indigo-300 mt-1">Keep up the great momentum this month.</p>
         </motion.div>
       </div>
@@ -213,6 +213,14 @@ export default function DashboardPage() {
     { label: 'My Profile', icon: User, href: '/profile' },
   ];
 
+  const managerQuickActions = [
+    { label: 'Add New Lead', icon: Plus, href: '/leads' },
+    { label: 'Team Overview', icon: Users, href: '/team' },
+    { label: 'View Commissions', icon: DollarSign, href: '/commissions' },
+    { label: 'My Targets', icon: Target, href: '/targets' },
+    { label: 'My Profile', icon: User, href: '/profile' },
+  ];
+
   const employeeQuickActions = [
     { label: 'Add New Lead', icon: Plus, href: '/leads' },
     { label: 'Schedule Meeting', icon: CalendarDays, href: '/meetings' },
@@ -222,15 +230,15 @@ export default function DashboardPage() {
     { label: 'My Profile', icon: User, href: '/profile' },
   ];
 
-  const quickActions = isAdmin || isManager ? adminQuickActions : employeeQuickActions;
+  const quickActions = isAdmin ? adminQuickActions : isManager ? managerQuickActions : employeeQuickActions;
 
   return (
     <div className="space-y-8">
       <div className="flex flex-col gap-2">
-        <h2 className="text-2xl font-bold text-white">
+        <h2 className="text-2xl font-bold text-foreground">
           Welcome back, {user?.email?.split('@')[0]}
         </h2>
-        <p className="text-slate-400">
+        <p className="text-muted-foreground">
           Here is what&apos;s happening with your sales today.
         </p>
       </div>
@@ -247,7 +255,7 @@ export default function DashboardPage() {
           className="lg:col-span-2 glass-panel rounded-2xl p-6 border border-indigo-500/10"
         >
           <div className="flex justify-between items-center mb-6">
-            <h3 className="text-lg font-semibold text-white">Revenue Overview</h3>
+            <h3 className="text-lg font-semibold text-foreground">Revenue Overview</h3>
             {loading && <div className="text-xs text-slate-500 animate-pulse">Loading...</div>}
           </div>
           <div className="h-[300px] w-full">
@@ -278,13 +286,13 @@ export default function DashboardPage() {
           transition={{ delay: 0.7, duration: 0.4 }}
           className="glass-panel rounded-2xl p-6 border border-indigo-500/10 flex flex-col"
         >
-          <h3 className="text-lg font-semibold text-white mb-4">Quick Actions</h3>
+          <h3 className="text-lg font-semibold text-foreground mb-4">Quick Actions</h3>
           <div className="space-y-2 flex-1">
             {quickActions.map((action, i) => (
               <button
                 key={i}
                 onClick={() => router.push(action.href)}
-                className="w-full text-left px-4 py-3 rounded-xl bg-slate-800/50 hover:bg-indigo-500/20 hover:text-indigo-300 text-slate-300 text-sm font-medium transition-all border border-transparent hover:border-indigo-500/20 flex items-center gap-3"
+                className="w-full text-left px-4 py-3 rounded-xl bg-muted/50 hover:bg-indigo-500/20 hover:text-indigo-300 text-muted-foreground text-sm font-medium transition-all border border-transparent hover:border-indigo-500/20 flex items-center gap-3"
               >
                 <action.icon className="w-4 h-4 text-indigo-400 shrink-0" />
                 {action.label}
