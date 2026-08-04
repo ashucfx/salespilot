@@ -17,7 +17,10 @@ import {
   ShieldAlert,
   CalendarDays,
   Mail,
-  Trophy
+  Trophy,
+  CheckSquare,
+  User,
+  Building2
 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { motion } from 'framer-motion';
@@ -37,17 +40,23 @@ const getNavItems = (roles: string[]) => {
     items.push({ name: 'My Leads', href: '/leads', icon: Target });
     items.push({ name: 'My Pipeline', href: '/pipeline', icon: Activity });
     items.push({ name: 'My Meetings', href: '/meetings', icon: CalendarDays });
-    items.push({ name: 'My Clients', href: '/companies', icon: Briefcase });
+    items.push({ name: 'My Tasks', href: '/tasks', icon: CheckSquare });
+    items.push({ name: 'My Targets', href: '/targets', icon: TrendingUp });
+    items.push({ name: 'Contacts', href: '/contacts', icon: User });
+    items.push({ name: 'Companies', href: '/companies', icon: Building2 });
     items.push({ name: 'My Payouts', href: '/payouts', icon: Banknote });
   } else {
     items.push({ name: 'All Leads', href: '/leads', icon: Target });
     items.push({ name: 'Pipeline', href: '/pipeline', icon: Activity });
-    items.push({ name: 'All Meetings', href: '/meetings', icon: CalendarDays });
-    items.push({ name: 'Companies', href: '/companies', icon: Briefcase });
     items.push({ name: 'Deals', href: '/deals', icon: Briefcase });
+    items.push({ name: 'All Meetings', href: '/meetings', icon: CalendarDays });
+    items.push({ name: 'Tasks', href: '/tasks', icon: CheckSquare });
+    items.push({ name: 'Contacts', href: '/contacts', icon: User });
+    items.push({ name: 'Companies', href: '/companies', icon: Building2 });
+    items.push({ name: 'Targets', href: '/targets', icon: TrendingUp });
     items.push({ name: 'Team', href: '/team', icon: Users });
-    items.push({ name: 'Payouts', href: '/payouts', icon: Banknote });
     items.push({ name: 'Commissions', href: '/commissions', icon: Banknote });
+    items.push({ name: 'Payouts', href: '/payouts', icon: Banknote });
   }
 
   // Profile is available for everyone
