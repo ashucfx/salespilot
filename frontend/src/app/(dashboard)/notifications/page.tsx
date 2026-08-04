@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { Bell, CheckCircle2, DollarSign, Target, Briefcase, Mail, Filter, Trash2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
-import api from '@/lib/api';
+import { api } from '@/lib/api';
 
 export default function NotificationsPage() {
   const [notifications, setNotifications] = useState<any[]>([]);
