@@ -7,6 +7,7 @@ export interface User {
   roles: string[];
   emailVerified: boolean;
   profilePicture?: string;
+  otpEnabled?: boolean;
 }
 
 interface AuthState {
