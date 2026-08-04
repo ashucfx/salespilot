@@ -7,9 +7,10 @@ import toast from 'react-hot-toast';
 import { 
   User, ShieldAlert, CheckCircle2, Briefcase, Activity, 
   CreditCard, Save, Lock, Upload, FileText, Camera, Trophy, 
-  Sparkles, Award, Phone, Mail, MapPin, Building, Calendar, Edit3
+  Sparkles, Award, Phone, Mail, MapPin, Building, Calendar, Edit3,
+  X, Loader2, AlertTriangle
 } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 
 export default function ProfilePage() {
@@ -638,21 +639,99 @@ export default function ProfilePage() {
               <span className="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-semibold">Active</span>
             </div>
 
+            <div className="p-4 rounded-2xl bg-indigo-950/20 border border-indigo-500/20 flex items-center justify-between">
+              <div>
+                <p className="text-sm font-bold text-indigo-300">Contractual Commitment</p>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  {profile?.contractEndDate ? `Your contract commitment ends on ${profile.contractEndDate}.` : 'No formal contract end date specified.'}
+                </p>
+              </div>
+              <span className="px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-400 text-xs font-semibold">
+                {profile?.contractEndDate || 'Open Ended'}
+              </span>
+            </div>
+
             <div className="p-4 rounded-2xl bg-rose-950/20 border border-rose-500/20 flex items-center justify-between">
               <div>
                 <p className="text-sm font-bold text-rose-300">Employment Resignation</p>
-                <p className="text-xs text-slate-400 mt-0.5">Submit formal resignation to initiating exit workflows.</p>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  {profile?.resignationStatus && profile.resignationStatus !== 'NONE'
+                    ? `Current Status: ${profile.resignationStatus}${profile.resignationReason ? ` ("${profile.resignationReason}")` : ''}`
+                    : 'Submit formal resignation to initiating exit workflows.'}
+                </p>
               </div>
               <button
                 onClick={() => setShowResignModal(true)}
-                className="px-4 py-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-400 text-xs font-bold transition-colors"
+                disabled={profile?.resignationStatus === 'SUBMITTED' || profile?.resignationStatus === 'APPROVED'}
+                className="px-4 py-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 disabled:opacity-50 border border-rose-500/30 text-rose-400 text-xs font-bold transition-colors"
               >
-                Submit Resignation
+                {profile?.resignationStatus && profile.resignationStatus !== 'NONE' ? profile.resignationStatus : 'Submit Resignation'}
               </button>
             </div>
           </div>
         </motion.div>
       )}
+
+      {/* Resignation Modal */}
+      <AnimatePresence>
+        {showResignModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="w-full max-w-md glass-panel rounded-2xl border border-rose-500/30 overflow-hidden shadow-2xl"
+            >
+              <div className="p-6 border-b border-rose-500/20 flex justify-between items-center bg-rose-950/20">
+                <div className="flex items-center gap-2 text-rose-400 font-bold text-lg">
+                  <AlertTriangle className="w-5 h-5" />
+                  <span>Submit Formal Resignation</span>
+                </div>
+                <button onClick={() => setShowResignModal(false)} className="text-slate-400 hover:text-white">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <form onSubmit={handleResignSubmit} className="p-6 space-y-4">
+                {profile?.contractEndDate && (
+                  <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-300">
+                    <strong>Note:</strong> Your contract commitment end date is <strong>{profile.contractEndDate}</strong>. Resigning before this date may require HR authorization.
+                  </div>
+                )}
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">Reason for Resignation</label>
+                  <textarea 
+                    required 
+                    rows={4}
+                    value={resignReason} 
+                    onChange={e => setResignReason(e.target.value)} 
+                    className="w-full p-3 bg-slate-900/80 border border-rose-500/30 rounded-xl text-white text-sm focus:outline-none focus:border-rose-500" 
+                    placeholder="Please state your primary reason for leaving..." 
+                  />
+                </div>
+
+                <div className="flex items-center gap-3 pt-2">
+                  <button 
+                    type="button" 
+                    onClick={() => setShowResignModal(false)}
+                    className="flex-1 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    disabled={isSubmittingResignation || !resignReason.trim()} 
+                    type="submit" 
+                    className="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 disabled:opacity-50 text-white font-medium transition-colors flex items-center justify-center gap-2"
+                  >
+                    {isSubmittingResignation && <Loader2 className="w-4 h-4 animate-spin" />}
+                    <span>Confirm Resignation</span>
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
