@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { api } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
+import toast from 'react-hot-toast';
 import { 
   Users, 
   Plus,
@@ -11,7 +12,12 @@ import {
   Briefcase,
   ShieldAlert,
   Loader2,
-  CheckCircle2
+  CheckCircle2,
+  Trash2,
+  KeyRound,
+  X,
+  Lock,
+  AlertTriangle
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -30,6 +36,41 @@ export default function UsersPage() {
   });
   const [submitting, setSubmitting] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
+
+  // OTP Deletion State
+  const [showDeleteOtpModal, setShowDeleteOtpModal] = useState(false);
+  const [employeeToDelete, setEmployeeToDelete] = useState<any>(null);
+  const [deleteOtpInput, setDeleteOtpInput] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleInitiateDelete = async (emp: any) => {
+    try {
+      setEmployeeToDelete(emp);
+      setDeleteOtpInput('');
+      await api.post(`/employees/${emp.id}/delete-otp`);
+      toast.success('OTP sent to your admin email address.');
+      setShowDeleteOtpModal(true);
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Failed to initiate deletion OTP');
+    }
+  };
+
+  const handleConfirmDelete = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!employeeToDelete || !deleteOtpInput.trim()) return;
+    setIsDeleting(true);
+    try {
+      await api.delete(`/employees/${employeeToDelete.id}?otp=${encodeURIComponent(deleteOtpInput.trim())}`);
+      toast.success('Employee deleted successfully.');
+      setShowDeleteOtpModal(false);
+      setEmployeeToDelete(null);
+      fetchUsers();
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Failed to delete employee with OTP');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   useEffect(() => {
     fetchUsers();
@@ -104,19 +145,20 @@ export default function UsersPage() {
                 <th className="px-6 py-4 font-medium">Contact</th>
                 <th className="px-6 py-4 font-medium">Status</th>
                 <th className="px-6 py-4 font-medium">Role</th>
+                <th className="px-6 py-4 font-medium text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-indigo-500/5">
               {loading ? (
                 <tr>
-                  <td colSpan={4} className="px-6 py-8 text-center text-slate-500">
+                  <td colSpan={5} className="px-6 py-8 text-center text-slate-500">
                     <Loader2 className="w-6 h-6 animate-spin mx-auto mb-2" />
                     Loading users...
                   </td>
                 </tr>
               ) : employees.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="px-6 py-8 text-center text-slate-500">
+                  <td colSpan={5} className="px-6 py-8 text-center text-slate-500">
                     No users found.
                   </td>
                 </tr>
@@ -126,7 +168,7 @@ export default function UsersPage() {
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-violet-500 flex items-center justify-center text-white font-medium">
-                          {emp.firstName.charAt(0)}
+                          {emp.firstName?.charAt(0) || 'U'}
                         </div>
                         <div>
                           <div className="font-medium text-white">{emp.firstName} {emp.lastName}</div>
@@ -143,8 +185,16 @@ export default function UsersPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-slate-400">
-                      {/* For now, role is on the user object, but we just list them here */}
                       System Access
+                    </td>
+                    <td className="px-6 py-4 text-right">
+                      <button
+                        onClick={() => handleInitiateDelete(emp)}
+                        className="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 transition-colors inline-flex items-center justify-center"
+                        title="Delete Employee via OTP"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
                     </td>
                   </tr>
                 ))
@@ -221,6 +271,73 @@ export default function UsersPage() {
                   </form>
                 )}
               </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* OTP Deletion Modal */}
+      <AnimatePresence>
+        {showDeleteOtpModal && employeeToDelete && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="w-full max-w-md glass-panel rounded-2xl border border-rose-500/30 overflow-hidden shadow-2xl"
+            >
+              <div className="p-6 border-b border-rose-500/20 flex justify-between items-center bg-rose-950/20">
+                <div className="flex items-center gap-2 text-rose-400 font-bold text-lg">
+                  <AlertTriangle className="w-5 h-5" />
+                  <span>Confirm OTP Deletion</span>
+                </div>
+                <button onClick={() => setShowDeleteOtpModal(false)} className="text-slate-400 hover:text-white">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <form onSubmit={handleConfirmDelete} className="p-6 space-y-4">
+                <p className="text-sm text-slate-300">
+                  You are initiating a permanent database deletion for <strong className="text-white">{employeeToDelete.firstName} {employeeToDelete.lastName}</strong> ({employeeToDelete.workEmail}).
+                </p>
+                <div className="p-3 rounded-xl bg-slate-900/50 border border-indigo-500/20 text-xs text-indigo-300">
+                  A 6-digit verification token has been dispatched to your administrator email address. Please enter it below to confirm deletion.
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">Admin OTP Token</label>
+                  <div className="relative">
+                    <KeyRound className="absolute left-3 top-2.5 h-4 w-4 text-slate-500" />
+                    <input 
+                      required 
+                      type="text" 
+                      maxLength={6}
+                      value={deleteOtpInput} 
+                      onChange={e => setDeleteOtpInput(e.target.value)} 
+                      className="w-full pl-9 pr-3 py-2 bg-slate-900/80 border border-rose-500/30 rounded-lg text-white font-mono text-center tracking-[0.3em] text-lg focus:outline-none focus:border-rose-500" 
+                      placeholder="123456" 
+                    />
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3 pt-2">
+                  <button 
+                    type="button" 
+                    onClick={() => setShowDeleteOtpModal(false)}
+                    className="flex-1 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    disabled={isDeleting || !deleteOtpInput.trim()} 
+                    type="submit" 
+                    className="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 disabled:opacity-50 text-white font-medium transition-colors flex items-center justify-center gap-2"
+                  >
+                    {isDeleting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
+                    <span>Confirm Delete</span>
+                  </button>
+                </div>
+              </form>
             </motion.div>
           </div>
         )}
