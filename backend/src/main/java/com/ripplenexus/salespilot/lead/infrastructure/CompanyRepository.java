@@ -11,5 +11,6 @@ import java.util.UUID;
 @Repository
 public interface CompanyRepository extends JpaRepository<Company, UUID> {
     Page<Company> findByDeletedAtIsNull(Pageable pageable);
-    boolean existsByNameIgnoreCase(String name);
+    @org.springframework.data.jpa.repository.Query("SELECT CASE WHEN COUNT(c) > 0 THEN true ELSE false END FROM Company c WHERE LOWER(c.name) = LOWER(:name) AND c.deletedAt IS NULL")
+    boolean existsByNameIgnoreCase(@org.springframework.data.repository.query.Param("name") String name);
 }
