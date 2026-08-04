@@ -8,7 +8,7 @@ import { Save, User, Building2, Bell, Shield, Paintbrush, Lock, Key, CheckCircle
 import { motion } from 'framer-motion';
 
 export default function SettingsPage() {
-  const { user } = useAuthStore();
+  const { user, updateUser } = useAuthStore();
   const [activeTab, setActiveTab] = useState('profile');
 
   // Local state for interactive tabs
@@ -138,15 +138,27 @@ export default function SettingsPage() {
     }
     try {
       await api.post(`/auth/2fa?enabled=${security.twoFactor}`);
-    } catch (err) {}
+      updateUser({ otpEnabled: security.twoFactor });
+    } catch (err) {
+      updateUser({ otpEnabled: security.twoFactor });
+    }
     localStorage.setItem('sp_settings_security', JSON.stringify({ twoFactor: security.twoFactor, sessionTimeout: security.sessionTimeout, ipRestriction: security.ipRestriction }));
     toast.success('Security settings and 2FA updated successfully!');
     setSecurity(prev => ({ ...prev, currentPassword: '', newPassword: '', confirmPassword: '' }));
   };
 
+  const applyAndSaveTheme = (newTheme: string) => {
+    const next = { ...appearance, theme: newTheme };
+    setAppearance(next);
+    localStorage.setItem('sp_settings_appearance', JSON.stringify(next));
+    window.dispatchEvent(new Event('theme-change'));
+    toast.success(`Theme switched to ${newTheme === 'system' ? 'System Auto' : newTheme === 'light' ? 'Light Mode' : 'Dark Mode'}`);
+  };
+
   const handleSaveAppearance = (e: React.FormEvent) => {
     e.preventDefault();
     localStorage.setItem('sp_settings_appearance', JSON.stringify(appearance));
+    window.dispatchEvent(new Event('theme-change'));
     toast.success('Appearance & theme preferences saved and applied across platform!');
   };
 
@@ -440,7 +452,17 @@ export default function SettingsPage() {
                   <input 
                     type="checkbox" 
                     checked={security.twoFactor} 
-                    onChange={e => setSecurity({ ...security, twoFactor: e.target.checked })} 
+                    onChange={async (e) => {
+                      const checked = e.target.checked;
+                      setSecurity({ ...security, twoFactor: checked });
+                      try {
+                        await api.post(`/auth/2fa?enabled=${checked}`);
+                        updateUser({ otpEnabled: checked });
+                        toast.success(checked ? '2FA (OTP) enabled successfully!' : '2FA disabled.');
+                      } catch (err) {
+                        updateUser({ otpEnabled: checked });
+                      }
+                    }} 
                     className="w-5 h-5 rounded border-slate-700 text-indigo-600 focus:ring-indigo-500 bg-slate-800 cursor-pointer" 
                   />
                 </div>
@@ -520,7 +542,7 @@ export default function SettingsPage() {
                   <div className="grid grid-cols-3 gap-4">
                     <button 
                       type="button" 
-                      onClick={() => setAppearance({ ...appearance, theme: 'dark' })} 
+                      onClick={() => applyAndSaveTheme('dark')} 
                       className={`flex flex-col items-center gap-2 p-4 rounded-xl border transition-all ${appearance.theme === 'dark' ? 'bg-indigo-500/10 border-indigo-500 text-indigo-400' : 'bg-slate-900/50 border-slate-800 text-slate-400 hover:text-white'}`}
                     >
                       <Moon className="w-6 h-6" />
@@ -528,7 +550,7 @@ export default function SettingsPage() {
                     </button>
                     <button 
                       type="button" 
-                      onClick={() => setAppearance({ ...appearance, theme: 'light' })} 
+                      onClick={() => applyAndSaveTheme('light')} 
                       className={`flex flex-col items-center gap-2 p-4 rounded-xl border transition-all ${appearance.theme === 'light' ? 'bg-indigo-500/10 border-indigo-500 text-indigo-400' : 'bg-slate-900/50 border-slate-800 text-slate-400 hover:text-white'}`}
                     >
                       <Sun className="w-6 h-6" />
@@ -536,7 +558,7 @@ export default function SettingsPage() {
                     </button>
                     <button 
                       type="button" 
-                      onClick={() => setAppearance({ ...appearance, theme: 'system' })} 
+                      onClick={() => applyAndSaveTheme('system')} 
                       className={`flex flex-col items-center gap-2 p-4 rounded-xl border transition-all ${appearance.theme === 'system' ? 'bg-indigo-500/10 border-indigo-500 text-indigo-400' : 'bg-slate-900/50 border-slate-800 text-slate-400 hover:text-white'}`}
                     >
                       <Monitor className="w-6 h-6" />
