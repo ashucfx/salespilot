@@ -99,12 +99,32 @@ public class EmployeeController {
         return ResponseEntity.ok(ApiResponse.success("Employee deactivated", null));
     }
 
-    @Operation(summary = "Delete employee (Admin only)")
+    @Operation(summary = "Request OTP for employee deletion (Admin only)")
+    @PostMapping("/{id}/delete-otp")
+    @PreAuthorize("hasRole(\'ADMIN\')")
+    public ResponseEntity<ApiResponse<Void>> requestDeleteOtp(@PathVariable UUID id, @AuthenticationPrincipal User user) {
+        employeeService.requestDeleteOtp(id, user.getEmail());
+        return ResponseEntity.ok(ApiResponse.success("OTP sent to your admin email address", null));
+    }
+
+    @Operation(summary = "Delete employee (Admin only, OTP required)")
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole(\'ADMIN\')")
-    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable UUID id) {
-        employeeService.deleteEmployee(id);
-        return ResponseEntity.ok(ApiResponse.success("Employee deleted", null));
+    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable UUID id, @RequestParam(required = false) String otp, @AuthenticationPrincipal User user) {
+        if (otp == null || otp.trim().isEmpty()) {
+            throw new IllegalArgumentException("OTP code is required to delete an employee. Please request a deletion OTP first.");
+        }
+        employeeService.deleteEmployeeWithOtp(id, otp, user.getEmail());
+        return ResponseEntity.ok(ApiResponse.success("Employee deleted successfully", null));
+    }
+
+    @Operation(summary = "Set employee contract end date (Admin only)")
+    @PutMapping("/{id}/contract-date")
+    @PreAuthorize("hasRole(\'ADMIN\')")
+    public ResponseEntity<ApiResponse<EmployeeDto>> updateContractDate(@PathVariable UUID id, @RequestBody java.util.Map<String, String> request) {
+        java.time.LocalDate endDate = request.get("contractEndDate") != null && !request.get("contractEndDate").isEmpty() 
+            ? java.time.LocalDate.parse(request.get("contractEndDate")) : null;
+        return ResponseEntity.ok(ApiResponse.success("Contract end date updated", employeeService.updateContractDate(id, endDate)));
     }
 
     @Operation(summary = "Verify Employee KYC (Admin only)")

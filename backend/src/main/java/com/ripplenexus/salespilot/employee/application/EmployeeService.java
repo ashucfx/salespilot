@@ -183,6 +183,62 @@ public class EmployeeService {
         log.info("Employee deactivated: {}", employee.getEmployeeNumber());
     }
 
+    private String hashOtp(String otp) {
+        try {
+            java.security.MessageDigest digest = java.security.MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(otp.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            return java.util.Base64.getEncoder().encodeToString(hash);
+        } catch (java.security.NoSuchAlgorithmException e) {
+            throw new RuntimeException("Failed to hash OTP", e);
+        }
+    }
+
+    public void requestDeleteOtp(UUID employeeId, String adminEmail) {
+        getEmployeeOrThrow(employeeId);
+        User adminUser = userRepository.findByEmail(adminEmail)
+            .orElseThrow(() -> new ResourceNotFoundException("Admin user not found: " + adminEmail));
+        String otpCode = String.format("%06d", RANDOM.nextInt(1000000));
+        adminUser.setOtpCode(hashOtp(otpCode));
+        adminUser.setOtpExpiry(java.time.Instant.now().plus(10, java.time.temporal.ChronoUnit.MINUTES));
+        userRepository.save(adminUser);
+        emailService.sendOtpEmail(adminEmail, otpCode);
+        log.info("Requested deletion OTP for employee {} by admin {}", employeeId, adminEmail);
+    }
+
+    public void deleteEmployeeWithOtp(UUID id, String otpCode, String adminEmail) {
+        if (otpCode == null || otpCode.trim().isEmpty()) {
+            throw new IllegalArgumentException("OTP verification code is required to delete an employee from the database.");
+        }
+        User adminUser = userRepository.findByEmail(adminEmail)
+            .orElseThrow(() -> new ResourceNotFoundException("Admin user not found: " + adminEmail));
+        if (adminUser.getOtpExpiry() == null || adminUser.getOtpExpiry().isBefore(java.time.Instant.now())) {
+            throw new IllegalArgumentException("OTP has expired. Please request a new deletion OTP.");
+        }
+        if (!hashOtp(otpCode.trim()).equals(adminUser.getOtpCode())) {
+            throw new IllegalArgumentException("Invalid OTP code. Employee deletion aborted.");
+        }
+        adminUser.setOtpCode(null);
+        adminUser.setOtpExpiry(null);
+        userRepository.save(adminUser);
+
+        Employee employee = getEmployeeOrThrow(id);
+        if (employee.getUser() != null && employee.getUser().getEmail() != null && employee.getUser().getEmail().equalsIgnoreCase("ashutosh.shukla@theripplenexus.com")) {
+            throw new IllegalArgumentException("Cannot delete the primary founder/admin account (ashutosh.shukla@theripplenexus.com).");
+        }
+        employee.softDelete();
+        if (employee.getUser() != null) {
+            employee.getUser().softDelete();
+        }
+        employeeRepository.save(employee);
+        log.info("Employee deleted via verified OTP by {}: {}", adminEmail, employee.getEmployeeNumber());
+    }
+
+    public EmployeeDto updateContractDate(UUID id, java.time.LocalDate endDate) {
+        Employee employee = getEmployeeOrThrow(id);
+        employee.setContractEndDate(endDate);
+        return EmployeeDto.from(employeeRepository.save(employee));
+    }
+
     public void deleteEmployee(UUID id) {
         Employee employee = getEmployeeOrThrow(id);
         employee.softDelete();
@@ -213,8 +269,8 @@ public class EmployeeService {
             emp.setWorkEmail(user.getEmail());
             String name = user.getEmail().split("@")[0];
             emp.setFirstName(name.substring(0, 1).toUpperCase() + name.substring(1));
-            emp.setLastName("Shukla");
-            emp.setEmployeeNumber("RN-" + UUID.randomUUID().toString().substring(0, 4).toUpperCase());
+            emp.setLastName(user.hasRole("ADMIN") ? "Shukla" : "Representative");
+            emp.setEmployeeNumber("SP-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
             emp.setDesignation(user.hasRole("ADMIN") ? "Founder & CEO" : "Sales Executive");
             emp.setStatus(Employee.EmploymentStatus.ACTIVE);
             emp.setKycStatus(Employee.KycStatus.VERIFIED);
