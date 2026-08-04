@@ -19,6 +19,29 @@ export default function LoginPage() {
   const [otpStep, setOtpStep] = useState(false);
   const [otpCode, setOtpCode] = useState('');
 
+  const checkRedirect = async (user: any) => {
+    if (!user?.roles?.includes('ADMIN')) {
+      try {
+        const empRes = await api.get('/employees/me');
+        const emp = empRes.data?.data;
+        if (!emp?.bankAccount || !emp?.bankName || !emp?.panNumber || !emp?.phone) {
+          toast.custom((t) => (
+            <div className="bg-indigo-950 border border-indigo-500/50 p-4 rounded-xl shadow-2xl text-white max-w-sm">
+              <h4 className="font-bold text-sm text-indigo-300">Profile Completion Required</h4>
+              <p className="text-xs text-slate-300 mt-1">Please complete your personal and bank details to enable payouts and full access.</p>
+            </div>
+          ), { duration: 5000 });
+          window.location.href = '/profile';
+          return;
+        }
+      } catch (err) {
+        window.location.href = '/profile';
+        return;
+      }
+    }
+    window.location.href = '/dashboard';
+  };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) {
@@ -39,7 +62,7 @@ export default function LoginPage() {
         setAuth(user, accessToken, refreshToken);
         document.cookie = `token=${accessToken}; path=/; max-age=86400; SameSite=Lax`;
         toast.success('Login successful');
-        window.location.href = '/dashboard';
+        await checkRedirect(user);
       }
     } catch (error: any) {
       console.error('Login failed', error);
@@ -66,7 +89,7 @@ export default function LoginPage() {
       // Set cookie for Next.js middleware
       document.cookie = `token=${accessToken}; path=/; max-age=86400; SameSite=Lax`;
       toast.success('Verification successful');
-      window.location.href = '/dashboard';
+      await checkRedirect(user);
     } catch (error: any) {
       console.error('OTP verification failed', error);
       toast.error(error.response?.data?.message || 'Invalid security code');
