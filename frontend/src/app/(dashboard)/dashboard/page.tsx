@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
 import { formatCurrency } from '@/lib/utils';
+import { useRouter } from 'next/navigation';
 import { 
   TrendingUp, 
   Users, 
@@ -11,7 +12,11 @@ import {
   Briefcase,
   AlertCircle,
   Quote,
-  ShieldAlert
+  ShieldAlert,
+  Plus,
+  CalendarDays,
+  DollarSign,
+  User
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { 
@@ -39,16 +44,6 @@ interface DashboardStats {
   monthlyRevenue?: number;
   pendingCommissions?: number;
 }
-
-// Dummy data for the chart
-const revenueData = [
-  { name: 'Jan', revenue: 4000 },
-  { name: 'Feb', revenue: 3000 },
-  { name: 'Mar', revenue: 5000 },
-  { name: 'Apr', revenue: 8000 },
-  { name: 'May', revenue: 6000 },
-  { name: 'Jun', revenue: 10000 },
-];
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const StatCard = ({ title, value, icon: Icon, color, delay }: any) => (
@@ -100,26 +95,25 @@ function ManagerDashboardView({ stats }: { stats: DashboardStats | null }) {
 }
 
 function EmployeeDashboardView({ stats }: { stats: DashboardStats | null }) {
-  const [quote, setQuote] = useState({ text: "Loading motivation...", author: "" });
+  const [quote, setQuote] = useState({ text: 'Loading motivation...', author: '' });
 
   useEffect(() => {
     fetch('https://quotesapi.prayushadhikari.com.np/api/quotes/random')
       .then(res => res.json())
       .then(data => {
-        if(data && data.length > 0) {
+        if (data && data.length > 0) {
           setQuote({ text: data[0].quote, author: data[0].author });
         }
       })
       .catch(() => {
-        setQuote({ text: "Success is not final, failure is not fatal: it is the courage to continue that counts.", author: "Winston Churchill" });
+        setQuote({ text: 'Success is not final, failure is not fatal: it is the courage to continue that counts.', author: 'Winston Churchill' });
       });
   }, []);
 
   return (
     <>
-      {/* Tenure & Motivation Banner */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.1, duration: 0.4 }}
@@ -132,7 +126,7 @@ function EmployeeDashboardView({ stats }: { stats: DashboardStats | null }) {
           </div>
         </motion.div>
 
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.2, duration: 0.4 }}
@@ -158,13 +152,15 @@ function EmployeeDashboardView({ stats }: { stats: DashboardStats | null }) {
 
 export default function DashboardPage() {
   const { user } = useAuthStore();
+  const router = useRouter();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [revenueData, setRevenueData] = useState<{ name: string; revenue: number }[]>([]);
 
   const roles = user?.roles || [];
   const isAdmin = roles.includes('ADMIN');
   const isManager = roles.includes('SALES_MANAGER');
-  const isEmployee = !isAdmin && !isManager; // Default fallback to employee
+  const isEmployee = !isAdmin && !isManager;
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -179,12 +175,57 @@ export default function DashboardPage() {
       }
     };
 
+    const fetchRevenueChart = async () => {
+      try {
+        const { data } = await api.get('/analytics/revenue-trend');
+        const trend = data?.data || data || [];
+        if (Array.isArray(trend) && trend.length > 0) {
+          setRevenueData(trend);
+        } else {
+          buildFallbackChart();
+        }
+      } catch {
+        buildFallbackChart();
+      }
+    };
+
+    const buildFallbackChart = () => {
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const now = new Date();
+      setRevenueData(
+        Array.from({ length: 6 }, (_, i) => ({
+          name: months[(now.getMonth() - 5 + i + 12) % 12],
+          revenue: 0
+        }))
+      );
+    };
+
     fetchStats();
+    fetchRevenueChart();
   }, [isAdmin]);
+
+  const adminQuickActions = [
+    { label: 'Add New Lead', icon: Plus, href: '/leads' },
+    { label: 'Schedule Meeting', icon: CalendarDays, href: '/meetings' },
+    { label: 'View Commissions', icon: DollarSign, href: '/commissions' },
+    { label: 'Team Overview', icon: Users, href: '/team' },
+    { label: 'KYC Approvals', icon: ShieldAlert, href: '/kyc' },
+    { label: 'My Profile', icon: User, href: '/profile' },
+  ];
+
+  const employeeQuickActions = [
+    { label: 'Add New Lead', icon: Plus, href: '/leads' },
+    { label: 'Schedule Meeting', icon: CalendarDays, href: '/meetings' },
+    { label: 'My Targets', icon: Target, href: '/targets' },
+    { label: 'My Payouts', icon: DollarSign, href: '/payouts' },
+    { label: 'Incentives Hub', icon: Briefcase, href: '/incentives' },
+    { label: 'My Profile', icon: User, href: '/profile' },
+  ];
+
+  const quickActions = isAdmin || isManager ? adminQuickActions : employeeQuickActions;
 
   return (
     <div className="space-y-8">
-      {/* Header section */}
       <div className="flex flex-col gap-2">
         <h2 className="text-2xl font-bold text-white">
           Welcome back, {user?.email?.split('@')[0]}
@@ -194,14 +235,12 @@ export default function DashboardPage() {
         </p>
       </div>
 
-      {/* Role-based Dashboard Views */}
       {isAdmin && <AdminDashboardView stats={stats} />}
       {isManager && !isAdmin && <ManagerDashboardView stats={stats} />}
       {isEmployee && <EmployeeDashboardView stats={stats} />}
 
-      {/* Shared Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.6, duration: 0.4 }}
@@ -209,20 +248,21 @@ export default function DashboardPage() {
         >
           <div className="flex justify-between items-center mb-6">
             <h3 className="text-lg font-semibold text-white">Revenue Overview</h3>
+            {loading && <div className="text-xs text-slate-500 animate-pulse">Loading...</div>}
           </div>
           <div className="h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={revenueData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#6366f1" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#6366f1" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#6366f1" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#6366f1" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-                <XAxis dataKey="name" stroke="#94a3b8" tick={{fill: '#94a3b8'}} axisLine={false} tickLine={false} />
-                <YAxis stroke="#94a3b8" tick={{fill: '#94a3b8'}} axisLine={false} tickLine={false} tickFormatter={(val) => `₹${val/1000}k`} />
-                <Tooltip 
+                <XAxis dataKey="name" stroke="#94a3b8" tick={{ fill: '#94a3b8' }} axisLine={false} tickLine={false} />
+                <YAxis stroke="#94a3b8" tick={{ fill: '#94a3b8' }} axisLine={false} tickLine={false} tickFormatter={(val) => `₹${val / 1000}k`} />
+                <Tooltip
                   contentStyle={{ backgroundColor: '#1a1a2e', borderColor: 'rgba(99, 102, 241, 0.2)', borderRadius: '12px' }}
                   itemStyle={{ color: '#fff' }}
                 />
@@ -232,21 +272,22 @@ export default function DashboardPage() {
           </div>
         </motion.div>
 
-        {/* Quick Actions */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.7, duration: 0.4 }}
           className="glass-panel rounded-2xl p-6 border border-indigo-500/10 flex flex-col"
         >
-          <h3 className="text-lg font-semibold text-white mb-6">Quick Actions</h3>
-          <div className="space-y-4 flex-1">
-            {['Create New Lead', 'Schedule Meeting', 'View Commissions', 'Update Profile'].map((action, i) => (
-              <button 
+          <h3 className="text-lg font-semibold text-white mb-4">Quick Actions</h3>
+          <div className="space-y-2 flex-1">
+            {quickActions.map((action, i) => (
+              <button
                 key={i}
-                className="w-full text-left px-4 py-3 rounded-xl bg-slate-800/50 hover:bg-indigo-500/20 hover:text-indigo-300 text-slate-300 text-sm font-medium transition-colors border border-transparent hover:border-indigo-500/20"
+                onClick={() => router.push(action.href)}
+                className="w-full text-left px-4 py-3 rounded-xl bg-slate-800/50 hover:bg-indigo-500/20 hover:text-indigo-300 text-slate-300 text-sm font-medium transition-all border border-transparent hover:border-indigo-500/20 flex items-center gap-3"
               >
-                {action}
+                <action.icon className="w-4 h-4 text-indigo-400 shrink-0" />
+                {action.label}
               </button>
             ))}
           </div>
