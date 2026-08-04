@@ -15,7 +15,7 @@ public class EmailTemplates {
         return frontendUrl;
     }
 
-    private static String baseTemplate(String content) {
+        private static String baseTemplate(String content) {
         return """
             <!DOCTYPE html>
             <html lang="en">
@@ -24,32 +24,40 @@ public class EmailTemplates {
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Sales Pilot by Ripple Nexus</title>
             <style>
+              /* Mobile Responsiveness */
               @media only screen and (max-width: 600px) {
-                .container { width: 100% !important; border-radius: 0 !important; }
-                .content { padding: 20px 15px !important; }
-                h1 { font-size: 22px !important; }
-                h2 { font-size: 20px !important; }
-                p { font-size: 16px !important; }
+                .container { width: 100% !important; border-radius: 0 !important; border: none !important; }
+                .content { padding: 24px 16px !important; }
+                h1 { font-size: 24px !important; line-height: 1.2 !important; }
+                h2 { font-size: 20px !important; line-height: 1.3 !important; }
+                h3 { font-size: 18px !important; }
+                p { font-size: 16px !important; line-height: 1.5 !important; }
+                .btn { display: block !important; width: 100% !important; box-sizing: border-box !important; text-align: center !important; }
+                .logo-text { font-size: 20px !important; }
+                .logo-icon { width: 28px !important; height: 28px !important; line-height: 28px !important; font-size: 16px !important; }
               }
             </style>
             </head>
             <body style="margin:0; padding:0; background-color:#f8fafc; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color:#0f172a; -webkit-font-smoothing:antialiased;">
-              <table width="100%%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f8fafc; padding:20px 0; width:100%%;">
+              <table width="100%%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f8fafc; width:100%%; table-layout:fixed;">
                 <tr>
-                  <td align="center">
-                    <table class="container" width="100%%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px; background-color:#ffffff; border-radius:12px; overflow:hidden; box-shadow:0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); border: 1px solid #e2e8f0;">
+                  <td align="center" style="padding: 20px 0;">
+                    <!--[if (gte mso 9)|(IE)]>
+                    <table width="600" align="center" cellpadding="0" cellspacing="0" border="0"><tr><td>
+                    <![endif]-->
+                    <table class="container" width="100%%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px; margin:0 auto; background-color:#ffffff; border-radius:12px; overflow:hidden; box-shadow:0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); border: 1px solid #e2e8f0;">
                       <!-- Header Banner -->
                       <tr>
-                        <td align="center" style="background-color:#0f172a; padding:30px 20px;">
+                        <td align="center" style="background-color:#05050A; padding:24px 20px; border-bottom: 4px solid #6366f1;">
                           <table cellpadding="0" cellspacing="0" border="0">
                             <tr>
                               <td valign="middle" style="padding-right: 12px;">
-                                <div style="width: 32px; height: 32px; background-color: #6366f1; border-radius: 8px; text-align: center; line-height: 32px; color: #ffffff; font-weight: bold; font-size: 18px;">
-                                  &#8599;
+                                <div class="logo-icon" style="width: 32px; height: 32px; background: linear-gradient(135deg, #6366f1 0%%, #7c3aed 50%%, #c026d3 100%%); background-color: #6366f1; border-radius: 8px; text-align: center; color: #ffffff; border: 1px solid rgba(129, 140, 248, 0.2); box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.3);">
+                                  <span style="font-size: 20px; line-height: 32px; font-weight: bold;">&#8599;</span>
                                 </div>
                               </td>
                               <td valign="middle">
-                                <span style="color:#ffffff; font-size:24px; font-weight:900; letter-spacing:-0.5px;">SALES<span style="color:#818cf8;">PILOT</span></span>
+                                <span class="logo-text" style="color:#ffffff; font-size:24px; font-weight:900; letter-spacing:-0.5px;">SALES<span style="color:#a78bfa;">PILOT</span></span>
                               </td>
                             </tr>
                           </table>
@@ -63,13 +71,26 @@ public class EmailTemplates {
                       </tr>
                       <!-- Footer -->
                       <tr>
-                        <td align="center" style="padding:30px 20px; background-color:#f1f5f9; border-top:1px solid #e2e8f0; color:#64748b; font-size:13px; line-height:1.5;">
-                          <p style="margin:0 0 8px; font-weight:600; color:#475569;">SALES PILOT BY RIPPLE NEXUS</p>
-                          <p style="margin:0 0 12px;">The Next-Generation AI-Powered Sales Acceleration Platform</p>
-                          <p style="margin:0;">&copy; 2026 Ripple Nexus. All rights reserved. &bull; <a href="https://salespilot.theripplenexus.com" style="color:#6366f1; text-decoration:none; font-weight:600;">Portal Access</a></p>
+                        <td align="center" style="padding:32px 20px; background-color:#f1f5f9; border-top:1px solid #e2e8f0; color:#64748b; font-size:13px; line-height:1.5;">
+                          <h4 style="margin:0 0 8px; font-weight:700; color:#475569; font-size:14px; letter-spacing:0.5px;">SALES PILOT BY RIPPLE NEXUS</h4>
+                          <p style="margin:0 0 16px;">The Next-Generation AI-Powered Sales Acceleration Platform</p>
+                          <table cellpadding="0" cellspacing="0" border="0">
+                            <tr>
+                              <td style="padding: 0 10px;">
+                                <a href="https://salespilot.theripplenexus.com" style="color:#6366f1; text-decoration:none; font-weight:600;">Portal Access</a>
+                              </td>
+                              <td style="border-left: 1px solid #cbd5e1; padding: 0 10px;">
+                                <a href="#" style="color:#64748b; text-decoration:none;">Support</a>
+                              </td>
+                            </tr>
+                          </table>
+                          <p style="margin:16px 0 0;">&copy; 2026 Ripple Nexus. All rights reserved.</p>
                         </td>
                       </tr>
                     </table>
+                    <!--[if (gte mso 9)|(IE)]>
+                    </td></tr></table>
+                    <![endif]-->
                   </td>
                 </tr>
               </table>
