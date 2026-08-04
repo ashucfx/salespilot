@@ -17,6 +17,29 @@ export default function DashboardLayout({
 
   useEffect(() => {
     setIsMounted(true);
+    const applyTheme = () => {
+      try {
+        const app = JSON.parse(localStorage.getItem('sp_settings_appearance') || '{}');
+        let theme = app.theme || 'dark';
+        if (theme === 'system') {
+          theme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        }
+        if (theme === 'light') {
+          document.documentElement.classList.remove('dark');
+          document.documentElement.classList.add('light');
+        } else {
+          document.documentElement.classList.remove('light');
+          document.documentElement.classList.add('dark');
+        }
+      } catch (e) {}
+    };
+    applyTheme();
+    window.addEventListener('storage', applyTheme);
+    window.addEventListener('theme-change', applyTheme);
+    return () => {
+      window.removeEventListener('storage', applyTheme);
+      window.removeEventListener('theme-change', applyTheme);
+    };
   }, []);
 
   useEffect(() => {
