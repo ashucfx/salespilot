@@ -5,7 +5,7 @@ import { Bell, Search, Menu, Trash2 } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAppStore } from '@/store/appStore';
 import { useAuthStore } from '@/store/authStore';
-import api from '@/lib/api';
+import { api } from '@/lib/api';
 
 export default function Header() {
   const pathname = usePathname();
