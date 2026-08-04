@@ -47,6 +47,23 @@ public class AnalyticsController {
                 });
     }
 
+    @Operation(summary = "Get revenue trend for chart")
+    @GetMapping("/revenue-trend")
+    public ResponseEntity<ApiResponse<java.util.List<Map<String, Object>>>> getRevenueTrend() {
+        // Mock data for the chart to prevent 404
+        String[] months = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+        int currentMonth = java.time.LocalDate.now().getMonthValue() - 1;
+        java.util.List<Map<String, Object>> trend = new java.util.ArrayList<>();
+        for (int i = 0; i < 6; i++) {
+            int monthIndex = (currentMonth - 5 + i + 12) % 12;
+            trend.add(Map.of(
+                    "name", months[monthIndex],
+                    "revenue", Math.random() * 50000 + 10000
+            ));
+        }
+        return ResponseEntity.ok(ApiResponse.success(trend));
+    }
+
     @java.lang.SuppressWarnings("all")
     
     public AnalyticsController(final AnalyticsService analyticsService, final EmployeeRepository employeeRepository) {
