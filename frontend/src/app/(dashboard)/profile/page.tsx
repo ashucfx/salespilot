@@ -316,12 +316,12 @@ export default function ProfilePage() {
       </div>
 
       {/* Tabs Navigation */}
-      <div className="flex items-center gap-2 border-b border-slate-800 pb-2">
+      <div className="flex overflow-x-auto bg-slate-900/50 p-1 rounded-xl w-full max-w-full mb-6 border border-slate-800 custom-scrollbar whitespace-nowrap">
         <button
           onClick={() => setActiveTab('overview')}
-          className={`px-4 py-2 rounded-xl text-sm font-semibold transition-colors flex items-center gap-2 ${
+          className={`min-w-fit px-4 flex-1 flex items-center justify-center gap-2 py-2 text-sm font-medium rounded-lg transition-colors ${
             activeTab === 'overview' 
-              ? 'bg-indigo-600 text-white shadow-md' 
+              ? 'bg-indigo-500 text-white shadow-lg' 
               : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
           }`}
         >
@@ -330,9 +330,9 @@ export default function ProfilePage() {
 
         <button
           onClick={() => setActiveTab('incentives')}
-          className={`px-4 py-2 rounded-xl text-sm font-semibold transition-colors flex items-center gap-2 ${
+          className={`min-w-fit px-4 flex-1 flex items-center justify-center gap-2 py-2 text-sm font-medium rounded-lg transition-colors ${
             activeTab === 'incentives' 
-              ? 'bg-indigo-600 text-white shadow-md' 
+              ? 'bg-indigo-500 text-white shadow-lg' 
               : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
           }`}
         >
@@ -341,9 +341,9 @@ export default function ProfilePage() {
 
         <button
           onClick={() => setActiveTab('kyc')}
-          className={`px-4 py-2 rounded-xl text-sm font-semibold transition-colors flex items-center gap-2 ${
+          className={`min-w-fit px-4 flex-1 flex items-center justify-center gap-2 py-2 text-sm font-medium rounded-lg transition-colors ${
             activeTab === 'kyc' 
-              ? 'bg-indigo-600 text-white shadow-md' 
+              ? 'bg-indigo-500 text-white shadow-lg' 
               : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
           }`}
         >
@@ -352,13 +352,13 @@ export default function ProfilePage() {
 
         <button
           onClick={() => setActiveTab('security')}
-          className={`px-4 py-2 rounded-xl text-sm font-semibold transition-colors flex items-center gap-2 ${
+          className={`min-w-fit px-4 flex-1 flex items-center justify-center gap-2 py-2 text-sm font-medium rounded-lg transition-colors ${
             activeTab === 'security' 
-              ? 'bg-indigo-600 text-white shadow-md' 
+              ? 'bg-indigo-500 text-white shadow-lg' 
               : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
           }`}
         >
-          <Lock className="w-4 h-4" /> Account & Security
+          <Lock className="w-4 h-4" /> Security & Access
         </button>
       </div>
 

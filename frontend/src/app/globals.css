@@ -178,12 +178,24 @@ html.light [class*="bg-slate-800"] {
 
 /* Typography & Text */
 html.light [class*="text-transparent"] { color: transparent !important; }
-html.light [class*="text-white"]:not(button):not(a):not([class*="bg-indigo"]):not([class*="bg-red"]):not([class*="bg-emerald"]) { color: #0f172a !important; }
-html.light button[class*="text-white"], html.light a[class*="text-white"], html.light [class*="bg-indigo"][class*="text-white"], html.light [class*="bg-red"][class*="text-white"] { color: #ffffff !important; }
-html.light [class*="text-slate-200"] { color: #1e293b !important; }
-html.light [class*="text-slate-300"] { color: #334155 !important; }
-html.light [class*="text-slate-400"] { color: #475569 !important; }
-html.light [class*="text-slate-500"] { color: #64748b !important; }
+html.light .text-white { color: #0f172a !important; }
+html.light button.text-white, 
+html.light button .text-white,
+html.light a.text-white,
+html.light [class*="bg-indigo"] .text-white,
+html.light [class*="bg-indigo"].text-white,
+html.light [class*="bg-red"] .text-white,
+html.light [class*="bg-red"].text-white,
+html.light [class*="bg-emerald"] .text-white,
+html.light [class*="bg-emerald"].text-white { 
+  color: #ffffff !important; 
+}
+html.light .text-slate-50,
+html.light .text-slate-100,
+html.light .text-slate-200 { color: #1e293b !important; }
+html.light .text-slate-300 { color: #334155 !important; }
+html.light .text-slate-400 { color: #475569 !important; }
+html.light .text-slate-500 { color: #64748b !important; }
 
 /* Keep colored text like emerald, rose, indigo, amber vibrant in light mode */
 html.light [class*="text-indigo-400"] { color: #4f46e5 !important; }
