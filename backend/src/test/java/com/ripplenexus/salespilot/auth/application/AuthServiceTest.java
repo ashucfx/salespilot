@@ -64,9 +64,11 @@ class AuthServiceTest {
 
     @Test
     void login_Success() {
-        // Arrange
-        LoginRequest request = new LoginRequest("test@salespilot.com", "password123");
-        
+        // Arrange — use no-arg constructor + setters (LoginRequest has no all-args constructor)
+        LoginRequest request = new LoginRequest();
+        request.setEmail("test@salespilot.com");
+        request.setPassword("password123");
+
         when(userRepository.findByEmail(request.getEmail())).thenReturn(Optional.of(testUser));
         when(jwtUtil.generateAccessToken(any(), any())).thenReturn("mocked.access.token");
         when(refreshTokenRepository.save(any(RefreshToken.class))).thenAnswer(i -> i.getArguments()[0]);
@@ -79,7 +81,7 @@ class AuthServiceTest {
         assertEquals("mocked.access.token", response.getAccessToken());
         assertNotNull(response.getRefreshToken());
         assertEquals("test@salespilot.com", response.getUser().getEmail());
-        
+
         verify(authenticationManager).authenticate(any(UsernamePasswordAuthenticationToken.class));
         verify(userRepository).updateLastLogin(eq(testUser.getId()), any());
     }
@@ -87,14 +89,17 @@ class AuthServiceTest {
     @Test
     void login_UserNotFound() {
         // Arrange
-        LoginRequest request = new LoginRequest("nonexistent@salespilot.com", "password123");
+        LoginRequest request = new LoginRequest();
+        request.setEmail("nonexistent@salespilot.com");
+        request.setPassword("password123");
+
         when(userRepository.findByEmail(request.getEmail())).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(ResourceNotFoundException.class, () -> 
+        assertThrows(ResourceNotFoundException.class, () ->
             authService.login(request, "127.0.0.1", "Mozilla")
         );
-        
+
         verify(authenticationManager).authenticate(any(UsernamePasswordAuthenticationToken.class));
     }
 }
