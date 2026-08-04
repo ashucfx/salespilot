@@ -23,33 +23,50 @@ public class EmailTemplates {
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Sales Pilot by Ripple Nexus</title>
+            <style>
+              @media only screen and (max-width: 600px) {
+                .container { width: 100% !important; border-radius: 0 !important; }
+                .content { padding: 20px 15px !important; }
+                h1 { font-size: 22px !important; }
+                h2 { font-size: 20px !important; }
+                p { font-size: 16px !important; }
+              }
+            </style>
             </head>
-            <body style="margin:0; padding:0; background-color:#06080F; font-family:'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color:#E2E8F0; -webkit-font-smoothing:antialiased;">
-              <table width="100%%" cellpadding="0" cellspacing="0" border="0" style="background-color:#06080F; padding:40px 15px; width:100%%;">
+            <body style="margin:0; padding:0; background-color:#f8fafc; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color:#0f172a; -webkit-font-smoothing:antialiased;">
+              <table width="100%%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f8fafc; padding:20px 0; width:100%%;">
                 <tr>
                   <td align="center">
-                    <table width="100%%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px; background-color:#0D111D; border-radius:20px; border:1px solid #26334D; overflow:hidden; box-shadow:0 25px 50px -12px rgba(0,0,0,0.7);">
+                    <table class="container" width="100%%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px; background-color:#ffffff; border-radius:12px; overflow:hidden; box-shadow:0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); border: 1px solid #e2e8f0;">
                       <!-- Header Banner -->
                       <tr>
-                        <td align="center" style="background:linear-gradient(135deg, #1E1B4B 0%%, #312E81 50%%, #4C1D95 100%%); padding:36px 30px 28px; border-bottom:1px solid #334155;">
-                          <div style="display:inline-block; background-color:#151C2F; padding:10px 24px; border-radius:14px; border:1px solid #475569; margin-bottom:10px; box-shadow:0 4px 12px rgba(0,0,0,0.3);">
-                            <span style="color:#FFFFFF; font-size:26px; font-weight:900; letter-spacing:3px;">SALES<span style="color:#38BDF8;">PILOT</span></span>
-                          </div>
-                          <p style="margin:4px 0 0; color:#93C5FD; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:3px;">Enterprise Revenue Engine &bull; Ripple Nexus</p>
+                        <td align="center" style="background-color:#0f172a; padding:30px 20px;">
+                          <table cellpadding="0" cellspacing="0" border="0">
+                            <tr>
+                              <td valign="middle" style="padding-right: 12px;">
+                                <div style="width: 32px; height: 32px; background-color: #6366f1; border-radius: 8px; text-align: center; line-height: 32px; color: #ffffff; font-weight: bold; font-size: 18px;">
+                                  &#8599;
+                                </div>
+                              </td>
+                              <td valign="middle">
+                                <span style="color:#ffffff; font-size:24px; font-weight:900; letter-spacing:-0.5px;">SALES<span style="color:#818cf8;">PILOT</span></span>
+                              </td>
+                            </tr>
+                          </table>
                         </td>
                       </tr>
                       <!-- Body Content -->
                       <tr>
-                        <td style="padding:40px 32px; line-height:1.7; font-size:15px; color:#94A3B8;">
+                        <td class="content" style="padding:40px 32px; line-height:1.6; font-size:16px; color:#334155;">
                           """ + content + """
                         </td>
                       </tr>
                       <!-- Footer -->
                       <tr>
-                        <td align="center" style="padding:28px 30px; background-color:#080A12; border-top:1px solid #1E293B; color:#64748B; font-size:12px;">
-                          <p style="margin:0 0 6px; font-weight:700; color:#94A3B8; letter-spacing:1px;">SALES PILOT BY RIPPLE NEXUS</p>
+                        <td align="center" style="padding:30px 20px; background-color:#f1f5f9; border-top:1px solid #e2e8f0; color:#64748b; font-size:13px; line-height:1.5;">
+                          <p style="margin:0 0 8px; font-weight:600; color:#475569;">SALES PILOT BY RIPPLE NEXUS</p>
                           <p style="margin:0 0 12px;">The Next-Generation AI-Powered Sales Acceleration Platform</p>
-                          <p style="margin:0;">&copy; 2026 Ripple Nexus. All rights reserved. &bull; <a href="https://salespilot.theripplenexus.com" style="color:#38BDF8; text-decoration:none; font-weight:600;">Portal Access</a></p>
+                          <p style="margin:0;">&copy; 2026 Ripple Nexus. All rights reserved. &bull; <a href="https://salespilot.theripplenexus.com" style="color:#6366f1; text-decoration:none; font-weight:600;">Portal Access</a></p>
                         </td>
                       </tr>
                     </table>
@@ -65,47 +82,47 @@ public class EmailTemplates {
     public static String welcome(String name, String email, String tempPassword, String frontendUrl) {
         String url = resolveUrl(frontendUrl);
         return baseTemplate("""
-            <h2 style="color:#FFFFFF; font-size:24px; font-weight:800; margin:0 0 16px; letter-spacing:-0.5px;">Welcome aboard, %s! \ud83d\ude80</h2>
-            <p style="margin:0 0 18px; color:#94A3B8;">Your enterprise profile on <strong style="color:#FFFFFF;">Sales Pilot</strong> has been officially created. You now have full access to our cutting-edge AI revenue acceleration platform.</p>
-            <div style="background-color:#151C2F; border:1px solid #26334D; border-radius:14px; padding:24px; margin:24px 0; border-left:4px solid #38BDF8;">
-              <p style="margin:0; font-size:15px; color:#E2E8F0;"><strong style="color:#FFFFFF;">Work Email:</strong> <span style="color:#38BDF8;">%s</span></p>
-              <p style="margin:14px 0 0; font-size:15px; color:#E2E8F0;"><strong style="color:#FFFFFF;">Temporary Password:</strong> <span style="background-color:#080A12; padding:6px 12px; border-radius:8px; font-family:monospace; font-size:16px; color:#F8FAFC; border:1px solid #334155; margin-left:8px;">%s</span></p>
+            <h1 style="color:#0f172a; font-size:22px; font-weight:800; margin:0 0 16px; letter-spacing:-0.5px;">Welcome aboard, %s! \ud83d\ude80</h1>
+            <p style="margin:0 0 18px; color:#475569;">Your enterprise profile on <strong style="color:#0f172a;">Sales Pilot</strong> has been officially created. You now have full access to our cutting-edge AI revenue acceleration platform.</p>
+            <div style="background-color:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:20px; margin:24px 0; border-left:4px solid #6366f1;">
+              <p style="margin:0; font-size:15px; color:#334155;"><strong style="color:#0f172a;">Work Email:</strong> <span style="color:#6366f1;">%s</span></p>
+              <p style="margin:14px 0 0; font-size:15px; color:#334155;"><strong style="color:#0f172a;">Temporary Password:</strong> <span style="background-color:#f1f5f9; padding:6px 12px; border-radius:6px; font-family:monospace; font-size:16px; color:#0f172a; border:1px solid #cbd5e1; margin-left:8px;">%s</span></p>
             </div>
-            <p style="margin:0 0 12px; color:#E2E8F0; font-weight:700;">Required Onboarding Checklist:</p>
-            <ul style="padding-left:20px; color:#94A3B8; margin:0 0 28px;">
+            <p style="margin:0 0 12px; color:#0f172a; font-weight:700;">Required Onboarding Checklist:</p>
+            <ul style="padding-left:20px; color:#475569; margin:0 0 28px;">
               <li style="margin-bottom:8px;">Log into your portal using your secure credentials above.</li>
               <li style="margin-bottom:8px;">Complete your Employee Profile &amp; KYC Verification for payout processing.</li>
               <li style="margin-bottom:8px;">Set a new secure password upon your first sign-in.</li>
             </ul>
             <div style="text-align:center; margin:36px 0;">
-              <a href="%s/login" style="display:inline-block; background:linear-gradient(135deg, #3B82F6 0%%, #6366F1 50%%, #8B5CF6 100%%); color:#FFFFFF !important; text-decoration:none; padding:16px 36px; border-radius:12px; font-weight:700; font-size:16px; box-shadow:0 10px 25px -5px rgba(99,102,241,0.5); border:1px solid rgba(255,255,255,0.2);">Access Sales Pilot Portal</a>
+              <a href="%s/login" style="display:inline-block; background-color:#6366f1; color:#ffffff !important; text-decoration:none; padding:14px 32px; border-radius:8px; font-weight:600; font-size:16px;">Access Sales Pilot Portal</a>
             </div>
-            <p style="font-size:13px; color:#64748B; text-align:center; margin:0;">Direct Portal URL: <a href="%s/login" style="color:#38BDF8; text-decoration:none;">%s/login</a></p>
+            <p style="font-size:13px; color:#64748b; text-align:center; margin:0;">Direct Portal URL: <a href="%s/login" style="color:#6366f1; text-decoration:none;">%s/login</a></p>
             """.formatted(name, email, tempPassword, url, url, url));
     }
 
     // 2. OTP Security Code
     public static String otpCode(String code) {
         return baseTemplate("""
-            <h2 style="color:#FFFFFF; font-size:24px; font-weight:800; margin:0 0 16px;">Security Verification \ud83d\udd12</h2>
-            <p style="margin:0 0 20px; color:#94A3B8;">We detected a sensitive action or login attempt on your Sales Pilot account. Please enter the two-factor authentication code below to verify your identity.</p>
-            <div style="text-align:center; background-color:#151C2F; border:1px solid #3730A3; border-radius:16px; padding:32px; margin:28px 0; box-shadow:inset 0 2px 10px rgba(99,102,241,0.2);">
-              <p style="margin:0; font-size:42px; color:#FFFFFF; font-weight:900; letter-spacing:10px; font-family:monospace;">%s</p>
+            <h1 style="color:#0f172a; font-size:22px; font-weight:800; margin:0 0 16px;">Security Verification \ud83d\udd12</h1>
+            <p style="margin:0 0 20px; color:#475569;">We detected a sensitive action or login attempt on your Sales Pilot account. Please enter the two-factor authentication code below to verify your identity.</p>
+            <div style="text-align:center; background-color:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:28px; margin:28px 0;">
+              <p style="margin:0; font-size:40px; color:#0f172a; font-weight:900; letter-spacing:10px; font-family:monospace;">%s</p>
             </div>
-            <p style="font-size:13px; text-align:center; color:#94A3B8; margin:0 0 16px;">This security token expires in <strong style="color:#FFFFFF;">10 minutes</strong>.</p>
-            <p style="font-size:13px; color:#64748B; text-align:center; margin:0;">If you did not initiate this request, please reset your password immediately and notify system administration.</p>
+            <p style="font-size:13px; text-align:center; color:#475569; margin:0 0 16px;">This security token expires in <strong style="color:#0f172a;">10 minutes</strong>.</p>
+            <p style="font-size:13px; color:#64748b; text-align:center; margin:0;">If you did not initiate this request, please reset your password immediately and notify system administration.</p>
             """.formatted(code));
     }
 
     // 3. Password Reset Request
     public static String passwordReset(String resetLink) {
         return baseTemplate("""
-            <h2 style="color:#FFFFFF; font-size:24px; font-weight:800; margin:0 0 16px;">Reset Your Password \ud83d\udd11</h2>
-            <p style="margin:0 0 24px; color:#94A3B8;">We received a secure request to reset the password associated with your Sales Pilot account. Click the button below to establish a new credential.</p>
+            <h1 style="color:#0f172a; font-size:22px; font-weight:800; margin:0 0 16px;">Reset Your Password \ud83d\udd11</h1>
+            <p style="margin:0 0 24px; color:#475569;">We received a secure request to reset the password associated with your Sales Pilot account. Click the button below to establish a new credential.</p>
             <div style="text-align:center; margin:36px 0;">
-              <a href="%s" style="display:inline-block; background:linear-gradient(135deg, #3B82F6 0%%, #6366F1 50%%, #8B5CF6 100%%); color:#FFFFFF !important; text-decoration:none; padding:16px 36px; border-radius:12px; font-weight:700; font-size:16px; box-shadow:0 10px 25px -5px rgba(99,102,241,0.5); border:1px solid rgba(255,255,255,0.2);">Reset Password Now</a>
+              <a href="%s" style="display:inline-block; background-color:#6366f1; color:#ffffff !important; text-decoration:none; padding:14px 32px; border-radius:8px; font-weight:600; font-size:16px;">Reset Password Now</a>
             </div>
-            <p style="font-size:13px; color:#64748B; text-align:center; margin:0;">If you did not request a password reset, no action is required. Your account remains secure.</p>
+            <p style="font-size:13px; color:#64748b; text-align:center; margin:0;">If you did not request a password reset, no action is required. Your account remains secure.</p>
             """.formatted(resetLink));
     }
 
@@ -113,15 +130,15 @@ public class EmailTemplates {
     public static String leadAssigned(String name, String leadName, String company, String frontendUrl) {
         String url = resolveUrl(frontendUrl);
         return baseTemplate("""
-            <h2 style="color:#FFFFFF; font-size:24px; font-weight:800; margin:0 0 16px;">New Opportunity Assigned \ud83c\udfaf</h2>
-            <p style="margin:0 0 20px; color:#94A3B8;">Hi <strong style="color:#FFFFFF;">%s</strong>, a high-value prospect has been assigned to your sales pipeline!</p>
-            <div style="background-color:#151C2F; border:1px solid #26334D; border-radius:14px; padding:24px; margin:24px 0; border-left:4px solid #38BDF8;">
-              <p style="margin:0; font-size:20px; color:#FFFFFF; font-weight:800;">%s</p>
-              <p style="margin:6px 0 0; color:#38BDF8; font-weight:600; font-size:15px;">%s</p>
+            <h1 style="color:#0f172a; font-size:22px; font-weight:800; margin:0 0 16px;">New Opportunity Assigned \ud83c\udfaf</h1>
+            <p style="margin:0 0 20px; color:#475569;">Hi <strong style="color:#0f172a;">%s</strong>, a high-value prospect has been assigned to your sales pipeline!</p>
+            <div style="background-color:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:20px; margin:24px 0; border-left:4px solid #6366f1;">
+              <p style="margin:0; font-size:18px; color:#0f172a; font-weight:800;">%s</p>
+              <p style="margin:6px 0 0; color:#6366f1; font-weight:600; font-size:14px;">%s</p>
             </div>
-            <p style="margin:0 0 28px; color:#94A3B8;">Speed to lead is critical in closing enterprise deals. Access the CRM now to review their requirements and initiate engagement.</p>
+            <p style="margin:0 0 28px; color:#475569;">Speed to lead is critical in closing enterprise deals. Access the CRM now to review their requirements and initiate engagement.</p>
             <div style="text-align:center; margin:36px 0;">
-              <a href="%s/leads" style="display:inline-block; background:linear-gradient(135deg, #3B82F6 0%%, #6366F1 50%%, #8B5CF6 100%%); color:#FFFFFF !important; text-decoration:none; padding:16px 36px; border-radius:12px; font-weight:700; font-size:16px; border:1px solid rgba(255,255,255,0.2);">View Lead Pipeline</a>
+              <a href="%s/leads" style="display:inline-block; background-color:#6366f1; color:#ffffff !important; text-decoration:none; padding:14px 32px; border-radius:8px; font-weight:600; font-size:16px;">View Lead Pipeline</a>
             </div>
             """.formatted(name, leadName, company, url));
     }
@@ -130,14 +147,14 @@ public class EmailTemplates {
     public static String meetingReminder(String name, String title, String scheduledAt, String frontendUrl) {
         String url = resolveUrl(frontendUrl);
         return baseTemplate("""
-            <h2 style="color:#FFFFFF; font-size:24px; font-weight:800; margin:0 0 16px;">Meeting Scheduled \ud83d\uddd3️</h2>
-            <p style="margin:0 0 20px; color:#94A3B8;">Hi <strong style="color:#FFFFFF;">%s</strong>, a new client engagement session has been added to your calendar.</p>
-            <div style="background-color:#151C2F; border:1px solid #26334D; border-radius:14px; padding:24px; margin:24px 0; border-left:4px solid #8B5CF6;">
-              <p style="margin:0; font-size:18px; color:#FFFFFF; font-weight:700;">%s</p>
-              <p style="margin:8px 0 0; color:#A78BFA; font-weight:600; font-size:14px;">%s</p>
+            <h1 style="color:#0f172a; font-size:22px; font-weight:800; margin:0 0 16px;">Meeting Scheduled \ud83d\uddd3️</h1>
+            <p style="margin:0 0 20px; color:#475569;">Hi <strong style="color:#0f172a;">%s</strong>, a new client engagement session has been added to your calendar.</p>
+            <div style="background-color:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:20px; margin:24px 0; border-left:4px solid #8b5cf6;">
+              <p style="margin:0; font-size:16px; color:#0f172a; font-weight:700;">%s</p>
+              <p style="margin:8px 0 0; color:#8b5cf6; font-weight:600; font-size:14px;">%s</p>
             </div>
             <div style="text-align:center; margin:36px 0;">
-              <a href="%s/meetings" style="display:inline-block; background:linear-gradient(135deg, #3B82F6 0%%, #6366F1 50%%, #8B5CF6 100%%); color:#FFFFFF !important; text-decoration:none; padding:16px 36px; border-radius:12px; font-weight:700; font-size:16px; border:1px solid rgba(255,255,255,0.2);">Open Calendar</a>
+              <a href="%s/meetings" style="display:inline-block; background-color:#6366f1; color:#ffffff !important; text-decoration:none; padding:14px 32px; border-radius:8px; font-weight:600; font-size:16px;">Open Calendar</a>
             </div>
             """.formatted(name, title, scheduledAt, url));
     }
