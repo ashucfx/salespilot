@@ -188,8 +188,14 @@ export default function TeamMemberPage() {
               <span className="px-2 py-1 rounded-full bg-slate-800 border border-slate-700 text-xs font-medium text-slate-300 uppercase tracking-wider">
                 {employee.roles?.[0] || 'EMPLOYEE'}
               </span>
-              <p className="text-sm text-slate-500 mt-2">Joined {new Date(employee.createdAt).toLocaleDateString()}</p>
+              <p className="text-sm text-slate-400 mt-2 font-semibold">Joined: <span className="text-indigo-400">{employee.joiningDate ? new Date(employee.joiningDate).toLocaleDateString() : 'N/A'}</span></p>
             </div>
+          </div>
+          <div className="w-full">
+            <Link href={`/team/${id}/offer-letter`} className="w-full flex items-center justify-center gap-2 bg-[#1a1a2e]/60 border border-indigo-500/20 hover:bg-indigo-500/10 text-white px-4 py-2 rounded-xl transition-colors text-sm font-medium">
+              <Mail className="w-4 h-4 text-indigo-400" />
+              Generate Offer Letter
+            </Link>
           </div>
 
           <div className="pt-4 border-t border-slate-800/50 space-y-4">
