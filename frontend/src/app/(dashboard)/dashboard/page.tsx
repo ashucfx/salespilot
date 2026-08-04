@@ -158,8 +158,8 @@ export default function DashboardPage() {
   const [revenueData, setRevenueData] = useState<{ name: string; revenue: number }[]>([]);
 
   const roles = user?.roles || [];
-  const isAdmin = roles.includes('ADMIN');
-  const isManager = roles.includes('SALES_MANAGER');
+  const isAdmin = roles.some(r => r === 'ADMIN' || r === 'ROLE_ADMIN');
+  const isManager = roles.some(r => r === 'SALES_MANAGER' || r === 'ROLE_SALES_MANAGER');
   const isEmployee = !isAdmin && !isManager;
 
   useEffect(() => {

@@ -26,8 +26,8 @@ import { useAuthStore } from '@/store/authStore';
 import { motion } from 'framer-motion';
 
 const getNavItems = (roles: string[]) => {
-  const isAdmin = roles.includes('ADMIN');
-  const isManager = roles.includes('SALES_MANAGER');
+  const isAdmin = roles.some(r => r === 'ADMIN' || r === 'ROLE_ADMIN');
+  const isManager = roles.some(r => r === 'SALES_MANAGER' || r === 'ROLE_SALES_MANAGER');
   const isEmployee = !isAdmin && !isManager;
   
   const items = [];
