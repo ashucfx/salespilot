@@ -90,50 +90,117 @@ body {
   background: var(--color-primary);
 }
 
-/* Light Mode Overrides */
+/* Light Mode Universal Overrides using exact & attribute selectors */
 html.light, body.light, :root.light {
   --color-background: #f8fafc;
   --color-foreground: #0f172a;
   --color-card: #ffffff;
   --color-card-foreground: #0f172a;
   --color-muted: #f1f5f9;
-  --color-muted-foreground: #64748b;
-  --color-border: rgba(99, 102, 241, 0.15);
+  --color-muted-foreground: #475569;
+  --color-border: rgba(99, 102, 241, 0.2);
   color-scheme: light;
-  background-color: #f8fafc;
-  color: #0f172a;
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
 }
+
 html.light body {
-  background-image: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.08) 0%, transparent 50%);
-  background-color: #f8fafc;
-  color: #0f172a;
+  background-image: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.08) 0%, transparent 50%) !important;
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
 }
+
+/* Override dark backgrounds */
+html.light [class*="bg-[#0A0A10]"] {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+html.light [class*="bg-[#05050A]"] {
+  background-color: #ffffff !important;
+  border-right: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
+}
+
+html.light [class*="bg-[#0f0f1a]"] {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+html.light [class*="bg-[#1a1a2e]"],
+html.light [class*="bg-slate-900"],
+html.light [class*="bg-slate-950"] {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+html.light [class*="bg-slate-800"] {
+  background-color: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+  color: #1e293b !important;
+}
+
+/* Glass & Panels */
 html.light .glass {
-  background: rgba(255, 255, 255, 0.85) !important;
-  border-color: rgba(99, 102, 241, 0.2) !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-color: rgba(226, 232, 240, 0.8) !important;
   color: #0f172a !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
 }
+
 html.light .glass-panel {
-  background: rgba(255, 255, 255, 0.92) !important;
-  border-color: rgba(203, 213, 225, 0.8) !important;
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
   color: #0f172a !important;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
 }
-html.light .text-white { color: #0f172a !important; }
-html.light .text-slate-400 { color: #475569 !important; }
-html.light .text-slate-300 { color: #334155 !important; }
-html.light .bg-slate-900\/50, html.light .bg-slate-900\/40, html.light .bg-slate-900\/60, html.light .bg-slate-900\/80, html.light .bg-slate-900 {
-  background-color: rgba(241, 245, 249, 0.85) !important;
-  border-color: rgba(203, 213, 225, 0.6) !important;
+
+/* Borders */
+html.light [class*="border-slate-800"],
+html.light [class*="border-slate-700"],
+html.light [class*="border-indigo-500/10"],
+html.light [class*="border-indigo-500/20"] {
+  border-color: #e2e8f0 !important;
 }
-html.light .bg-slate-800, html.light .bg-slate-800\/50 {
-  background-color: rgba(226, 232, 240, 0.9) !important;
-}
-html.light .border-slate-800, html.light .border-slate-800\/60, html.light .border-slate-700 {
-  border-color: rgba(203, 213, 225, 0.7) !important;
-}
-html.light input, html.light select, html.light textarea {
+
+/* Typography & Text */
+html.light [class*="text-white"] { color: #0f172a !important; }
+html.light [class*="text-slate-200"] { color: #1e293b !important; }
+html.light [class*="text-slate-300"] { color: #334155 !important; }
+html.light [class*="text-slate-400"] { color: #475569 !important; }
+html.light [class*="text-slate-500"] { color: #64748b !important; }
+
+/* Keep colored text like emerald, rose, indigo, amber vibrant in light mode */
+html.light [class*="text-indigo-400"] { color: #4f46e5 !important; }
+html.light [class*="text-violet-400"] { color: #7c3aed !important; }
+html.light [class*="text-emerald-400"] { color: #059669 !important; }
+html.light [class*="text-rose-400"] { color: #e11d48 !important; }
+html.light [class*="text-amber-400"] { color: #d97706 !important; }
+html.light [class*="text-cyan-400"] { color: #0891b2 !important; }
+
+/* Form Controls */
+html.light input,
+html.light select,
+html.light textarea {
   background-color: #ffffff !important;
   color: #0f172a !important;
   border-color: #cbd5e1 !important;
+}
+html.light input::placeholder,
+html.light textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* Tables */
+html.light table thead {
+  background-color: #f1f5f9 !important;
+  color: #475569 !important;
+}
+html.light table tbody tr:hover {
+  background-color: #f8fafc !important;
+}
+html.light [class*="divide-y"] > * + * {
+  border-color: #e2e8f0 !important;
 }
