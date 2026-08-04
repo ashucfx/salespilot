@@ -19,6 +19,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, UUID> {
 
     Optional<Employee> findByEmployeeNumber(String employeeNumber);
 
+    @Query("SELECT CASE WHEN COUNT(e) > 0 THEN true ELSE false END FROM Employee e WHERE e.workEmail = :workEmail AND e.deletedAt IS NULL")
     boolean existsByWorkEmail(String workEmail);
 
     @Query("""
