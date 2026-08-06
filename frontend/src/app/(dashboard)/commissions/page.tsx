@@ -63,14 +63,14 @@ export default function CommissionsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
+          <h2 className="text-2xl font-bold text-foreground tracking-tight flex items-center gap-2">
             <DollarSign className="w-6 h-6 text-indigo-400" />
             Commissions
           </h2>
           <p className="text-slate-400 text-sm mt-1">Track and manage your earned incentives.</p>
         </div>
         <div className="flex items-center gap-3">
-          <button onClick={() => toast.success('Commission report generated.')} className="bg-slate-800/80 hover:bg-slate-700 text-white px-4 py-2 rounded-xl text-sm font-medium transition-all border border-slate-700 flex items-center gap-2">
+          <button onClick={() => toast.success('Commission report generated.')} className="bg-slate-800/80 hover:bg-slate-700 text-foreground px-4 py-2 rounded-xl text-sm font-medium transition-all border border-slate-700 flex items-center gap-2">
             <Download className="w-4 h-4" />
             Export CSV
           </button>
@@ -118,7 +118,7 @@ export default function CommissionsPage() {
 
       {/* Filters Bar */}
       <div className="glass-panel p-3 rounded-2xl flex flex-wrap gap-3 items-center">
-        <div className="relative flex-1 min-w-[200px]">
+        <div className="relative flex-1 min-w-[160px]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
           <input
             type="text"
@@ -164,7 +164,7 @@ export default function CommissionsPage() {
                     className="hover:bg-slate-800/30 transition-colors group cursor-pointer"
                   >
                     <td className="py-4 px-6">
-                      <p className="text-sm font-medium text-white group-hover:text-indigo-300 transition-colors">
+                      <p className="text-sm font-medium text-foreground group-hover:text-indigo-300 transition-colors">
                         {comm.deal?.name || 'Unknown Deal'}
                       </p>
                       <p className="text-xs text-slate-500 mt-1">Closed: {comm.deal?.expectedCloseDate ? new Date(comm.deal.expectedCloseDate).toLocaleDateString() : 'N/A'}</p>

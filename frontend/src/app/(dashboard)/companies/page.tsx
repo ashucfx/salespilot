@@ -104,12 +104,12 @@ export default function CompaniesPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-white tracking-tight">Companies</h2>
+          <h2 className="text-2xl font-bold text-foreground tracking-tight">Companies</h2>
           <p className="text-slate-400 text-sm mt-1">Manage accounts and target organizations — {filtered.length} compan{filtered.length !== 1 ? 'ies' : 'y'}</p>
         </div>
         <button
           onClick={() => setIsModalOpen(true)}
-          className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-xl text-sm font-medium transition-all shadow-lg shadow-indigo-500/25 flex items-center gap-2"
+          className="bg-indigo-600 hover:bg-indigo-500 text-foreground px-4 py-2 rounded-xl text-sm font-medium transition-all shadow-lg shadow-indigo-500/25 flex items-center gap-2"
         >
           <Plus className="w-4 h-4" />
           Add Company
@@ -118,7 +118,7 @@ export default function CompaniesPage() {
 
       {/* Filters */}
       <div className="glass-panel p-3 rounded-2xl flex flex-wrap gap-3 items-center">
-        <div className="relative flex-1 min-w-[200px]">
+        <div className="relative flex-1 min-w-[160px]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
           <input
             type="text"
@@ -190,7 +190,7 @@ export default function CompaniesPage() {
                     <Building2 className="w-6 h-6 text-indigo-400" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <h3 className="font-bold text-white text-sm truncate">{company.name}</h3>
+                    <h3 className="font-bold text-foreground text-sm truncate">{company.name}</h3>
                     {company.industry && (
                       <span className={`text-xs px-2 py-0.5 rounded-full mt-1 inline-block ${getIndustryColor(company.industry)}`}>
                         {company.industry}
@@ -256,7 +256,7 @@ export default function CompaniesPage() {
                     <input
                       required value={form.name} onChange={e => setForm({...form, name: e.target.value})}
                       placeholder="Acme Corporation"
-                      className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+                      className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
                     />
                   </div>
                   <div>
@@ -274,7 +274,7 @@ export default function CompaniesPage() {
                     <input
                       value={form.website} onChange={e => setForm({...form, website: e.target.value})}
                       placeholder="https://acmecorp.com"
-                      className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+                      className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
                     />
                   </div>
                   <div>
@@ -282,7 +282,7 @@ export default function CompaniesPage() {
                     <input
                       type="number" min="1" value={form.employeeCount} onChange={e => setForm({...form, employeeCount: e.target.value})}
                       placeholder="250"
-                      className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+                      className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
                     />
                   </div>
                   <div>
@@ -290,7 +290,7 @@ export default function CompaniesPage() {
                     <input
                       type="number" min="0" value={form.annualRevenue} onChange={e => setForm({...form, annualRevenue: e.target.value})}
                       placeholder="10000000"
-                      className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+                      className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
                     />
                   </div>
                   <div>
@@ -298,7 +298,7 @@ export default function CompaniesPage() {
                     <input
                       value={form.city} onChange={e => setForm({...form, city: e.target.value})}
                       placeholder="Mumbai"
-                      className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+                      className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
                     />
                   </div>
                   <div>
@@ -306,7 +306,7 @@ export default function CompaniesPage() {
                     <input
                       value={form.country} onChange={e => setForm({...form, country: e.target.value})}
                       placeholder="India"
-                      className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+                      className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
                     />
                   </div>
                 </div>
@@ -316,12 +316,12 @@ export default function CompaniesPage() {
                     value={form.notes} onChange={e => setForm({...form, notes: e.target.value})}
                     placeholder="Notes about this company..."
                     rows={3}
-                    className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-colors resize-none"
+                    className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-colors resize-none"
                   />
                 </div>
                 <div className="flex gap-3 pt-2">
                   <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 px-4 py-2.5 rounded-xl border border-slate-700 text-slate-300 hover:bg-slate-800 text-sm transition-colors">Cancel</button>
-                  <button type="submit" disabled={isSubmitting} className="flex-1 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium transition-colors flex items-center justify-center gap-2 disabled:opacity-60">
+                  <button type="submit" disabled={isSubmitting} className="flex-1 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-foreground text-sm font-medium transition-colors flex items-center justify-center gap-2 disabled:opacity-60">
                     {isSubmitting ? <><Loader2 className="w-4 h-4 animate-spin" /> Creating...</> : 'Create Company'}
                   </button>
                 </div>

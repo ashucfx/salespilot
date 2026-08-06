@@ -102,12 +102,12 @@ export default function ContactsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-white tracking-tight">Contacts</h2>
+          <h2 className="text-2xl font-bold text-foreground tracking-tight">Contacts</h2>
           <p className="text-slate-400 text-sm mt-1">Manage people and stakeholders — {filtered.length} contact{filtered.length !== 1 ? 's' : ''}</p>
         </div>
         <button
           onClick={() => setIsModalOpen(true)}
-          className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-xl text-sm font-medium transition-all shadow-lg shadow-indigo-500/25 flex items-center gap-2"
+          className="bg-indigo-600 hover:bg-indigo-500 text-foreground px-4 py-2 rounded-xl text-sm font-medium transition-all shadow-lg shadow-indigo-500/25 flex items-center gap-2"
         >
           <Plus className="w-4 h-4" />
           Add Contact
@@ -116,7 +116,7 @@ export default function ContactsPage() {
 
       {/* Search */}
       <div className="glass-panel p-3 rounded-2xl flex flex-wrap gap-3 items-center">
-        <div className="relative flex-1 min-w-[200px]">
+        <div className="relative flex-1 min-w-[160px]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
           <input
             type="text"
@@ -180,7 +180,7 @@ export default function ContactsPage() {
                   <div className={`w-14 h-14 rounded-full flex items-center justify-center font-bold text-lg mb-3 ${colors[i % colors.length]}`}>
                     {getInitials(contact)}
                   </div>
-                  <h3 className="font-semibold text-white text-sm">
+                  <h3 className="font-semibold text-foreground text-sm">
                     {contact.firstName} {contact.lastName}
                   </h3>
                   {contact.designation && (
@@ -248,7 +248,7 @@ export default function ContactsPage() {
                     <input
                       required value={form.firstName} onChange={e => setForm({...form, firstName: e.target.value})}
                       placeholder="John"
-                      className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+                      className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
                     />
                   </div>
                   <div>
@@ -256,7 +256,7 @@ export default function ContactsPage() {
                     <input
                       value={form.lastName} onChange={e => setForm({...form, lastName: e.target.value})}
                       placeholder="Doe"
-                      className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+                      className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
                     />
                   </div>
                   <div>
@@ -264,7 +264,7 @@ export default function ContactsPage() {
                     <input
                       type="email" value={form.email} onChange={e => setForm({...form, email: e.target.value})}
                       placeholder="john@company.com"
-                      className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+                      className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
                     />
                   </div>
                   <div>
@@ -272,7 +272,7 @@ export default function ContactsPage() {
                     <input
                       value={form.phone} onChange={e => setForm({...form, phone: e.target.value})}
                       placeholder="+91 98765 43210"
-                      className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+                      className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
                     />
                   </div>
                   <div>
@@ -280,7 +280,7 @@ export default function ContactsPage() {
                     <input
                       value={form.designation} onChange={e => setForm({...form, designation: e.target.value})}
                       placeholder="VP of Sales"
-                      className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+                      className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
                     />
                   </div>
                   <div>
@@ -300,7 +300,7 @@ export default function ContactsPage() {
                     <input
                       value={form.city} onChange={e => setForm({...form, city: e.target.value})}
                       placeholder="Mumbai"
-                      className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+                      className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
                     />
                   </div>
                   <div>
@@ -308,7 +308,7 @@ export default function ContactsPage() {
                     <input
                       value={form.country} onChange={e => setForm({...form, country: e.target.value})}
                       placeholder="India"
-                      className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+                      className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
                     />
                   </div>
                   <div>
@@ -316,7 +316,7 @@ export default function ContactsPage() {
                     <input
                       value={form.linkedinUrl} onChange={e => setForm({...form, linkedinUrl: e.target.value})}
                       placeholder="https://linkedin.com/in/johndoe"
-                      className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+                      className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
                     />
                   </div>
                   <div>
@@ -324,7 +324,7 @@ export default function ContactsPage() {
                     <input
                       value={form.whatsapp} onChange={e => setForm({...form, whatsapp: e.target.value})}
                       placeholder="+91 98765 43210"
-                      className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+                      className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
                     />
                   </div>
                 </div>
@@ -334,7 +334,7 @@ export default function ContactsPage() {
                     value={form.notes} onChange={e => setForm({...form, notes: e.target.value})}
                     placeholder="Additional notes about this contact..."
                     rows={3}
-                    className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-colors resize-none"
+                    className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-colors resize-none"
                   />
                 </div>
                 <div className="flex items-center gap-3">
@@ -347,7 +347,7 @@ export default function ContactsPage() {
                 </div>
                 <div className="flex gap-3 pt-2">
                   <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 px-4 py-2.5 rounded-xl border border-slate-700 text-slate-300 hover:bg-slate-800 text-sm transition-colors">Cancel</button>
-                  <button type="submit" disabled={isSubmitting} className="flex-1 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium transition-colors flex items-center justify-center gap-2 disabled:opacity-60">
+                  <button type="submit" disabled={isSubmitting} className="flex-1 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-foreground text-sm font-medium transition-colors flex items-center justify-center gap-2 disabled:opacity-60">
                     {isSubmitting ? <><Loader2 className="w-4 h-4 animate-spin" /> Creating...</> : 'Create Contact'}
                   </button>
                 </div>
