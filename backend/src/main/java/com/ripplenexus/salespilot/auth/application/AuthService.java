@@ -220,7 +220,7 @@ public class AuthService {
 
     @java.lang.SuppressWarnings("all")
     
-    public AuthService(final UserRepository userRepository, final RefreshTokenRepository refreshTokenRepository, final RoleRepository roleRepository, final JwtUtil jwtUtil, final PasswordEncoder passwordEncoder, final AuthenticationManager authenticationManager, final EmailService emailService) {
+    public AuthService(final UserRepository userRepository, final RefreshTokenRepository refreshTokenRepository, final RoleRepository roleRepository, final JwtUtil jwtUtil, final PasswordEncoder passwordEncoder, final AuthenticationManager authenticationManager, final EmailService emailService, final com.ripplenexus.salespilot.employee.infrastructure.EmployeeRepository employeeRepository) {
         this.userRepository = userRepository;
         this.refreshTokenRepository = refreshTokenRepository;
         this.roleRepository = roleRepository;
@@ -228,5 +228,6 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.emailService = emailService;
+        this.employeeRepository = employeeRepository;
     }
 }
