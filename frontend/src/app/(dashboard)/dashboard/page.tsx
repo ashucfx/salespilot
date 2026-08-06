@@ -69,17 +69,40 @@ const StatCard = ({ title, value, icon: Icon, color, delay }: any) => (
 );
 
 function AdminDashboardView({ stats }: { stats: DashboardStats | null }) {
+  const [pendingKyc, setPendingKyc] = useState<number | null>(null);
+
+  useEffect(() => {
+    api.get('/employees/kyc?status=PENDING&size=1')
+      .then(res => {
+        const total = res.data?.data?.totalElements ?? res.data?.data?.total ?? null;
+        if (total !== null) { setPendingKyc(total); return; }
+        // fallback: try submitted too
+        api.get('/employees/kyc?status=SUBMITTED&size=1').then(r2 => {
+          const t2 = r2.data?.data?.totalElements ?? 0;
+          setPendingKyc((total ?? 0) + t2);
+        }).catch(() => setPendingKyc(0));
+      })
+      .catch(() => {
+        // Try alternate endpoint
+        api.get('/kyc/pending').then(r => {
+          const list = r.data?.data?.content || r.data?.data || r.data || [];
+          setPendingKyc(Array.isArray(list) ? list.length : r.data?.data?.totalElements ?? 0);
+        }).catch(() => setPendingKyc(0));
+      });
+  }, []);
+
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <StatCard title="Total Revenue (Month)" value={formatCurrency(stats?.monthlyRevenue || 0)} icon={TrendingUp} color="indigo" delay={0.1} />
-        <StatCard title="Pending KYC Approvals" value={stats?.totalEmployees || 0} icon={ShieldAlert} color="amber" delay={0.2} />
+        <StatCard title="Pending KYC Approvals" value={pendingKyc ?? '...'} icon={ShieldAlert} color="amber" delay={0.2} />
         <StatCard title="Total Leads" value={stats?.totalLeads || 0} icon={Target} color="violet" delay={0.3} />
         <StatCard title="End of Month Payouts" value={formatCurrency(stats?.pendingCommissions || 0)} icon={AlertCircle} color="emerald" delay={0.4} />
       </div>
     </>
   );
 }
+
 
 function ManagerDashboardView({ stats }: { stats: DashboardStats | null }) {
   return (
@@ -236,7 +259,7 @@ export default function DashboardPage() {
     <div className="space-y-8">
       <div className="flex flex-col gap-2">
         <h2 className="text-2xl font-bold text-foreground">
-          Welcome back, {user?.email?.split('@')[0]}
+          Welcome back, {user?.firstName || user?.fullName || user?.email?.split('@')[0]} 👋
         </h2>
         <p className="text-muted-foreground">
           Here is what&apos;s happening with your sales today.
