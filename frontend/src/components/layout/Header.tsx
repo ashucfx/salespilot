@@ -92,12 +92,12 @@ export default function Header() {
         <div className="flex items-center gap-4">
           <button 
             onClick={toggleSidebar}
-            className="lg:hidden text-slate-400 hover:text-white"
+            className="lg:hidden text-muted-foreground hover:text-foreground p-1 rounded-lg hover:bg-muted transition-colors"
           >
-            <Menu className="w-6 h-6" />
+            <Menu className="w-5 h-5" />
           </button>
           
-          <h1 className="text-lg font-bold text-white tracking-tight hidden sm:block">
+          <h1 className="text-base font-bold text-foreground tracking-tight hidden sm:block">
             {getPageTitle()}
           </h1>
         </div>
