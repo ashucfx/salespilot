@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Sidebar from '@/components/layout/Sidebar';
 import Header from '@/components/layout/Header';
 import { useAuthStore } from '@/store/authStore';
+import ProfileCompletionBanner from '@/components/common/ProfileCompletionBanner';
 
 export default function DashboardLayout({
   children,
@@ -65,7 +66,9 @@ export default function DashboardLayout({
         <div className="absolute top-1/2 left-1/2 w-[500px] h-[500px] bg-cyan-500/5 rounded-full blur-[100px] pointer-events-none -translate-y-1/2 -translate-x-1/2 z-0"></div>
         
         <Header />
-        <main className="flex-1 overflow-y-auto p-6 z-10 custom-scrollbar">
+        {/* Profile Completion Warning Banner (employees only) */}
+        <ProfileCompletionBanner />
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 z-10 custom-scrollbar">
           <div className="mx-auto max-w-7xl animate-fade-in">
             {children}
           </div>
