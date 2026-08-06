@@ -22,7 +22,7 @@ export default function NewLeadPage() {
   return (
     <div className="space-y-6 max-w-4xl mx-auto h-full flex flex-col pb-10">
       <div>
-        <h2 className="text-2xl font-bold text-white tracking-tight">Create New Lead</h2>
+        <h2 className="text-2xl font-bold text-foreground tracking-tight">Create New Lead</h2>
         <p className="text-slate-400 text-sm mt-1">Add a new prospect to your sales pipeline.</p>
       </div>
 
@@ -133,7 +133,7 @@ export default function NewLeadPage() {
           <button 
             type="submit" 
             disabled={loading}
-            className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-medium transition-all shadow-lg shadow-indigo-500/25 flex items-center gap-2 disabled:opacity-50"
+            className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-foreground rounded-xl text-sm font-medium transition-all shadow-lg shadow-indigo-500/25 flex items-center gap-2 disabled:opacity-50"
           >
             {loading ? (
               <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
