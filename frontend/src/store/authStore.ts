@@ -8,6 +8,9 @@ export interface User {
   emailVerified: boolean;
   profilePicture?: string;
   otpEnabled?: boolean;
+  firstName?: string;
+  lastName?: string;
+  fullName?: string;
 }
 
 interface AuthState {
