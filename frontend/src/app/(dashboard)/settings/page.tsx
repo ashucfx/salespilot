@@ -151,9 +151,27 @@ export default function SettingsPage() {
     const next = { ...appearance, theme: newTheme };
     setAppearance(next);
     localStorage.setItem('sp_settings_appearance', JSON.stringify(next));
+
+    // Apply immediately to DOM — don't wait for event propagation
+    let resolvedTheme = newTheme;
+    if (resolvedTheme === 'system') {
+      resolvedTheme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    }
+    if (resolvedTheme === 'light') {
+      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.add('light');
+    } else {
+      document.documentElement.classList.remove('light');
+      document.documentElement.classList.add('dark');
+    }
+
+    // Also notify any other listeners (layout, etc.)
+    window.dispatchEvent(new StorageEvent('storage', { key: 'sp_settings_appearance' }));
     window.dispatchEvent(new Event('theme-change'));
-    toast.success(`Theme switched to ${newTheme === 'system' ? 'System Auto' : newTheme === 'light' ? 'Light Mode' : 'Dark Mode'}`);
+
+    toast.success(`Theme: ${newTheme === 'system' ? 'System Auto' : newTheme === 'light' ? '☀️ Light Mode' : '🌙 Dark Mode'}`);
   };
+
 
   const handleSaveAppearance = (e: React.FormEvent) => {
     e.preventDefault();
