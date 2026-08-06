@@ -52,9 +52,7 @@ public class EmailTemplates {
                           <table cellpadding="0" cellspacing="0" border="0">
                             <tr>
                               <td valign="middle" style="padding-right: 12px;">
-                                <div class="logo-icon" style="width: 32px; height: 32px; background: linear-gradient(135deg, #6366f1 0%%, #7c3aed 50%%, #c026d3 100%%); background-color: #6366f1; border-radius: 8px; text-align: center; color: #ffffff; border: 1px solid rgba(129, 140, 248, 0.2); box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.3);">
-                                  <span style="font-size: 20px; line-height: 32px; font-weight: bold;">&#8599;</span>
-                                </div>
+                                <img src="https://salespilot.theripplenexus.com/apple-touch-icon.png" width="32" height="32" style="border-radius: 8px; vertical-align: middle; box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.3);" alt="SalesPilot Logo" />
                               </td>
                               <td valign="middle">
                                 <span class="logo-text" style="color:#ffffff; font-size:24px; font-weight:900; letter-spacing:-0.5px;">SALES<span style="color:#a78bfa;">PILOT</span></span>
