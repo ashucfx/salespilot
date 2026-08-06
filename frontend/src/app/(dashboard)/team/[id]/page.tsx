@@ -180,7 +180,7 @@ export default function TeamMemberPage() {
           <ArrowLeft className="w-5 h-5" />
         </Link>
         <div>
-          <h2 className="text-2xl font-bold text-white tracking-tight flex items-center gap-3">
+          <h2 className="text-2xl font-bold text-foreground tracking-tight flex items-center gap-3">
             {employee.firstName} {employee.lastName}
             {employee.kycStatus === 'VERIFIED' ? (
               <CheckCircle2 className="w-5 h-5 text-emerald-400" />
@@ -211,7 +211,7 @@ export default function TeamMemberPage() {
                       type="date" 
                       value={joiningDateInput}
                       onChange={(e) => setJoiningDateInput(e.target.value)}
-                      className="bg-slate-900 border border-indigo-500/30 rounded-lg px-2 py-1 text-white text-xs focus:outline-none w-32"
+                      className="bg-slate-900 border border-indigo-500/30 rounded-lg px-2 py-1 text-foreground text-xs focus:outline-none w-32"
                     />
                     <button onClick={handleUpdateJoiningDate} className="text-xs text-emerald-400 hover:text-emerald-300 font-semibold">Save</button>
                     <button onClick={() => setIsEditingJoining(false)} className="text-xs text-slate-400 hover:text-slate-300">Cancel</button>
@@ -228,7 +228,7 @@ export default function TeamMemberPage() {
             </div>
           </div>
           <div className="w-full">
-            <Link href={`/team/${id}/offer-letter`} className="w-full flex items-center justify-center gap-2 bg-[#1a1a2e]/60 border border-indigo-500/20 hover:bg-indigo-500/10 text-white px-4 py-2 rounded-xl transition-colors text-sm font-medium">
+            <Link href={`/team/${id}/offer-letter`} className="w-full flex items-center justify-center gap-2 bg-[#1a1a2e]/60 border border-indigo-500/20 hover:bg-indigo-500/10 text-foreground px-4 py-2 rounded-xl transition-colors text-sm font-medium">
               <Mail className="w-4 h-4 text-indigo-400" />
               Generate Offer Letter
             </Link>
@@ -243,7 +243,7 @@ export default function TeamMemberPage() {
                     type="number" 
                     value={commissionRate}
                     onChange={(e) => setCommissionRate(Number(e.target.value))}
-                    className="w-20 bg-slate-900 border border-indigo-500/30 rounded-lg px-3 py-1.5 text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+                    className="w-20 bg-slate-900 border border-indigo-500/30 rounded-lg px-3 py-1.5 text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
                   />
                   <span className="text-slate-400">%</span>
                   <button onClick={handleUpdateCommission} className="ml-2 text-sm text-emerald-400 hover:text-emerald-300">Save</button>
@@ -280,7 +280,7 @@ export default function TeamMemberPage() {
                     type="date" 
                     value={contractDate}
                     onChange={(e) => setContractDate(e.target.value)}
-                    className="bg-slate-900 border border-indigo-500/30 rounded-lg px-2 py-1 text-white text-xs focus:outline-none w-32"
+                    className="bg-slate-900 border border-indigo-500/30 rounded-lg px-2 py-1 text-foreground text-xs focus:outline-none w-32"
                   />
                   <button onClick={handleUpdateContract} className="text-xs text-emerald-400 hover:text-emerald-300 font-semibold">Save</button>
                   <button onClick={() => setIsEditingContract(false)} className="text-xs text-slate-400 hover:text-slate-300">Cancel</button>
@@ -434,7 +434,7 @@ export default function TeamMemberPage() {
                       maxLength={6}
                       value={deleteOtpInput} 
                       onChange={e => setDeleteOtpInput(e.target.value)} 
-                      className="w-full pl-9 pr-3 py-2 bg-slate-900/80 border border-rose-500/30 rounded-lg text-white font-mono text-center tracking-[0.3em] text-lg focus:outline-none focus:border-rose-500" 
+                      className="w-full pl-9 pr-3 py-2 bg-slate-900/80 border border-rose-500/30 rounded-lg text-foreground font-mono text-center tracking-[0.3em] text-lg focus:outline-none focus:border-rose-500" 
                       placeholder="123456" 
                     />
                   </div>

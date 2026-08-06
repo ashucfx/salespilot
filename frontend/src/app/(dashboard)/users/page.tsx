@@ -314,7 +314,7 @@ export default function UsersPage() {
                       maxLength={6}
                       value={deleteOtpInput} 
                       onChange={e => setDeleteOtpInput(e.target.value)} 
-                      className="w-full pl-9 pr-3 py-2 bg-slate-900/80 border border-rose-500/30 rounded-lg text-white font-mono text-center tracking-[0.3em] text-lg focus:outline-none focus:border-rose-500" 
+                      className="w-full pl-9 pr-3 py-2 bg-slate-900/80 border border-rose-500/30 rounded-lg text-foreground font-mono text-center tracking-[0.3em] text-lg focus:outline-none focus:border-rose-500" 
                       placeholder="123456" 
                     />
                   </div>

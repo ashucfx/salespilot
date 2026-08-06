@@ -68,7 +68,7 @@ export default function OfferLetterPage() {
         </button>
         <button 
           onClick={handlePrint}
-          className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl transition-colors text-sm font-semibold"
+          className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-foreground px-4 py-2 rounded-xl transition-colors text-sm font-semibold"
         >
           <Printer className="w-4 h-4" />
           Print Offer Letter
