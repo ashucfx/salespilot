@@ -55,10 +55,10 @@ export default function DealsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-white tracking-tight">Deals</h2>
+          <h2 className="text-2xl font-bold text-foreground tracking-tight">Deals</h2>
           <p className="text-slate-400 text-sm mt-1">Manage and forecast your revenue pipeline.</p>
         </div>
-        <button onClick={() => toast.success('Navigate to Leads to qualify and convert prospects into Deals.')} className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-xl text-sm font-medium transition-all shadow-lg shadow-indigo-500/25 flex items-center gap-2">
+        <button onClick={() => toast.success('Navigate to Leads to qualify and convert prospects into Deals.')} className="bg-indigo-600 hover:bg-indigo-500 text-foreground px-4 py-2 rounded-xl text-sm font-medium transition-all shadow-lg shadow-indigo-500/25 flex items-center gap-2">
           <Plus className="w-4 h-4" />
           Create Deal
         </button>
@@ -103,7 +103,7 @@ export default function DealsPage() {
 
       {/* Filters Bar */}
       <div className="glass-panel p-3 rounded-2xl flex flex-wrap gap-3 items-center">
-        <div className="relative flex-1 min-w-[200px]">
+        <div className="relative flex-1 min-w-[160px]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
           <input
             type="text"
@@ -150,7 +150,7 @@ export default function DealsPage() {
                   >
                     <td className="py-4 px-6">
                       <div>
-                        <p className="text-sm font-medium text-white group-hover:text-indigo-300 transition-colors">{deal.name || 'Unnamed Deal'}</p>
+                        <p className="text-sm font-medium text-foreground group-hover:text-indigo-300 transition-colors">{deal.name || 'Unnamed Deal'}</p>
                         <p className="text-xs text-slate-500 mt-1">{deal.lead?.company?.name || 'No Company'} • {deal.owner?.firstName || 'Unassigned'}</p>
                       </div>
                     </td>

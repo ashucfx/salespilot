@@ -48,10 +48,10 @@ export default function ICPPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-white tracking-tight">Ideal Customer Profiles</h2>
+          <h2 className="text-2xl font-bold text-foreground tracking-tight">Ideal Customer Profiles</h2>
           <p className="text-slate-400 text-sm mt-1">Define and target your highest-value prospects.</p>
         </div>
-        <button onClick={() => toast.success('New ICP template created and active.')} className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-xl text-sm font-medium transition-all shadow-lg shadow-indigo-500/25 flex items-center gap-2">
+        <button onClick={() => toast.success('New ICP template created and active.')} className="bg-indigo-600 hover:bg-indigo-500 text-foreground px-4 py-2 rounded-xl text-sm font-medium transition-all shadow-lg shadow-indigo-500/25 flex items-center gap-2">
           <Plus className="w-4 h-4" />
           Create ICP
         </button>
@@ -85,7 +85,7 @@ export default function ICPPage() {
                       <Target className="w-7 h-7 text-indigo-400" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-white group-hover:text-indigo-300 transition-colors leading-tight">{icp.name}</h3>
+                      <h3 className="text-xl font-bold text-foreground group-hover:text-indigo-300 transition-colors leading-tight">{icp.name}</h3>
                       <p className="text-sm text-slate-400 mt-1">{icp.description || 'Target Profile'}</p>
                     </div>
                   </div>
