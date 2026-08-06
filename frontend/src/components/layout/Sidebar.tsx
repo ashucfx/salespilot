@@ -166,12 +166,12 @@ export default function Sidebar() {
             />
           ) : (
             <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-violet-600 to-indigo-600 flex items-center justify-center text-foreground font-bold text-sm shadow-[0_0_15px_rgba(99,102,241,0.4)] border border-white/10 ring-2 ring-background">
-              {user?.email?.charAt(0).toUpperCase()}
+              {(user?.firstName || user?.email)?.charAt(0).toUpperCase()}
             </div>
           )}
           <div className="flex-1 min-w-0">
             <p className="text-[14px] font-semibold text-foreground truncate leading-tight">
-              {user?.email?.split('@')[0]}
+              {user?.fullName || user?.firstName ? `${user.firstName ?? ''} ${user.lastName ?? ''}`.trim() : user?.email?.split('@')[0]}
             </p>
             <p className="text-[12px] text-muted-foreground truncate capitalize font-medium tracking-wide mt-0.5">
               {roles[0]?.toLowerCase().replace('_', ' ')}
