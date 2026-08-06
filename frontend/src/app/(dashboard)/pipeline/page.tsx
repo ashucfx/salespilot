@@ -190,7 +190,7 @@ export default function PipelinePage() {
   return (
     <div className="h-[calc(100vh-8rem)] flex flex-col">
       <div className="mb-6 shrink-0">
-        <h2 className="text-2xl font-bold text-white tracking-tight">Sales Pipeline</h2>
+        <h2 className="text-2xl font-bold text-foreground tracking-tight">Sales Pipeline</h2>
         <p className="text-slate-400 text-sm mt-1">Drag and drop leads to progress them through the sales cycle.</p>
       </div>
 

@@ -168,7 +168,7 @@ export default function PayoutsPage() {
                         {payout.status === 'PENDING' && (
                           <button 
                             onClick={() => handleMarkPaid(payout.id)}
-                            className="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-medium rounded-lg shadow-lg shadow-emerald-500/20 transition-all"
+                            className="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-foreground text-xs font-medium rounded-lg shadow-lg shadow-emerald-500/20 transition-all"
                           >
                             Mark as Paid
                           </button>

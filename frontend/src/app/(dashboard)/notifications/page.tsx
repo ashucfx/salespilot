@@ -108,7 +108,7 @@ export default function NotificationsPage() {
     <div className="space-y-6 max-w-4xl mx-auto h-full flex flex-col">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-white tracking-tight flex items-center gap-3">
+          <h2 className="text-2xl font-bold text-foreground tracking-tight flex items-center gap-3">
             Notifications
             {unreadCount > 0 && (
               <span className="text-xs font-bold bg-indigo-500 text-white px-2 py-0.5 rounded-full">
@@ -122,7 +122,7 @@ export default function NotificationsPage() {
           <button 
             onClick={markAllRead}
             disabled={notifications.length === 0 || unreadCount === 0}
-            className="px-4 py-2 bg-slate-800/50 hover:bg-slate-700 disabled:opacity-50 text-white border border-slate-700 rounded-xl text-sm font-medium transition-colors flex items-center gap-2"
+            className="px-4 py-2 bg-slate-800/50 hover:bg-slate-700 disabled:opacity-50 text-foreground border border-slate-700 rounded-xl text-sm font-medium transition-colors flex items-center gap-2"
           >
             <CheckCircle2 className="w-4 h-4" />
             Mark All Read
