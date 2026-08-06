@@ -156,7 +156,7 @@ export default function TasksPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
+          <h2 className="text-2xl font-bold text-foreground tracking-tight flex items-center gap-2">
             <CheckSquare className="w-6 h-6 text-indigo-400" />
             Tasks
           </h2>
@@ -166,7 +166,7 @@ export default function TasksPage() {
         </div>
         <button
           onClick={() => setIsModalOpen(true)}
-          className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-xl text-sm font-medium transition-all shadow-lg shadow-indigo-500/25 flex items-center gap-2"
+          className="bg-indigo-600 hover:bg-indigo-500 text-foreground px-4 py-2 rounded-xl text-sm font-medium transition-all shadow-lg shadow-indigo-500/25 flex items-center gap-2"
         >
           <Plus className="w-4 h-4" />
           New Task
@@ -175,7 +175,7 @@ export default function TasksPage() {
 
       {/* Filters Bar */}
       <div className="glass-panel p-3 rounded-2xl flex flex-wrap gap-3 items-center">
-        <div className="relative flex-1 min-w-[200px]">
+        <div className="relative flex-1 min-w-[160px]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
           <input
             type="text"
@@ -235,7 +235,7 @@ export default function TasksPage() {
 
                 <div className="flex-1 min-w-0 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6">
                   <div className="flex-1 min-w-0">
-                    <p className={`text-sm font-semibold truncate transition-colors ${task.status === 'COMPLETED' ? 'text-slate-400 line-through' : 'text-white group-hover:text-indigo-300'}`}>
+                    <p className={`text-sm font-semibold truncate transition-colors ${task.status === 'COMPLETED' ? 'text-slate-400 line-through' : 'text-foreground group-hover:text-indigo-300'}`}>
                       {task.title || task.subject || 'Untitled Task'}
                     </p>
                     {task.description && (
@@ -316,7 +316,7 @@ export default function TasksPage() {
                   <input
                     required value={form.title} onChange={e => setForm({...form, title: e.target.value})}
                     placeholder="What needs to be done?"
-                    className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+                    className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
                   />
                 </div>
                 <div>
@@ -325,7 +325,7 @@ export default function TasksPage() {
                     value={form.description} onChange={e => setForm({...form, description: e.target.value})}
                     placeholder="Optional details..."
                     rows={3}
-                    className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-colors resize-none"
+                    className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-colors resize-none"
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
@@ -360,7 +360,7 @@ export default function TasksPage() {
                 </div>
                 <div className="flex gap-3 pt-2">
                   <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 px-4 py-2.5 rounded-xl border border-slate-700 text-slate-300 hover:bg-slate-800 text-sm transition-colors">Cancel</button>
-                  <button type="submit" disabled={isSubmitting} className="flex-1 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium transition-colors flex items-center justify-center gap-2 disabled:opacity-60">
+                  <button type="submit" disabled={isSubmitting} className="flex-1 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-foreground text-sm font-medium transition-colors flex items-center justify-center gap-2 disabled:opacity-60">
                     {isSubmitting ? <><Loader2 className="w-4 h-4 animate-spin" /> Creating...</> : 'Create Task'}
                   </button>
                 </div>

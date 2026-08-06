@@ -49,14 +49,14 @@ export default function TargetsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
+          <h2 className="text-2xl font-bold text-foreground tracking-tight flex items-center gap-2">
             <Target className="w-6 h-6 text-indigo-400" />
             Targets & Quotas
           </h2>
           <p className="text-slate-400 text-sm mt-1">Track sales performance against goals.</p>
         </div>
         <div className="flex items-center gap-3">
-          <select className="bg-slate-800 border border-slate-700 text-white text-sm rounded-xl px-4 py-2 focus:outline-none focus:border-indigo-500 transition-colors">
+          <select className="bg-slate-800 border border-slate-700 text-foreground text-sm rounded-xl px-4 py-2 focus:outline-none focus:border-indigo-500 transition-colors">
             <option>Q3 2026</option>
             <option>Q4 2026</option>
             <option>FY 2026</option>
@@ -143,7 +143,7 @@ export default function TargetsPage() {
                             {target.employee?.user?.firstName?.charAt(0) || 'U'}
                           </div>
                           <div>
-                            <h4 className="font-bold text-sm text-white group-hover:text-indigo-300 transition-colors">
+                            <h4 className="font-bold text-sm text-foreground group-hover:text-indigo-300 transition-colors">
                               {target.employee?.user?.firstName} {target.employee?.user?.lastName}
                             </h4>
                             <p className="text-xs text-slate-500">{target.period || 'Q3 2026'}</p>
