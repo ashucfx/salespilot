@@ -12,6 +12,7 @@ import com.ripplenexus.salespilot.core.email.EmailService;
 import com.ripplenexus.salespilot.core.exception.BusinessException;
 import com.ripplenexus.salespilot.core.exception.ResourceNotFoundException;
 import com.ripplenexus.salespilot.core.util.JwtUtil;
+import com.ripplenexus.salespilot.employee.infrastructure.EmployeeRepository;
 import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -38,6 +39,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
+    private final EmployeeRepository employeeRepository;
     @Value("${salespilot.jwt.refresh-token-expiry}")
     private long refreshTokenExpiry;
     @Value("${salespilot.frontend-url}")
@@ -188,7 +190,16 @@ public class AuthService {
         res.setAccessToken(accessToken);
         res.setRefreshToken(refreshToken);
         res.setTokenType("Bearer");
-        res.setUser(UserInfoDto.from(user));
+        UserInfoDto userInfo = UserInfoDto.from(user);
+        // Enrich with employee name and avatar if available
+        try {
+            employeeRepository.findByUserId(user.getId()).ifPresent(emp -> {
+                userInfo.withEmployee(emp.getFirstName(), emp.getLastName(), emp.getProfilePicture());
+            });
+        } catch (Exception e) {
+            log.warn("Could not enrich login response with employee profile for user {}: {}", user.getEmail(), e.getMessage());
+        }
+        res.setUser(userInfo);
         return res;
     }
 
