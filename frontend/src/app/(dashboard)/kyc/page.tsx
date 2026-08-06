@@ -266,10 +266,10 @@ export default function KycApprovalPage() {
                   </div>
 
                   <div className="flex justify-end gap-3 mt-4">
-                    <button type="button" onClick={() => setShowRejectModal(false)} className="px-4 py-2 text-slate-400 hover:text-white text-sm font-medium transition-colors">
+                    <button type="button" onClick={() => setShowRejectModal(false)} className="px-4 py-2 text-slate-400 hover:text-foreground text-sm font-medium transition-colors">
                       Cancel
                     </button>
-                    <button type="submit" className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white text-sm font-medium rounded-lg transition-colors">
+                    <button type="submit" className="px-4 py-2 bg-red-600 hover:bg-red-500 text-foreground text-sm font-medium rounded-lg transition-colors">
                       Confirm Rejection
                     </button>
                   </div>

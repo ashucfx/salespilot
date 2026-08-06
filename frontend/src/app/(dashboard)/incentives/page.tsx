@@ -95,7 +95,7 @@ export default function IncentivesPage() {
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-semibold uppercase tracking-wider mb-3">
               <Sparkles className="w-4 h-4 text-indigo-400" /> Sales Rewards Hub
             </div>
-            <h1 className="text-3xl font-extrabold text-white tracking-tight">Employee Incentive System</h1>
+            <h1 className="text-3xl font-extrabold text-foreground tracking-tight">Employee Incentive System</h1>
             <p className="text-slate-300 text-sm mt-1 max-w-xl">
               Crush your deal targets, unlock exclusive performance badges, and earn cash rewards deposited directly into your monthly commissions!
             </p>
